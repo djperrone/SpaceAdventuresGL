@@ -3,7 +3,7 @@
 
 int main()
 {
-	Application* app = new Application();
+	Nova::Application* app = new Nova::Application();
 	while (app->IsRunning())
 	{
 		app->Update();

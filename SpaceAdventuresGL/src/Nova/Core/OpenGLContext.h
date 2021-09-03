@@ -13,7 +13,7 @@ struct Window
 class OpenGLContext
 {
 public:
-	OpenGLContext();
+	OpenGLContext(float width, float height);
 	~OpenGLContext();
 
 	void PollEvents();
