@@ -48,20 +48,17 @@ namespace Nova {
 		};		
 
 		s_RenderData.IndexBuffer = std::make_unique <IndexBuffer>(indices, numIndices);
-		
-		/*s_RenderData.DefaultRectangleVertices[1] = glm::vec4( 0.5f, -0.5f, 0.0f, 1.0f);
+		 // aspect ratio
+		s_RenderData.DefaultRectangleVertices[1] = glm::vec4( 0.5f, -0.5f, 0.0f, 1.0f);
 		s_RenderData.DefaultRectangleVertices[0] = glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);
 		s_RenderData.DefaultRectangleVertices[2] = glm::vec4( 0.5f,  0.5f, 0.0f, 1.0f);
-		s_RenderData.DefaultRectangleVertices[3] = glm::vec4(-0.5f,  0.5f, 0.0f, 1.0f);*/
+		s_RenderData.DefaultRectangleVertices[3] = glm::vec4(-0.5f,  0.5f, 0.0f, 1.0f);
+		
+		// no aspect ratio
 		/*s_RenderData.DefaultRectangleVertices[0] = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 		s_RenderData.DefaultRectangleVertices[1] = glm::vec4(100.0f, 0.0f, 0.0f, 1.0f);
 		s_RenderData.DefaultRectangleVertices[2] = glm::vec4(100.0f, 100.0f, 0.0f, 1.0f);
 		s_RenderData.DefaultRectangleVertices[3] = glm::vec4(0.0f, 100.0f, 0.0f, 1.0f);*/
-		
-		s_RenderData.DefaultRectangleVertices[0] = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-		s_RenderData.DefaultRectangleVertices[1] = glm::vec4(100.0f, 0.0f, 0.0f, 1.0f);
-		s_RenderData.DefaultRectangleVertices[2] = glm::vec4(100.0f, 100.0f, 0.0f, 1.0f);
-		s_RenderData.DefaultRectangleVertices[3] = glm::vec4(0.0f, 100.0f, 0.0f, 1.0f);
 	}
 	
 	void Renderer::BeginScene(Shader& shader, const Camera& camera)
@@ -74,33 +71,26 @@ namespace Nova {
 	void Renderer::Draw(const Rectangle& rectangle)
 	{
 		//s_RenderData.VertexArray->AddBuffer(rectangle.GetVertexBuffer(), 0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 0);
-		//s_RenderData.VertexArray->AddBuffer(rectangle.GetVertexBuffer(), 1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 3 * sizeof(float));
+		//s_RenderData.VertexArray->AddBuffer(rectangle.GetVertexBuffer(), 1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 3 * sizeof(float));	
 		
-		/*glm::mat3 position;
-		position[0] = s_RenderData.DefaultRectangleVertices[0] * rectangle.m_Position;
-		position[1] = s_RenderData.DefaultRectangleVertices[1] * rectangle.m_Position;
-		position[2] = s_RenderData.DefaultRectangleVertices[2] * rectangle.m_Position;
-		position[3] = s_RenderData.DefaultRectangleVertices[3] * rectangle.m_Position;*/
 
 		std::vector<VertexData> vertices;
 		vertices.reserve(4);
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), rectangle.m_Position) * glm::scale(glm::mat4(1.0f), rectangle.m_Scale);
 
-		/*vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));*/
-
-		vertices.emplace_back(transform * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), rectangle.m_Color);
+		
+		// as[ect ratio
+		/*vertices.emplace_back(transform * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), rectangle.m_Color);
 		vertices.emplace_back(transform * glm::vec4(rectangle.m_Size.x, 0.0f, 0.0f, 1.0f), rectangle.m_Color);
 		vertices.emplace_back(transform * glm::vec4(rectangle.m_Size.x, rectangle.m_Size.y, 0.0f, 1.0f), rectangle.m_Color);
-		vertices.emplace_back(transform * glm::vec4(0.0f, rectangle.m_Size.y, 0.0f, 1.0f), rectangle.m_Color);
+		vertices.emplace_back(transform * glm::vec4(0.0f, rectangle.m_Size.y, 0.0f, 1.0f), rectangle.m_Color);	*/	
 
-		/*glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-		glm::vec4(rectangle.m_Size.x, 0.0f, 0.0f, 1.0f);
-		glm::vec4(rectangle.m_Size.x, rectangle.m_Size.y, 0.0f, 1.0f);
-		glm::vec4(0.0f, rectangle.m_Size.y, 0.0f, 1.0f);*/
+		// no aspect ratio
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.m_Color);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], rectangle.m_Color);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], rectangle.m_Color);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.m_Color);
 		
 		s_RenderData.VertexBuffer->SetData(vertices);
 		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 0);

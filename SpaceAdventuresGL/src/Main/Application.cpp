@@ -10,7 +10,8 @@ namespace Nova {
 		Nova::Renderer::Init();
 
 		m_Rect = std::make_unique<Rectangle>(glm::vec2(500.0f, 500.0f), glm::vec2(64.0f, 64.0f), glm::vec4(0.4f, 0.2f, 0.8f, 1.0f));
-		
+		//m_Rect = std::make_unique<Rectangle>(glm::vec2(0.0f, 0.5f), glm::vec2(64.0f, 64.0f), glm::vec4(0.4f, 0.2f, 0.8f, 1.0f));
+
 		m_Shader = std::make_unique<Shader>("Assets/Shaders/BasicColorShader.glsl");
 	}
 	
@@ -18,6 +19,7 @@ namespace Nova {
 	{
 		
 		BeginFrame();
+		m_Camera.CalcProjectionMatrix(m_Context.GetWindow().Width, m_Context.GetWindow().Height);
 		Renderer::BeginScene(*m_Shader, m_Camera);
 		//m_Shader->Bind();
 		Nova::Renderer::Draw(*m_Rect);
