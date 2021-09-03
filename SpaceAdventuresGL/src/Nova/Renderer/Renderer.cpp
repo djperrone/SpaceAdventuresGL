@@ -49,16 +49,16 @@ namespace Nova {
 
 		s_RenderData.IndexBuffer = std::make_unique <IndexBuffer>(indices, numIndices);
 		 // aspect ratio
+		/*s_RenderData.DefaultRectangleVertices[0] = glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);
 		s_RenderData.DefaultRectangleVertices[1] = glm::vec4( 0.5f, -0.5f, 0.0f, 1.0f);
-		s_RenderData.DefaultRectangleVertices[0] = glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);
 		s_RenderData.DefaultRectangleVertices[2] = glm::vec4( 0.5f,  0.5f, 0.0f, 1.0f);
 		s_RenderData.DefaultRectangleVertices[3] = glm::vec4(-0.5f,  0.5f, 0.0f, 1.0f);
-		
+		*/
 		// no aspect ratio
-		/*s_RenderData.DefaultRectangleVertices[0] = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+		s_RenderData.DefaultRectangleVertices[0] = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 		s_RenderData.DefaultRectangleVertices[1] = glm::vec4(100.0f, 0.0f, 0.0f, 1.0f);
 		s_RenderData.DefaultRectangleVertices[2] = glm::vec4(100.0f, 100.0f, 0.0f, 1.0f);
-		s_RenderData.DefaultRectangleVertices[3] = glm::vec4(0.0f, 100.0f, 0.0f, 1.0f);*/
+		s_RenderData.DefaultRectangleVertices[3] = glm::vec4(0.0f, 100.0f, 0.0f, 1.0f);
 	}
 	
 	void Renderer::BeginScene(Shader& shader, const Camera& camera)
@@ -80,17 +80,17 @@ namespace Nova {
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), rectangle.m_Position) * glm::scale(glm::mat4(1.0f), rectangle.m_Scale);
 
 		
-		// as[ect ratio
-		/*vertices.emplace_back(transform * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), rectangle.m_Color);
+		// no as[ect ratio
+		vertices.emplace_back(transform * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f), rectangle.m_Color);
 		vertices.emplace_back(transform * glm::vec4(rectangle.m_Size.x, 0.0f, 0.0f, 1.0f), rectangle.m_Color);
 		vertices.emplace_back(transform * glm::vec4(rectangle.m_Size.x, rectangle.m_Size.y, 0.0f, 1.0f), rectangle.m_Color);
-		vertices.emplace_back(transform * glm::vec4(0.0f, rectangle.m_Size.y, 0.0f, 1.0f), rectangle.m_Color);	*/	
+		vertices.emplace_back(transform * glm::vec4(0.0f, rectangle.m_Size.y, 0.0f, 1.0f), rectangle.m_Color);		
 
-		// no aspect ratio
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.m_Color);
+		//  aspect ratio
+		/*vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.m_Color);
 		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], rectangle.m_Color);
 		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], rectangle.m_Color);
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.m_Color);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.m_Color);*/
 		
 		s_RenderData.VertexBuffer->SetData(vertices);
 		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 0);

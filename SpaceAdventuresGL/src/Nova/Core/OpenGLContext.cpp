@@ -15,6 +15,7 @@ OpenGLContext::OpenGLContext(float width, float height)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     m_Window.Width = width;
     m_Window.Height = height;
+    m_Window.AspectRatio = m_Window.Width / m_Window.Height;
     m_Window.Window = glfwCreateWindow(m_Window.Width, m_Window.Height, "LearnOpenGL", NULL, NULL);
     if (m_Window.Window == NULL)
     {
