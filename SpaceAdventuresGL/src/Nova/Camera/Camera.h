@@ -20,7 +20,7 @@ namespace Nova {
 
 	private:
 		float m_AspectRatio;
-		//float& m_Width, m_Height;
+		float m_Width, m_Height;
 		glm::mat4 m_ProjectionMatrix;
 		glm::mat4 m_ViewMatrix;
 		glm::mat4 m_ViewProjectionMatrix;

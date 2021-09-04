@@ -9,10 +9,11 @@ out vec4 v_Color;
 out vec3 v_Pos;
 
 uniform mat4 u_ViewProjectionMatrix;
+uniform mat4 u_ProjectionMatrix;
 
 void main()
 {
-	gl_Position = u_ViewProjectionMatrix * vec4(aPos, 1.0);
+	gl_Position = u_ProjectionMatrix * vec4(aPos, 1.0);
 	//gl_Position = vec4(aPos, 1.0);
     v_Pos = aPos;
     v_Color = aColor;

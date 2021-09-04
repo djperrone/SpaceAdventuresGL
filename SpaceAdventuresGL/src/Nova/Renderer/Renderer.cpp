@@ -77,7 +77,7 @@ namespace Nova {
 		//SceneCamera = &camera;
 		shader.Bind();
 		
-		//shader.SetUniformMat4f("u_ProjectionMatrix", camera.GetProjectionMatrix());
+		shader.SetUniformMat4f("u_ProjectionMatrix", camera.GetProjectionMatrix());
 		//shader.SetUniformMat4f("u_ViewMatrix", camera.GetViewMatrix());
 		shader.SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
 	}
@@ -101,15 +101,15 @@ namespace Nova {
 		vertices.emplace_back(transform * glm::vec4(0.0f, rectangle.m_Size.y, 0.0f, 1.0f), rectangle.m_Color);	*/	
 
 		//  aspect ratio
-		auto test = transform * s_RenderData.DefaultRectangleVertices[0];
+		
 		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.m_Color);
 		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], rectangle.m_Color);
 		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], rectangle.m_Color);
 		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.m_Color);
 		
 		s_RenderData.VertexBuffer->SetData(vertices);
-		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 0);
-		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 3 * sizeof(float));
+		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), 0);
+		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 1, 4, GL_FLOAT, GL_FALSE, 9 * sizeof(float), 3 * sizeof(float));
 
 		s_RenderData.VertexArray->Bind();
 		s_RenderData.VertexBuffer->Bind();
