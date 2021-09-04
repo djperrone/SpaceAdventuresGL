@@ -85,4 +85,7 @@ void OpenGLContext::WindowResizeCallBack(GLFWwindow* window, int width, int heig
     glViewport(0, 0, width, height);
     m_Window.Width = width;
     m_Window.Height = height;
+    
+    //m_Camera.CalcProjectionMatrix(m_Context.GetWindow().Width, m_Context.GetWindow().Height);
+
 }
