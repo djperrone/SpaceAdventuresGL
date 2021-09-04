@@ -7,13 +7,12 @@
 
 namespace Nova {
 
-
     Texture::Texture(const std::string& path)
         : m_Width(0), m_Height(0), m_NumChannels(0)
     {
         LoadTexture(path);
+        spdlog::info("tecture const");
     }
-
 
     void Texture::Bind(unsigned int slot) const
     {
@@ -34,8 +33,8 @@ namespace Nova {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         // set texture filtering parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         // load image, create texture and generate mipmaps   
 
         stbi_set_flip_vertically_on_load(true);

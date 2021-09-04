@@ -14,7 +14,8 @@ namespace Nova {
 		std::unique_ptr<IndexBuffer> IndexBuffer;
 		std::unique_ptr<VertexBuffer> VertexBuffer;
 
-		glm::vec4 DefaultRectangleVertices[4];		
+		glm::vec4 DefaultRectangleVertices[4];
+		glm::vec2 DefaultTextureCoords[4];
 	};
 
 	const Camera* SceneCamera = nullptr;
@@ -36,6 +37,10 @@ namespace Nova {
 	{
 		glEnable(GL_DEPTH_TEST);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+
 		SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 
 		s_RenderData.VertexArray = std::make_unique<VertexArray>();
@@ -55,6 +60,11 @@ namespace Nova {
 		s_RenderData.DefaultRectangleVertices[1] = glm::vec4( 0.5f, -0.5f, 0.0f, 1.0f);
 		s_RenderData.DefaultRectangleVertices[2] = glm::vec4( 0.5f,  0.5f, 0.0f, 1.0f);
 		s_RenderData.DefaultRectangleVertices[3] = glm::vec4(-0.5f,  0.5f, 0.0f, 1.0f);
+
+		s_RenderData.DefaultTextureCoords[0] = glm::vec2(0.0f, 0.0f);
+		s_RenderData.DefaultTextureCoords[1] = glm::vec2(1.0f, 0.0f);
+		s_RenderData.DefaultTextureCoords[2] = glm::vec2(1.0f, 1.0f);
+		s_RenderData.DefaultTextureCoords[3] = glm::vec2(0.0f, 1.0f);
 
 		/*s_RenderData.DefaultRectangleVertices[0] = glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
 		s_RenderData.DefaultRectangleVertices[1] = glm::vec4(0.5f, -0.5f, 0.0f, 1.0f);
@@ -102,14 +112,20 @@ namespace Nova {
 
 		//  aspect ratio
 		
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.m_Color);
+		/*vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.m_Color);
 		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], rectangle.m_Color);
 		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], rectangle.m_Color);
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.m_Color);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.m_Color);*/
+
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.m_Color, s_RenderData.DefaultTextureCoords[0]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], rectangle.m_Color, s_RenderData.DefaultTextureCoords[1]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], rectangle.m_Color, s_RenderData.DefaultTextureCoords[2]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.m_Color, s_RenderData.DefaultTextureCoords[3]);
 		
 		s_RenderData.VertexBuffer->SetData(vertices);
-		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), 0);
-		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 1, 4, GL_FLOAT, GL_FALSE, 9 * sizeof(float), 3 * sizeof(float));
+		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
+		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, Color));
+		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, TexCoord));
 
 		s_RenderData.VertexArray->Bind();
 		s_RenderData.VertexBuffer->Bind();

@@ -34,6 +34,8 @@ namespace Nova {
 	}
 	void Camera::CalcViewProjectionMatrix()
 	{
+		CalcProjectionMatrix();
+		CalcViewMatrix();
 		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 	}
 }
