@@ -105,7 +105,7 @@ namespace Novaura {
 	{
 		s_RenderData.TextureShader->Bind();
 
-		s_RenderData.TextureShader->SetUniformMat4f("u_ProjectionMatrix", camera.GetProjectionMatrix());
+		//s_RenderData.TextureShader->SetUniformMat4f("u_ProjectionMatrix", camera.GetProjectionMatrix());
 		//shader.SetUniformMat4f("u_ViewMatrix", camera.GetViewMatrix());
 		s_RenderData.TextureShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
 	}

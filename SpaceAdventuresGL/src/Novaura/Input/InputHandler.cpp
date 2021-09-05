@@ -1,7 +1,7 @@
 #include "sapch.h"
 #include "InputHandler.h"
 
-
+#include "Novaura/Primitives/Rectangle.h"
 
 namespace Novaura {
 
@@ -9,6 +9,8 @@ namespace Novaura {
 	/*std::unordered_map<int, Command> InputHandler::AxisKeyBindings;
 	std::unordered_map<EventType, std::unordered_map<KeyCode, Command>> InputHandler::ActionKeyBindings;*/
 	std::shared_ptr<InputController> InputHandler::s_InputController;
+	std::shared_ptr<Window> InputHandler::s_CurrentWindow;
+
 	void InputHandler::Init()
 	{
 		//if (!s_Instance)
@@ -38,6 +40,18 @@ namespace Novaura {
 	bool InputHandler::IsPressed(GLFWwindow* window, int keyCode)
 	{
 		return glfwGetKey(window, keyCode) == GLFW_PRESS;
+	}
+
+	MousePosition InputHandler::GetMousePosition()
+	{
+		MousePosition mousePos;
+		glfwGetCursorPos(GetCurrentWindow()->Window, &mousePos.x, &mousePos.y);
+		return mousePos;
+	}
+
+	bool InputHandler::IsRectClicked(const Rectangle& rectangle)
+	{
+		return false;
 	}
 
 }

@@ -3,11 +3,17 @@
 #include <queue>
 #include "Command.h"
 #include "InputController.h"
+#include "Novaura/Core/Window.h"
 
 namespace Novaura {	
-
+	class Rectangle;
 	using EventType = int;
 	using KeyCode = int;
+
+	struct MousePosition
+	{
+		double x, y;
+	};
 
 	struct Event
 	{
@@ -24,18 +30,24 @@ namespace Novaura {
 		static void ShutDown();
 		static bool IsPressed(GLFWwindow* window, int keyCode);
 
+		static void SetCurrentWindow(std::shared_ptr<Window> window) { s_CurrentWindow = window; }
+		static std::shared_ptr<Window> GetCurrentWindow() { return s_CurrentWindow; }
+
 		static void SetCurrentController(std::shared_ptr<InputController> controller) { s_InputController = controller; }
 		static InputController& GetCurrentController() { return *s_InputController; }
 		
+		static MousePosition GetMousePosition();
+		static bool IsRectClicked(const Rectangle& rectangle);
 
 		//static std::queue<Event> EventQueue;
 	private:
 		static std::shared_ptr<InputController> s_InputController;
-
+		static std::shared_ptr<Window>s_CurrentWindow;
 	private:
 		InputHandler() = default;
 		InputHandler(const InputHandler&) = delete;		
 		InputHandler(std::shared_ptr<InputController> controller);
+
 		//static InputHandler* s_Instance;
 	};
 }

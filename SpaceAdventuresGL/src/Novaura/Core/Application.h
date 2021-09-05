@@ -20,8 +20,8 @@ namespace Novaura {
 		void Update();
 		void BeginFrame();
 		void EndFrame();
-		const Window& GetWindow() const { return m_Context.GetWindow(); }
-		Window& GetWindow() { return m_Context.GetWindow(); }
+		const std::shared_ptr<Window> GetWindow() const { return (m_Context.GetWindow()); }
+		std::shared_ptr<Window> GetWindow() { return (m_Context.GetWindow()); }
 		inline bool IsRunning() const { return m_Context.IsRunning(); }
 
 	protected:
@@ -46,9 +46,9 @@ namespace Novaura {
 	private:
 		OpenGLContext m_Context;
 		//Camera m_Camera;
-		CameraController m_CameraController;
-		std::unique_ptr<Rectangle> m_Rect;
-		std::unique_ptr<Shader> m_Shader;
+	public:
+		std::shared_ptr<CameraController> m_CameraController;
+	
 
 	private:
 		float m_DeltaTime = 0.0f;

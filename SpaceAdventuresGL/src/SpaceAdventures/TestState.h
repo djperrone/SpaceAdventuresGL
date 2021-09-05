@@ -2,6 +2,10 @@
 #include "Novaura/StateMachine/State.h"
 #include "Novaura/Camera/CameraController.h"
 #include "Novaura/Primitives/Rectangle.h"
+#include "Novaura/Input/InputHandler.h"
+
+#include "Novaura/Core/Window.h"
+
 namespace SpaceAdventures {
 
 
@@ -10,7 +14,7 @@ namespace SpaceAdventures {
 	{
 	public:
 		TestState() = default;
-		TestState(Novaura::Window& window);
+		TestState(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> m_CameraController);
 		virtual void HandleInput() override;
 		virtual void Update(float deltaTime)override;
 		virtual void Draw(float deltaTime) override;
@@ -21,12 +25,10 @@ namespace SpaceAdventures {
 		virtual void Pause() override;
 		virtual void Resume() override;
 
-		Novaura::Window& GetWindow() { return m_Window; }
-		const Novaura::Window& GetWindow() const { return m_Window; }
+		
 
-	private:
-		Novaura::Window& m_Window;
+	private:	
 		std::unique_ptr<Novaura::Rectangle> m_Rect;
-		Novaura::CameraController m_CameraController;
+
 	};
 }

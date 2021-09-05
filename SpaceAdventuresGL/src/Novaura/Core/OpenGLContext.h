@@ -9,25 +9,27 @@ namespace Novaura {
 	class OpenGLContext
 	{
 	public:
-		OpenGLContext(float width, float height);
+		OpenGLContext() = default;
+		OpenGLContext(std::string_view title, float width, float height);
 		~OpenGLContext();
 	
 		void PollEvents();
 	
-		Window& GetWindow() { return m_Window; }
-		const Window& GetWindow() const { return m_Window; }
+		std::shared_ptr<Window> GetWindow() { return m_Window; }
+		const std::shared_ptr<Window> GetWindow() const { return m_Window; }
+		//const Window& GetWindow() const { return m_Window; }
 	
 		void SwapBuffers() const;
 		bool OpenGLContext::IsRunning() const;
 	
 	
 	private:
-		Window m_Window;
+		std::shared_ptr<Window> m_Window;
 	
 	private:
-		void SetCallBackFunctions();
+		//void SetCallBackFunctions();
 	
-		void WindowResizeCallBack(GLFWwindow* window, int width, int height);
+		//void WindowResizeCallBack(GLFWwindow* window, int width, int height);
 	
 	private:
 		/*class GLFWCallbackWrapper
