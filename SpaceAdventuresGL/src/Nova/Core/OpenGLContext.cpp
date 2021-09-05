@@ -3,7 +3,7 @@
 
 #include <spdlog/spdlog.h>
 
-OpenGLContext* OpenGLContext::GLFWCallbackWrapper::s_Application = nullptr;
+//OpenGLContext* OpenGLContext::GLFWCallbackWrapper::s_Application = nullptr;
 
 
 OpenGLContext::OpenGLContext(float width, float height)
@@ -34,7 +34,7 @@ OpenGLContext::OpenGLContext(float width, float height)
     }
 
     glViewport(0, 0, m_Window.Width, m_Window.Height);
-    SetCallBackFunctions();
+    //SetCallBackFunctions();
 
 
     spdlog::info("glfw initialized");
@@ -61,31 +61,31 @@ void OpenGLContext::PollEvents()
     glfwPollEvents();
 }
 
-void OpenGLContext::SetCallBackFunctions()
-{
-    GLFWCallbackWrapper::SetApplication(this);
-    //glfwSetCursorPosCallback(m_Window.Window, GLFWCallbackWrapper::MousePositionCallback);
-   // glfwSetScrollCallback(m_Window.Window, GLFWCallbackWrapper::MouseScrollCallBack);
-    glfwSetFramebufferSizeCallback(m_Window.Window, GLFWCallbackWrapper::WindowResizeCallBack);
-}
-
-void OpenGLContext::GLFWCallbackWrapper::SetApplication(OpenGLContext* application)
-{
-    GLFWCallbackWrapper::s_Application = application;
-}
-
-
-void OpenGLContext::GLFWCallbackWrapper::WindowResizeCallBack(GLFWwindow* window, int width, int height)
-{
-    s_Application->WindowResizeCallBack(window, width, height);
-}
-
-void OpenGLContext::WindowResizeCallBack(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-    m_Window.Width = width;
-    m_Window.Height = height;
-    
-    //m_Camera.CalcProjectionMatrix(m_Context.GetWindow().Width, m_Context.GetWindow().Height);
-
-}
+//void OpenGLContext::SetCallBackFunctions()
+//{
+//    GLFWCallbackWrapper::SetApplication(this);
+//    //glfwSetCursorPosCallback(m_Window.Window, GLFWCallbackWrapper::MousePositionCallback);
+//   // glfwSetScrollCallback(m_Window.Window, GLFWCallbackWrapper::MouseScrollCallBack);
+//    glfwSetFramebufferSizeCallback(m_Window.Window, GLFWCallbackWrapper::WindowResizeCallBack);
+//}
+//
+//void OpenGLContext::GLFWCallbackWrapper::SetApplication(OpenGLContext* application)
+//{
+//    GLFWCallbackWrapper::s_Application = application;
+//}
+//
+//
+//void OpenGLContext::GLFWCallbackWrapper::WindowResizeCallBack(GLFWwindow* window, int width, int height)
+//{
+//    s_Application->WindowResizeCallBack(window, width, height);
+//}
+//
+//void OpenGLContext::WindowResizeCallBack(GLFWwindow* window, int width, int height)
+//{
+//    glViewport(0, 0, width, height);
+//    m_Window.Width = width;
+//    m_Window.Height = height;
+//    
+//    //m_Camera.CalcProjectionMatrix(m_Context.GetWindow().Width, m_Context.GetWindow().Height);
+//
+//}

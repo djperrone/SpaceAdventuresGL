@@ -32,5 +32,6 @@ namespace Nova {
 		glm::vec3 m_Size;
 		glm::vec3 m_Scale;
 		glm::vec4 m_Color;
+		float m_Rotation = 0.0f;
 	};
 }

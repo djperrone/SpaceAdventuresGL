@@ -18,7 +18,8 @@ namespace Nova {
 		static void SetClearColor(float r, float g, float b, float a = 1.0f);
 
 		static void BeginScene(Shader& shader, const Camera& camera);
-		static void Draw(const Rectangle& rectangle);
+		static void DrawRectangle(const Rectangle& rectangle);
+		static void DrawRotatedRectangle(const Rectangle& rectangle);
 	
 	};
 }

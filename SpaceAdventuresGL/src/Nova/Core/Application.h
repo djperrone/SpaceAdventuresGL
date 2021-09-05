@@ -3,6 +3,7 @@
 #include "Nova/Primitives/Rectangle.h"
 #include "Nova/Renderer/Shader.h"
 #include "Nova/Camera/Camera.h"
+#include "Nova/Camera/CameraController.h"
 
 namespace Nova {
 
@@ -14,15 +15,27 @@ namespace Nova {
 		void Update();
 		void BeginFrame();
 		void EndFrame();
-
+		const Window& GetWindow() const { return m_Context.GetWindow(); }
+		Window& GetWindow() { return m_Context.GetWindow(); }
 		inline bool IsRunning() const { return m_Context.IsRunning(); }
+		void ScreenSaver();
+	public:
+		void SetCallBackFunctions();
+
+		void WindowResizeCallBack(int width, int height);
+		void MouseScrollCallBack(double xoffset, double yoffset);
 
 
 	private:
 		OpenGLContext m_Context;
 		Camera m_Camera;
-
+		CameraController m_CameraController;
 		std::unique_ptr<Rectangle> m_Rect;
 		std::unique_ptr<Shader> m_Shader;
+
+	private:
+		float m_DeltaTime = 0.0f;
+		float m_LastFrame = 0.0f;
+
 	};
 }

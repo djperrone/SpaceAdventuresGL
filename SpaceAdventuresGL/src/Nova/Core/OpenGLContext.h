@@ -2,14 +2,8 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "Window.h"
 
-struct Window
-{
-	GLFWwindow* Window;
-	float Width = 800.0f;
-	float Height = 600.0f;
-	float AspectRatio = Width / Height;
-};
 
 class OpenGLContext
 {
@@ -35,7 +29,7 @@ private:
 	void WindowResizeCallBack(GLFWwindow* window, int width, int height);
 
 private:
-	class GLFWCallbackWrapper
+	/*class GLFWCallbackWrapper
 	{
 	public:
 		GLFWCallbackWrapper() = delete;
@@ -49,6 +43,6 @@ private:
 		static void SetApplication(OpenGLContext* application);
 	private:
 		static OpenGLContext* s_Application;
-	};
+	};*/
 
 };
