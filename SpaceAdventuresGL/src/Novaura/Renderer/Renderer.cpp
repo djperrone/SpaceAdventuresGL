@@ -14,6 +14,9 @@ namespace Novaura {
 		std::unique_ptr<IndexBuffer> IndexBuffer;
 		std::unique_ptr<VertexBuffer> VertexBuffer;
 
+		std::unique_ptr<Shader> TextureShader;
+
+
 		glm::vec4 DefaultRectangleVertices[4];
 		glm::vec2 DefaultTextureCoords[4];
 	};
@@ -45,6 +48,8 @@ namespace Novaura {
 
 		s_RenderData.VertexArray = std::make_unique<VertexArray>();
 		s_RenderData.VertexBuffer = std::make_unique<VertexBuffer>();
+		s_RenderData.TextureShader = std::make_unique<Shader>("Assets/Shaders/TextureShader.glsl");
+
 
 		constexpr unsigned int numIndices = 6;
 		unsigned int indices[numIndices] = {
@@ -81,6 +86,10 @@ namespace Novaura {
 		s_RenderData.DefaultRectangleVertices[2] = glm::vec4(100.0f, 100.0f, 0.0f, 1.0f);
 		s_RenderData.DefaultRectangleVertices[3] = glm::vec4(0.0f, 100.0f, 0.0f, 1.0f);*/
 	}
+
+	void Renderer::Init(const Camera& camera)
+	{
+	}
 	
 	void Renderer::BeginScene(Shader& shader, const Camera& camera)
 	{
@@ -90,6 +99,15 @@ namespace Novaura {
 		shader.SetUniformMat4f("u_ProjectionMatrix", camera.GetProjectionMatrix());
 		//shader.SetUniformMat4f("u_ViewMatrix", camera.GetViewMatrix());
 		shader.SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
+	}
+
+	void Renderer::BeginScene(const Camera& camera)
+	{
+		s_RenderData.TextureShader->Bind();
+
+		s_RenderData.TextureShader->SetUniformMat4f("u_ProjectionMatrix", camera.GetProjectionMatrix());
+		//shader.SetUniformMat4f("u_ViewMatrix", camera.GetViewMatrix());
+		s_RenderData.TextureShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
 	}
 
 	void Renderer::DrawRectangle(const Rectangle& rectangle)

@@ -16,27 +16,19 @@ namespace test {
 namespace Novaura {
 
 	Application::Application()
-		: m_Context(1280.0f,720.0f), m_Camera(m_Context.GetWindow().Width, m_Context.GetWindow().Height), m_CameraController(m_Context.GetWindow().Width, m_Context.GetWindow().Height)
-	{
+		: m_Context(1280.0f,720.0f), m_CameraController(m_Context.GetWindow().Width, m_Context.GetWindow().Height)
+	{		
 		InputHandler::Init();
-		m_InputController = std::make_shared<InputController>();
-		InputHandler::SetCurrentController(m_InputController);
+		Novaura::Renderer::Init();
 
-		SetCallBackFunctions();		
-
-		InputHandler::GetCurrentController().BindAxisInputEvent(GLFW_KEY_T, []() {spdlog::info("test axis event T"); });
-		//InputHandler::BindAxisKeyEvent(GLFW_MOUSE_BUTTON_LEFT, []() {spdlog::info("test axis event mouse lc"); });
-		//InputHandler::BindAxisKeyEvent(GLFW_KEY_U, []() {spdlog::info("test axis event U"); });
+		InputHandler::GetCurrentController().BindAxisInputEvent(GLFW_KEY_T, []() {spdlog::info("test axis event T"); });	
 		InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_KEY_U, []() {spdlog::info("test action event U"); });
 		InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_MOUSE_BUTTON_LEFT, []() {spdlog::info("test action event MB lc"); });
+		SetCallBackFunctions();		
 		
-		Novaura::Renderer::Init();
 		
 		m_Rect = std::make_unique<Rectangle>(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec4(0.4f, 0.2f, 0.8f, 1.0f), glm::vec2(0.4f,0.4f));
-		//InputHandler::GetCurrentController().BindAxisKeyEvent(GLFW_KEY_UP, [this, m_Rect = m_Rect.get(), m_DeltaTime = &m_DeltaTime]() { m_Rect->m_Position.y += test::velocity.y * *m_DeltaTime; spdlog::info("{0}, {1}", m_Rect->m_Position.x, m_Rect->m_Position.y); });
-		//InputHandler::GetCurrentController().BindAxisKeyEvent(GLFW_KEY_DOWN, [this, m_Rect = &m_Rect, m_DeltaTime = &m_DeltaTime]() {m_Rect->get()->m_Position.y -= test::velocity.y * *m_DeltaTime; });
-		//InputHandler::GetCurrentController().BindAxisKeyEvent(GLFW_KEY_LEFT, [this, m_Rect = &m_Rect, m_DeltaTime = &m_DeltaTime]() {m_Rect->get()->m_Position.x -= test::velocity.y * *m_DeltaTime; });
-		//InputHandler::GetCurrentController().BindAxisKeyEvent(GLFW_KEY_RIGHT, [this, m_Rect = &m_Rect, m_DeltaTime = &m_DeltaTime]() {m_Rect->get()->m_Position.x += test::velocity.x * *m_DeltaTime; });
+		
 
 		
 		
@@ -47,16 +39,33 @@ namespace Novaura {
 		tex.Bind();
 	}
 
+	Application::~Application()
+	{
+		InputHandler::ShutDown();
+
+	}
+
 	void Application::Update()
 	{
-		//ScreenSaver();
-		float aspectRatio = m_Context.GetWindow().Width / m_Context.GetWindow().Height;
-		
-		BeginFrame();		
-		//spdlog::info("{0}, {1}", m_Rect->m_Position.x, m_Rect->m_Position.y);		
-		Novaura::Renderer::DrawRotatedRectangle(*m_Rect);		
+		float currentFrame = glfwGetTime();
+		m_DeltaTime = currentFrame - m_LastFrame;
+		m_LastFrame = currentFrame;
+		m_Context.PollEvents();
+		m_CameraController.Update(GetWindow(), m_DeltaTime);
 
-		EndFrame();
+		m_StateMachine.GetCurrentState().Update(m_DeltaTime);
+		spdlog::info("application update nova");
+		//ScreenSaver();
+		//float aspectRatio = m_Context.GetWindow().Width / m_Context.GetWindow().Height;
+		
+		//BeginFrame();		
+		//spdlog::info("{0}, {1}", m_Rect->m_Position.x, m_Rect->m_Position.y);		
+		//Novaura::Renderer::DrawRotatedRectangle(*m_Rect);		
+
+
+
+		m_Context.SwapBuffers();
+		//EndFrame();
 	}
 
 	void Application::BeginFrame()
@@ -67,7 +76,7 @@ namespace Novaura {
 		m_DeltaTime = currentFrame - m_LastFrame;
 		m_LastFrame = currentFrame;
 		m_Context.PollEvents();
-		m_CameraController.Update(GetWindow(), m_DeltaTime);
+		m_CameraController.Update(GetWindow(), m_DeltaTime);	
 		Renderer::BeginScene(*m_Shader, m_CameraController.GetCamera());
 
 	}

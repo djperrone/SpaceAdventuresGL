@@ -7,12 +7,15 @@
 
 #include "Novaura/Input/InputController.h"
 
+#include "Novaura/StateMachine/StateMachine.h"
+
 namespace Novaura {
 
 	class Application
 	{
 	public:
 		Application();
+		~Application();
 
 		void Update();
 		void BeginFrame();
@@ -20,6 +23,11 @@ namespace Novaura {
 		const Window& GetWindow() const { return m_Context.GetWindow(); }
 		Window& GetWindow() { return m_Context.GetWindow(); }
 		inline bool IsRunning() const { return m_Context.IsRunning(); }
+
+	protected:
+		StateMachine m_StateMachine;
+
+	private:
 		void ScreenSaver();
 	public:
 		void SetCallBackFunctions();
@@ -32,12 +40,12 @@ namespace Novaura {
 		void MouseScrollCallBack(double xoffset, double yoffset);
 
 	public:
-		std::shared_ptr<InputController> m_InputController;
+		//std::shared_ptr<InputController> m_InputController;
 
 
 	private:
 		OpenGLContext m_Context;
-		Camera m_Camera;
+		//Camera m_Camera;
 		CameraController m_CameraController;
 		std::unique_ptr<Rectangle> m_Rect;
 		std::unique_ptr<Shader> m_Shader;

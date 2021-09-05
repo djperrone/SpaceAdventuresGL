@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Novaura/Input/InputController.h"
+#include "Novaura/Core/Window.h"
 
 namespace Novaura {
 
@@ -10,7 +11,7 @@ namespace Novaura {
 		State() = default;		
 
 		virtual void HandleInput() = 0;
-		virtual void Update() = 0;
+		virtual void Update(float deltaTime) = 0;
 		virtual void Draw(float deltaTime) = 0;
 
 		virtual void OnEnter() = 0;
@@ -27,8 +28,11 @@ namespace Novaura {
 		bool IsOverLay() { return m_IsOverlay; }
 		bool SetIsOverLay(bool isOverlay) { m_IsOverlay = isOverlay; }
 
+		
+
 	private:
 		std::shared_ptr<InputController> m_InputController;
 		bool m_IsOverlay;
+		
 	};
 }

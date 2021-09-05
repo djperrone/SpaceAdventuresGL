@@ -1,9 +1,11 @@
 #include "sapch.h"
 #include "Novaura/Core/Application.h"
+#include "SpaceAdventures/SpaceAdventuresApp.h"
 
 int main()
 {
-	Novaura::Application* app = new Novaura::Application();
+	Novaura::Application* app = new SpaceAdventures::SpaceAdventuresApp();
+	
 	while (app->IsRunning())
 	{
 		app->Update();

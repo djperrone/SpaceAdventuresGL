@@ -20,6 +20,7 @@ namespace Novaura {
 	public:
 		
 		static void Init();
+		static void Init(std::shared_ptr<InputController> controller);
 		static void ShutDown();
 		static bool IsPressed(GLFWwindow* window, int keyCode);
 
@@ -32,6 +33,9 @@ namespace Novaura {
 		static std::shared_ptr<InputController> s_InputController;
 
 	private:
-		static InputHandler* s_Instance;
+		InputHandler() = default;
+		InputHandler(const InputHandler&) = delete;		
+		InputHandler(std::shared_ptr<InputController> controller);
+		//static InputHandler* s_Instance;
 	};
 }
