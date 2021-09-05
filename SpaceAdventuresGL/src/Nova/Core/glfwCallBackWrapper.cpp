@@ -15,12 +15,24 @@ namespace Nova {
         s_Application->MouseScrollCallBack(xOffset, yOffset);
     }
 
-    
+    void GLFWCallbackWrapper::KeyBoardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+    {
+        s_Application->KeyboardCallback(key, scancode, action, mods);
+    }
 
+    void GLFWCallbackWrapper::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+    {
+        s_Application->MouseButtonCallBack(button, action, mods);
+
+    }
 
     void GLFWCallbackWrapper::WindowResizeCallBack(GLFWwindow* window, int width, int height)
     {
         s_Application->WindowResizeCallBack(width, height);
 
+    }
+    void GLFWCallbackWrapper::MousePositionCallBack(GLFWwindow* window, double positionX, double positionY)
+    {
+        s_Application->MousePositionCallBack(positionX, positionY);
     }
 }

@@ -23,6 +23,10 @@ namespace Nova {
 		void SetCallBackFunctions();
 
 		void WindowResizeCallBack(int width, int height);
+		void KeyboardCallback(int key, int scancode, int action, int mods);
+		
+		void MousePositionCallBack(double positionX, double positionY);
+		void MouseButtonCallBack(int button, int action, int mods);
 		void MouseScrollCallBack(double xoffset, double yoffset);
 
 

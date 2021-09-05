@@ -14,8 +14,10 @@ namespace Nova {
 		~GLFWCallbackWrapper() = delete;
 
 		static void WindowResizeCallBack(GLFWwindow* window, int width, int height);
-		static void MousePositionCallback(GLFWwindow* window, double positionX, double positionY);
+		static void MousePositionCallBack(GLFWwindow* window, double positionX, double positionY);
 		static void MouseScrollCallBack(GLFWwindow* window, double xOffset, double yOffset);
+		static void KeyBoardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 		static void SetApplication(Application* application);
 	private:
 		static Application* s_Application;
