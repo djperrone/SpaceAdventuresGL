@@ -1,9 +1,9 @@
 #include "sapch.h"
-#include "Nova/Core/Application.h"
+#include "Novaura/Core/Application.h"
 
 int main()
 {
-	Nova::Application* app = new Nova::Application();
+	Novaura::Application* app = new Novaura::Application();
 	while (app->IsRunning())
 	{
 		app->Update();

@@ -12,5 +12,6 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <stack>
 #include <unordered_map>
 #include <unordered_set>
