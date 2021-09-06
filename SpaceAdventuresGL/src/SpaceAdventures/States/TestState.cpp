@@ -68,9 +68,12 @@ namespace SpaceAdventures {
 
 	void TestState::OnEnter()
 	{
-		m_Rect = std::make_unique<Novaura::Rectangle>(glm::vec2(0.0f,0.0f), glm::vec2(1.0f, 1.0f), glm::vec4(0.4f, 0.2f, 0.8f, 1.0f), glm::vec2(1.0f, 1.0f));
+		
+		//Novaura::InputHandler::CreateNewInputController();
+
+		m_Rect = std::make_unique<Novaura::Rectangle>(glm::vec2(0.0f,0.0f), glm::vec2(1.0f, 1.0f), glm::vec4(0.4f, 0.2f, 0.8f, 1.0f));
 		Novaura::InputHandler::GetCurrentController().BindAxisInputEvent(GLFW_KEY_T, []() {spdlog::info("test axis event T"); });
-		Novaura::Texture tex = TextureLoader::LoadTexture("Assets/Textures/Spaceship.png");
+		Novaura::Texture tex = Novaura::TextureLoader::LoadTexture("Assets/Textures/Spaceship.png");
 		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_MOUSE_BUTTON_1, [m_Rect = &m_Rect, m_Window = &m_Window]()
 			{
 				

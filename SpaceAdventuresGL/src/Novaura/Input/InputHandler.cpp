@@ -4,20 +4,14 @@
 #include "Novaura/Primitives/Rectangle.h"
 
 namespace Novaura {
-
-	//InputHandler* InputHandler::s_Instance;
-	/*std::unordered_map<int, Command> InputHandler::AxisKeyBindings;
-	std::unordered_map<EventType, std::unordered_map<KeyCode, Command>> InputHandler::ActionKeyBindings;*/
+	
 	std::shared_ptr<InputController> InputHandler::s_InputController;
 	std::shared_ptr<Window> InputHandler::s_CurrentWindow;
 
+
 	void InputHandler::Init()
-	{
-		//if (!s_Instance)
-		//{
-			//s_Instance = new InputHandler();
-			s_InputController = std::make_shared<InputController>();
-		//}
+	{		
+		s_InputController = std::make_shared<InputController>();		
 	}
 
 	void InputHandler::Init(std::shared_ptr<InputController> controller)
@@ -40,6 +34,12 @@ namespace Novaura {
 	bool InputHandler::IsPressed(GLFWwindow* window, int keyCode)
 	{
 		return glfwGetKey(window, keyCode) == GLFW_PRESS;
+	}
+
+	void InputHandler::CreateNewInputController()
+	{
+		s_InputController.reset(new InputController());
+		//return s_InputController;
 	}
 
 	MousePosition InputHandler::GetMousePosition()
@@ -81,7 +81,6 @@ namespace Novaura {
 		else
 		{
 			return false;
-
 		}
 	}
 }

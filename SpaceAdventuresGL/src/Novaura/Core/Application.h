@@ -15,6 +15,7 @@ namespace Novaura {
 	{
 	public:
 		Application();
+		Application(std::string_view title, float width, float height);
 		~Application();
 
 		void Update();

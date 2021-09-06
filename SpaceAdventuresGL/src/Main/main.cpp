@@ -4,7 +4,7 @@
 
 int main()
 {
-	Novaura::Application* app = new SpaceAdventures::SpaceAdventuresApp();
+	Novaura::Application* app = new SpaceAdventures::SpaceAdventuresApp("Space Adventures", 1280.0f, 720.0f);
 	
 	while (app->IsRunning())
 	{

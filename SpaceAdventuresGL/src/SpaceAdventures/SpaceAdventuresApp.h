@@ -7,7 +7,8 @@ namespace SpaceAdventures {
 	{
 	public:
 		SpaceAdventuresApp();
-
+		SpaceAdventuresApp(std::string_view title, float width, float height);
+		
 	private:
 
 

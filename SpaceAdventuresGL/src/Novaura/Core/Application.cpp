@@ -3,7 +3,6 @@
 #include "Novaura/Renderer/Renderer.h"
 #include <spdlog/spdlog.h>
 #include "Novaura/Renderer/Texture.h"
-#include "Novaura/TextureLoader/TextureLoader.h"
 #include "glfwCallBackWrapper.h"
 #include "Novaura/Input/InputHandler.h"
 
@@ -18,11 +17,21 @@ namespace Novaura {
 	Application::Application()
 		: m_Context("Space Adventures", 1280.0f,720.0f), m_CameraController(std::make_shared<CameraController>(m_Context.GetWindow()->Width, m_Context.GetWindow()->Height))
 	{		
+		Novaura::Renderer::Init();
+		Novaura::InputHandler::Init();
+		Novaura::InputHandler::SetCurrentWindow(m_Context.GetWindow());
+
+		SetCallBackFunctions();				
+	}
+
+	Application::Application(std::string_view title, float width, float height)
+		: m_Context(title, width, height), m_CameraController(std::make_shared<CameraController>(width, height))
+	{
 		InputHandler::Init();
 		InputHandler::SetCurrentWindow(m_Context.GetWindow());
 		Novaura::Renderer::Init();
 
-		SetCallBackFunctions();				
+		SetCallBackFunctions();
 	}
 
 	Application::~Application()

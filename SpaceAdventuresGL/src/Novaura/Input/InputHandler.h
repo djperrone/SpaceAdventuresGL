@@ -1,7 +1,7 @@
 #pragma once
 #include <GLFW/glfw3.h>
-#include <queue>
-#include "Command.h"
+//#include <queue>
+//#include "Command.h"
 #include "InputController.h"
 #include "Novaura/Core/Window.h"
 
@@ -29,6 +29,8 @@ namespace Novaura {
 		static void Init(std::shared_ptr<InputController> controller);
 		static void ShutDown();
 		static bool IsPressed(GLFWwindow* window, int keyCode);
+
+		static void CreateNewInputController();
 
 		static void SetCurrentWindow(std::shared_ptr<Window> window) { s_CurrentWindow = window; }
 		static std::shared_ptr<Window> GetCurrentWindow() { return s_CurrentWindow; }

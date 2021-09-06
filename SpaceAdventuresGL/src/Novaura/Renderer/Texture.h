@@ -6,7 +6,8 @@ namespace Novaura {
 	{
 	public:
 		Texture() = default;
-		Texture(const std::string& path);				
+		Texture(const std::string& path);
+		Texture(std::string_view path);
 
 		void Bind(unsigned int slot = 0) const;
 		void UnBind() const;
@@ -21,7 +22,8 @@ namespace Novaura {
 		unsigned int m_TextureID;
 		int m_Width, m_Height, m_NumChannels;
 		
-		void LoadTexture(const std::string& path);	
+		void LoadTexture(const std::string& path);
+		void LoadTexture(std::string_view path);
 
 	};
 
