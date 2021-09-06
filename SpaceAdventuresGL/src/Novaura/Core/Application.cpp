@@ -48,7 +48,8 @@ namespace Novaura {
 		glViewport(0, 0, width, height);
 		GetWindow()->Width = width;
 		GetWindow()->Height = height;
-		
+		GetWindow()->AspectRatio = width / height;
+
 		m_CameraController->GetCamera().SetProjectionMatrix(width, height);
 	}
 
