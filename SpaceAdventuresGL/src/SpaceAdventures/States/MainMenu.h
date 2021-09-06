@@ -8,7 +8,7 @@
 
 namespace SpaceAdventures {
 
-	class Button;
+	//class Button;
 
 	class MainMenu : public Novaura::State
 	{

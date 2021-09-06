@@ -2,6 +2,8 @@
 #include "Novaura/StateMachine/State.h"
 #include "Novaura/Camera/CameraController.h"
 #include "Novaura/Primitives/Rectangle.h"
+
+
 namespace SpaceAdventures {
 
 	class Level : public Novaura::State

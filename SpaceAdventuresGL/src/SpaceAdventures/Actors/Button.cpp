@@ -18,12 +18,12 @@ namespace SpaceAdventures {
 		const bool state = Novaura::InputHandler::IsRectHovered(GetRectangle());
 		if (state && !m_IsHovered)
 		{			
-			m_Rect->m_Color = glm::vec4(1.25f, 1.25f, 1.25f, 1.0f);
+			m_Rect->SetColor(glm::vec4(1.25f, 1.25f, 1.25f, 1.0f));
 			m_IsHovered = true;					
 		}		
 		else if(!state && m_IsHovered)
 		{
-			m_Rect->m_Color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);			
+			m_Rect->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));			
 			m_IsHovered = false;			
 		}
 	}

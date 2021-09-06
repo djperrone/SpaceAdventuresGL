@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Novaura/Primitives/Rectangle.h"
+#include "SpaceAdventures/ECS/TransformComponent.h"
+#include "SpaceAdventures/ECS/TextureComponent.h"
 namespace SpaceAdventures {
 
 	class Actor
@@ -16,6 +18,8 @@ namespace SpaceAdventures {
 
 	protected:
 		std::unique_ptr<Novaura::Rectangle> m_Rect;
+		std::unique_ptr<TransformComponent> m_TransformComponent;
+		std::unique_ptr<TextureComponent> m_TransformComponent;
 		std::string_view m_TextureFile;
 	};
 }

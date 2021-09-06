@@ -24,7 +24,8 @@ namespace SpaceAdventures {
 
 	void MainMenu::OnEnter()
 	{
-		Novaura::InputHandler::CreateNewInputController();
+		m_InputController = Novaura::InputHandler::CreateNewInputController();
+		Novaura::InputHandler::SetCurrentController(m_InputController);
 		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_MOUSE_BUTTON_LEFT, &MainMenu::HandleInput, this);
 
 		m_Title = std::make_unique<Novaura::Rectangle>(glm::vec2(0.0f, 0.5f), glm::vec2(2.0f, 0.40f));

@@ -9,16 +9,8 @@
 #include "Novaura/Renderer/TextureLoader.h"
 #include "Novaura/Input/InputHandler.h"
 
-namespace SpaceAdventures {
-	//TestState::TestState()
-	//	: m_CameraController(GetWindow().Width, GetWindow().Height)
-	//{
-	//}
-	//TestState::TestState(std::shared_ptr<Window> window)
-	//	: m_Window(window), m_CameraController(GetWindow().Width, GetWindow().Height)
-	//{
-	//	OnEnter();
-	//}
+namespace SpaceAdventures {	
+
 	TestState::TestState(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> cameraController)
 	{
 		m_Window = window;
@@ -41,13 +33,13 @@ namespace SpaceAdventures {
 		
 
 		
-		m_Rect->m_Position.x += test::velocity;
-		if (m_Rect->m_Position.x > aspectRatio)
+		m_Rect->GetPosition().x += test::velocity;
+		if (m_Rect->GetPosition().x > aspectRatio)
 		{
 			test::velocity *= -1;
 		}
 
-		if (m_Rect->m_Position.x < -aspectRatio)
+		if (m_Rect->GetPosition().x < -aspectRatio)
 		{
 			test::velocity *= -1;
 		}

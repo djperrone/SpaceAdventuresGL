@@ -8,6 +8,7 @@ namespace SpaceAdventures {
 	{
 		None = 0,
 		Play,
+		Resume,
 		PauseMenu,
 		MainMenu,
 		Exit

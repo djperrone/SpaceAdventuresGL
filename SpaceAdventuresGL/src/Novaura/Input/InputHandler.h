@@ -30,7 +30,7 @@ namespace Novaura {
 		static void ShutDown();
 		static bool IsPressed(GLFWwindow* window, int keyCode);
 
-		static void CreateNewInputController();
+		static std::shared_ptr<InputController> CreateNewInputController();
 
 		static void SetCurrentWindow(std::shared_ptr<Window> window) { s_CurrentWindow = window; }
 		static std::shared_ptr<Window> GetCurrentWindow() { return s_CurrentWindow; }

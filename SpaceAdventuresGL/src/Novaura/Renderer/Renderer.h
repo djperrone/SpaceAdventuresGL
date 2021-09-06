@@ -22,6 +22,13 @@ namespace Novaura {
 		static void DrawRectangle(const Rectangle& rectangle, std::string_view texture);
 		static void DrawRotatedRectangle(const Rectangle& rectangle);
 		static void DrawRotatedRectangle(const Rectangle& rectangle, std::string_view texture);
+
+		static void DrawRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color);
+		static void DrawRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, std::string_view texture);
+
+		static void DrawRotatedRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color);
+		static void DrawRotatedRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, std::string_view texture);	
+		
 	
 	};
 }

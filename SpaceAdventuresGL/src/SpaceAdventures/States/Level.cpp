@@ -1,6 +1,7 @@
 #include "sapch.h"
 #include "Level.h"
 #include "Novaura/Novaura.h"
+#include "SpaceAdventures/States/PauseMenu.h"
 
 namespace SpaceAdventures {
 
@@ -23,7 +24,8 @@ namespace SpaceAdventures {
 	}
 
 	void Level::Update(float deltaTime)
-	{
+	{		
+		
 		Draw(deltaTime);
 	}
 
@@ -36,6 +38,10 @@ namespace SpaceAdventures {
 
 	void Level::OnEnter()
 	{
+		m_InputController = Novaura::InputHandler::CreateNewInputController();
+		Novaura::InputHandler::SetCurrentController(m_InputController);
+		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_KEY_ESCAPE, &Level::Pause, this);
+
 	}
 
 	void Level::OnExit()
@@ -44,9 +50,11 @@ namespace SpaceAdventures {
 
 	void Level::Pause()
 	{
+		m_StateMachine->PushState(std::make_unique<PauseMenu>(m_Window, m_CameraController, m_StateMachine));
 	}
 
 	void Level::Resume()
 	{
+		Novaura::InputHandler::SetCurrentController(m_InputController);
 	}
 }

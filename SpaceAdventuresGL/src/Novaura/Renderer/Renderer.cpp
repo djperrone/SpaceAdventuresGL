@@ -102,13 +102,13 @@ namespace Novaura {
 		std::vector<VertexData> vertices;
 		vertices.reserve(4);
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), rectangle.m_Position) * glm::scale(glm::mat4(1.0f), rectangle.m_Scale);		
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), rectangle.GetPosition()) * glm::scale(glm::mat4(1.0f), rectangle.GetScale());		
 		
 
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.m_Color, s_RenderData.DefaultTextureCoords[0]);
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], rectangle.m_Color, s_RenderData.DefaultTextureCoords[1]);
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], rectangle.m_Color, s_RenderData.DefaultTextureCoords[2]);
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.m_Color, s_RenderData.DefaultTextureCoords[3]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[0]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[1]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[2]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[3]);
 		
 		s_RenderData.VertexBuffer->SetData(vertices);
 		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
@@ -130,13 +130,13 @@ namespace Novaura {
 		std::vector<VertexData> vertices;
 		vertices.reserve(4);
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), rectangle.m_Position) * glm::scale(glm::mat4(1.0f), rectangle.m_Scale);
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), rectangle.GetPosition()) * glm::scale(glm::mat4(1.0f), rectangle.GetScale());
 
 
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.m_Color, s_RenderData.DefaultTextureCoords[0]);
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], rectangle.m_Color, s_RenderData.DefaultTextureCoords[1]);
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], rectangle.m_Color, s_RenderData.DefaultTextureCoords[2]);
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.m_Color, s_RenderData.DefaultTextureCoords[3]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[0]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[1]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[2]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[3]);
 
 		s_RenderData.VertexBuffer->SetData(vertices);
 		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
@@ -155,9 +155,9 @@ namespace Novaura {
 		std::vector<VertexData> vertices;
 		vertices.reserve(4);
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), rectangle.m_Position)
-			* glm::rotate(glm::mat4(1.0f), rectangle.m_Rotation, glm::vec3(0.0f, 0.0f, 1.0f))
-			* glm::scale(glm::mat4(1.0f), rectangle.m_Scale);		
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), rectangle.GetPosition())
+			* glm::rotate(glm::mat4(1.0f), rectangle.GetRotation(), glm::vec3(0.0f, 0.0f, 1.0f))
+			* glm::scale(glm::mat4(1.0f), rectangle.GetScale());		
 
 		/*auto test = transform * s_RenderData.DefaultRectangleVertices[0];
 		spdlog::info("first {0}, {1}", test.x, test.y);
@@ -169,10 +169,10 @@ namespace Novaura {
 		spdlog::info("last {0}, {1}", test.x, test.y);*/
 
 
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.m_Color, s_RenderData.DefaultTextureCoords[0]);
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], rectangle.m_Color, s_RenderData.DefaultTextureCoords[1]);
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], rectangle.m_Color, s_RenderData.DefaultTextureCoords[2]);
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.m_Color, s_RenderData.DefaultTextureCoords[3]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[0]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[1]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[2]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[3]);
 
 		s_RenderData.VertexBuffer->SetData(vertices);
 		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
@@ -194,9 +194,9 @@ namespace Novaura {
 		std::vector<VertexData> vertices;
 		vertices.reserve(4);
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), rectangle.m_Position)
-			* glm::rotate(glm::mat4(1.0f), rectangle.m_Rotation, glm::vec3(0.0f, 0.0f, 1.0f))
-			* glm::scale(glm::mat4(1.0f), rectangle.m_Scale);
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), rectangle.GetPosition())
+			* glm::rotate(glm::mat4(1.0f), rectangle.GetRotation(), glm::vec3(0.0f, 0.0f, 1.0f))
+			* glm::scale(glm::mat4(1.0f), rectangle.GetScale());
 
 		/*auto test = transform * s_RenderData.DefaultRectangleVertices[0];
 		spdlog::info("first {0}, {1}", test.x, test.y);
@@ -208,10 +208,10 @@ namespace Novaura {
 		spdlog::info("last {0}, {1}", test.x, test.y);*/
 
 
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.m_Color, s_RenderData.DefaultTextureCoords[0]);
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], rectangle.m_Color, s_RenderData.DefaultTextureCoords[1]);
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], rectangle.m_Color, s_RenderData.DefaultTextureCoords[2]);
-		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.m_Color, s_RenderData.DefaultTextureCoords[3]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[0]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[1]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[2]);
+		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[3]);
 
 		s_RenderData.VertexBuffer->SetData(vertices);
 		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
