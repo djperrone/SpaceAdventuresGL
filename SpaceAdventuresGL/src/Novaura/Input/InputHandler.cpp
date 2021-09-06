@@ -49,9 +49,39 @@ namespace Novaura {
 		return mousePos;
 	}
 
-	bool InputHandler::IsRectClicked(const Rectangle& rectangle)
-	{
-		return false;
+	MousePosition InputHandler::GetMouseDeviceCoordinates()
+	{		
+		MousePosition mousePos;
+		glfwGetCursorPos(GetCurrentWindow()->Window, &mousePos.x, &mousePos.y);
+
+		mousePos.x = mousePos.x / GetCurrentWindow()->Width * GetCurrentWindow()->AspectRatio * 2.0f - GetCurrentWindow()->AspectRatio;
+		mousePos.y =  1.0f - mousePos.y / GetCurrentWindow()->Height * 2.0f;
+		return mousePos;
 	}
 
+	bool InputHandler::IsRectClicked(const Rectangle& rectangle)
+	{
+		struct Pos
+		{
+			float x, y;
+		};
+		auto [mx, my] = GetMouseDeviceCoordinates();
+
+		Pos bottomLeft =	{ rectangle.m_Position.x - rectangle.m_Scale.x * 0.5f, rectangle.m_Position.y - rectangle.m_Scale.y * 0.5f };
+		//Pos bottomRight =   { rectangle.m_Position.x + rectangle.m_Scale.x * 0.5f, rectangle.m_Position.y - rectangle.m_Scale.y * 0.5f };
+		//Pos topLeft =		{ rectangle.m_Position.x - rectangle.m_Scale.x * 0.5f, rectangle.m_Position.y + rectangle.m_Scale.y * 0.5f };
+		/* mx <= bottomRight.x && my >= bottomRight.y	&&
+			 mx >= topLeft.x && my <= topLeft.y)*/
+		Pos topRight =		{ rectangle.m_Position.x + rectangle.m_Scale.x * 0.5f, rectangle.m_Position.y + rectangle.m_Scale.y * 0.5f };
+
+		if (mx >= bottomLeft.x && my >= bottomLeft.y &&	mx <= topRight.x && my <= topRight.y)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+
+		}
+	}
 }

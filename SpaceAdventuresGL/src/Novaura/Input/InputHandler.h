@@ -37,6 +37,7 @@ namespace Novaura {
 		static InputController& GetCurrentController() { return *s_InputController; }
 		
 		static MousePosition GetMousePosition();
+		static MousePosition GetMouseDeviceCoordinates();
 		static bool IsRectClicked(const Rectangle& rectangle);
 
 		//static std::queue<Event> EventQueue;

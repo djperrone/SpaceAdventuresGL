@@ -36,7 +36,11 @@ namespace SpaceAdventures {
 	{
 		m_CameraController->Update(GetWindow(), deltaTime);		
 		float aspectRatio = m_Window->Width / m_Window->Height;
-		/*
+
+		
+		
+
+		
 		m_Rect->m_Position.x += test::velocity;
 		if (m_Rect->m_Position.x > aspectRatio)
 		{
@@ -46,7 +50,7 @@ namespace SpaceAdventures {
 		if (m_Rect->m_Position.x < -aspectRatio)
 		{
 			test::velocity *= -1;
-		}*/
+		}
 
 
 		Draw(deltaTime);		
@@ -69,10 +73,22 @@ namespace SpaceAdventures {
 		Novaura::Texture tex = TextureLoader::LoadTexture("Assets/Textures/Spaceship.png");
 		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_MOUSE_BUTTON_1, [m_Rect = &m_Rect, m_Window = &m_Window]()
 			{
+				
+					if (Novaura::InputHandler::IsRectClicked(*m_Rect->get()))
+					{
+						spdlog::info("collision deteced!");
+					}
+				
+			});
+
+
+
+		/*Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_MOUSE_BUTTON_1, [m_Rect = &m_Rect, m_Window = &m_Window]()
+			{
 				float aspectRatio = m_Window->get()->AspectRatio;
 				Novaura::MousePosition mPos = Novaura::InputHandler::GetMousePosition();
 			spdlog::info("mouse x {0}, mouse y {1}", mPos.x / m_Window->get()->Width * aspectRatio * 2.0f - aspectRatio , 1.0f -  mPos.y / m_Window->get()->Height * 2.0f);
-			spdlog::info("ship x {0}, ship y {1}", m_Rect->get()->m_Position.x, m_Rect->get()->m_Position.y); });
+			spdlog::info("ship x {0}, ship y {1}", m_Rect->get()->m_Position.x, m_Rect->get()->m_Position.y); });*/
 	/*	spdlog::info("mouse x {0}, mouse y {1}", mPos.x / m_Window->get()->Width, mPos.y / m_Window->get()->Height);
 		spdlog::info("ship x {0}, ship y {1}", m_Rect->get()->m_Position.x, m_Rect->get()->m_Position.y);*/
 	
