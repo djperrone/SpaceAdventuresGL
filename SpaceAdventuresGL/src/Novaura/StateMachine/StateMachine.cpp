@@ -1,5 +1,6 @@
 #include "sapch.h"
 #include "StateMachine.h"
+#include "State.h"
 
 namespace Novaura {
  
@@ -17,5 +18,9 @@ namespace Novaura {
     void StateMachine::PopState()
     {
         m_States.pop();
+    }
+    void StateMachine::ShutDown()
+    {
+        exit(0);
     }
 }

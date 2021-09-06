@@ -3,6 +3,7 @@
 #include "Novaura/Input/InputController.h"
 #include "Novaura/Core/Window.h"
 #include "Novaura/Camera/CameraController.h"
+#include "StateMachine.h"
 
 namespace Novaura {
 
@@ -29,6 +30,9 @@ namespace Novaura {
 		CameraController& GetCameraController() { return *m_CameraController; }
 		const CameraController& GetCameraController() const { return *m_CameraController; }
 
+		StateMachine& GetStateMachine() { return *m_StateMachine; }
+		const StateMachine& GetStateMachine() const { return *m_StateMachine; }
+
 		void SetCameraController(std::shared_ptr<CameraController> cameraController) { m_CameraController = cameraController; }
 
 		Novaura::Window& GetWindow() { return *m_Window; }
@@ -41,6 +45,7 @@ namespace Novaura {
 		std::shared_ptr<InputController> m_InputController;
 		std::shared_ptr<CameraController> m_CameraController;
 		std::shared_ptr<Window> m_Window;
+		std::shared_ptr<StateMachine> m_StateMachine;
 		bool m_IsOverlay;
 		
 	};

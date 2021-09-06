@@ -77,7 +77,7 @@ namespace SpaceAdventures {
 		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_MOUSE_BUTTON_1, [m_Rect = &m_Rect, m_Window = &m_Window]()
 			{
 				
-					if (Novaura::InputHandler::IsRectClicked(*m_Rect->get()))
+					if (Novaura::InputHandler::IsRectHovered(*m_Rect->get()))
 					{
 						spdlog::info("collision deteced!");
 					}

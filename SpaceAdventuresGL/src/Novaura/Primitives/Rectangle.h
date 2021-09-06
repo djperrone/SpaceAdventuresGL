@@ -9,6 +9,7 @@ namespace Novaura {
 		Rectangle() = default;
 		//Rectangle(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const glm::vec2& scale = glm::vec2(1.0f, 1.0f));
 		Rectangle(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color);
+		Rectangle(const glm::vec2& position, const glm::vec2& scale);
 		~Rectangle() = default;			
 
 	public:

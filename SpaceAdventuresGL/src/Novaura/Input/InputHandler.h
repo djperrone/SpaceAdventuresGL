@@ -40,7 +40,7 @@ namespace Novaura {
 		
 		static MousePosition GetMousePosition();
 		static MousePosition GetMouseDeviceCoordinates();
-		static bool IsRectClicked(const Rectangle& rectangle);
+		static bool IsRectHovered(const Rectangle& rectangle);
 
 		//static std::queue<Event> EventQueue;
 	private:

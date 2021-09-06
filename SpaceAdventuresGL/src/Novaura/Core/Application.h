@@ -26,7 +26,7 @@ namespace Novaura {
 		inline bool IsRunning() const { return m_Context.IsRunning(); }
 
 	protected:
-		StateMachine m_StateMachine;
+		std::shared_ptr <StateMachine> m_StateMachine;
 
 	private:
 		void ScreenSaver();

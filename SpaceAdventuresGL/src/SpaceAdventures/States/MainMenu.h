@@ -15,24 +15,27 @@ namespace SpaceAdventures {
 	public:
 		MainMenu() = default;
 		MainMenu(Novaura::Window & window);
-		MainMenu(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> cameraController);
-
-
-		virtual void HandleInput() override;
-		virtual void Update(float deltaTime)override;
-		virtual void Draw(float deltaTime) override;
+		MainMenu(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> cameraController, std::shared_ptr<Novaura::StateMachine> stateMachine);
 
 		virtual void OnEnter() override;
+
+		virtual void Update(float deltaTime)override;
+		virtual void Draw(float deltaTime) override;
+		virtual void HandleInput() override;
+
 		virtual void OnExit() override;
 
 		virtual void Pause() override;
 		virtual void Resume() override;
+
+
+		
 		
 	private:			
 
-		/*std::vector<std::unique_ptr<StaticSprite>> m_SpriteList;
-		std::vector<std::unique_ptr<Button>> m_ButtonList;*/
-		std::unique_ptr<Button> m_Button;
+		//std::vector<std::unique_ptr<StaticSprite>> m_SpriteList;
+		std::vector<std::unique_ptr<Button>> m_ButtonList;
+		std::unique_ptr<Novaura::Rectangle> m_Title;
 
 	};
 }

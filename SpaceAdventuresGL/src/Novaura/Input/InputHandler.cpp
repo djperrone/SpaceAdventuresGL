@@ -59,7 +59,7 @@ namespace Novaura {
 		return mousePos;
 	}
 
-	bool InputHandler::IsRectClicked(const Rectangle& rectangle)
+	bool InputHandler::IsRectHovered(const Rectangle& rectangle)
 	{
 		struct Pos
 		{

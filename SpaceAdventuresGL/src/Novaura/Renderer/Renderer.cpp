@@ -125,6 +125,7 @@ namespace Novaura {
 	void Renderer::DrawRectangle(const Rectangle& rectangle, std::string_view texture)
 	{
 		Texture tex = TextureLoader::LoadTexture(texture);
+		tex.Bind();
 
 		std::vector<VertexData> vertices;
 		vertices.reserve(4);

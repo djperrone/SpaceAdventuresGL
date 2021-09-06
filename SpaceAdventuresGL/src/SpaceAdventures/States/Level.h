@@ -9,7 +9,7 @@ namespace SpaceAdventures {
 	public:
 		Level() = default;
 		Level(Novaura::Window & window);
-		Level(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> cameraController);
+		Level(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> cameraController, std::shared_ptr<Novaura::StateMachine> stateMachine);
 
 		virtual void HandleInput() override;
 		virtual void Update(float deltaTime)override;
