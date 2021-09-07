@@ -7,7 +7,8 @@ namespace SpaceAdventures {
 	{
 		m_Gun = std::make_unique<ProjectileComponent>(m_Rect.get(), m_MovementComponent.get(), m_Team);
 		//m_Rect = std::make_unique<Novaura::Rectangle>(pos, 1.0);
-
+		time(&currentTime);
+		previousTime = currentTime;
 	}
 
 	UFO::UFO(float x, float y)
@@ -24,8 +25,6 @@ namespace SpaceAdventures {
 		m_CombatComponent = std::make_unique<CombatComponent>(3.0f, 3.0f);
 		m_Gun = std::make_unique<ProjectileComponent>(m_Rect.get(), m_MovementComponent.get(), m_Team);
 		m_Rect->SetPosition(glm::vec3(x,y,-0.1f));
-
-
 	}
 
 	void UFO::Update(float dt)
@@ -36,6 +35,7 @@ namespace SpaceAdventures {
 		if (currentTime - previousTime >= 2)
 		{
 			FireGun();
+			//spdlog::info("gun list size {0}", m_Gun->GetProjectileList().size());
 			previousTime = currentTime;
 		}
 	}

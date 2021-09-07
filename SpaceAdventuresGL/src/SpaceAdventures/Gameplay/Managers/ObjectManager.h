@@ -5,6 +5,7 @@
 //#include "CollisionManager.h"
 //#include "ProjectileManager.h"
 #include "../GameObjects/Asteroid.h"
+#include "../GameObjects/Player.h"
 //#include "InputHandler/InputController.h"
 
 #include "SpaceAdventures/Actors/Character.h"
@@ -26,7 +27,7 @@ namespace SpaceAdventures {
 		void LoadAllProjectiles();
 
 		bool IsWithinBounds(const Character& object);
-		//Player* GetPlayer();
+		inline Player& GetPlayer() { return *m_Player; }
 
 		std::list<std::unique_ptr<Asteroid>>& GetAsteroidList() { return m_AsteroidList; }
 		std::list<std::shared_ptr<Ship>>& GetShipList() { return m_ShipList; }
@@ -35,7 +36,7 @@ namespace SpaceAdventures {
 
 	private:
 		//std::unique_ptr<CollisionManager> m_CollisionManager;
-		//std::shared_ptr<Player> m_Player;	
+		std::shared_ptr<Player> m_Player;	
 		//std::unique_ptr<KeyboardController> m_InputController;
 		std::unique_ptr<Character> m_MouseController;
 		std::unique_ptr<Spawner> m_Spawner;

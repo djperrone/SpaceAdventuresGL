@@ -8,7 +8,7 @@ namespace SpaceAdventures {
 	Projectile::Projectile(glm::vec2 position, glm::vec2 velocity, Team team, float angle)
 	{
 
-		m_Rect = std::make_unique<Novaura::Rectangle>(glm::vec2(position), glm::vec2(0.25f, 0.25f), angle);
+		m_Rect = std::make_unique<Novaura::Rectangle>(glm::vec2(position), glm::vec2(0.15f, 0.15f), angle);
 		//m_MovementComponent = std::make_unique<MovementComponent>(glm::vec2((cos(angle) * 3.14159 / 180.0f), (sin(angle) * 3.14159 / 180.0f)), 10.0f);
 		m_MovementComponent = std::make_unique<MovementComponent>(glm::vec2(cos(angle) * 180.0f / 3.14159f,sin(angle) * 180.0f / 3.14159f), 1.0f);
 		m_CombatComponent = std::make_unique<CombatComponent>(1.0f, 1.0f);			  
@@ -45,7 +45,7 @@ namespace SpaceAdventures {
 
 		float yRad = glm::sin(glm::radians(angle));
 		float xRad = glm::cos(glm::radians(angle));
-		spdlog::info("x: {0},  y {1} ", xRad, yRad);
+		//spdlog::info("x: {0},  y {1} ", xRad, yRad);
 		
 		m_MovementComponent->SetVelocity(glm::vec2(xRad, yRad));
 	
@@ -76,7 +76,7 @@ namespace SpaceAdventures {
 
 		float yRad = glm::sin(glm::radians(angle));
 		float xRad = glm::cos(glm::radians(angle));
-		spdlog::info("x: {0},  y {1} ", xRad, yRad);
+		//spdlog::info("x: {0},  y {1} ", xRad, yRad);
 
 		m_MovementComponent->SetVelocity(glm::vec2(xRad, yRad));
 

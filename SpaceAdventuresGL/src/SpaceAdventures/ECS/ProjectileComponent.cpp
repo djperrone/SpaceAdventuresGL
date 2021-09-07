@@ -37,10 +37,14 @@ namespace SpaceAdventures {
 		}
 	}
 
-	bool ProjectileComponent::FireGun()
+	void ProjectileComponent::FireGun()
 	{
+		glm::vec2 spawnLoc = { m_TransformComponent->GetPosition() };
 
-		if (!m_IsReloading)
+		m_ProjectileList.emplace_back(std::move(std::make_shared<Projectile>(spawnLoc,
+			m_MovementComponent->GetVelocity(), m_Team, m_TransformComponent->GetRotation())));
+
+		/*if (!m_IsReloading)
 		{
 			if (m_UseCount >= m_MagazineSize)
 			{
@@ -64,7 +68,7 @@ namespace SpaceAdventures {
 			}
 			return true;
 		}
-		return false;
+		return false;*/
 	}
 	void ProjectileComponent::ClearGun()
 	{

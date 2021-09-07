@@ -15,7 +15,7 @@ namespace SpaceAdventures {
 		ProjectileComponent(Novaura::Rectangle* transform, MovementComponent* movement, Team team);
 		void Reload();
 		virtual void Update() override;
-		bool FireGun();
+		void FireGun();
 		void ClearGun();
 		inline std::vector<std::shared_ptr<Projectile>>& GetProjectileList() { return m_ProjectileList; }
 		
@@ -38,7 +38,7 @@ namespace SpaceAdventures {
 
 		uint32_t m_ReloadTime = 2500;
 
-		bool m_IsReloading;
+		bool m_IsReloading = false;
 
 
 	};

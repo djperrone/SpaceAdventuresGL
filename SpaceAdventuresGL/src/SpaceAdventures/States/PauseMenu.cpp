@@ -75,7 +75,7 @@ namespace SpaceAdventures {
 		Novaura::Renderer::Clear();
 		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());
 		//Novaura::Renderer::DrawRectangle(m_Title->GetRectangle(), m_Button->GetTextureFile());
-		Novaura::Renderer::DrawRectangle(*m_Title, "Assets/Textures/Buttons/ResumeButtonLight.png");
+		Novaura::Renderer::DrawRectangle(*m_Title, "Assets/Textures/Buttons/TitleLight.png");
 
 		for (auto& button : m_ButtonList)
 		{

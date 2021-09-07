@@ -36,8 +36,12 @@ namespace SpaceAdventures {
 		m_Spawner = std::make_unique<Spawner>(&m_AsteroidList, &m_ShipList);
 		m_ProjectileManager = std::make_unique<ProjectileManager>();
 
-		m_ProjectileList.emplace_back(std::make_unique<Projectile>(glm::vec2(0.0f, 0.0f), glm::vec2(0.05f, 0.5f), Team::Enemy,45.0f));
-		m_ProjectileList.emplace_back(std::make_unique<Projectile>(glm::vec2(0.5f,-0.5f), glm::vec2(0.05f, 0.5f), Team::Friend,0.0f));
+		m_Player = std::make_shared<Player>();	
+		m_ShipList.push_back(m_Player);
+
+
+		//m_ProjectileList.emplace_back(std::make_unique<Projectile>(glm::vec2(0.0f, 0.0f), glm::vec2(0.05f, 0.5f), Team::Enemy,45.0f));
+		//m_ProjectileList.emplace_back(std::make_unique<Projectile>(glm::vec2(0.5f,-0.5f), glm::vec2(0.05f, 0.5f), Team::Friend,0.0f));
 
 	}
 

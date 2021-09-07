@@ -11,14 +11,14 @@ namespace Novaura {
         : m_Width(0), m_Height(0), m_NumChannels(0)
     {
         LoadTexture(path);
-        spdlog::info("tecture const");
+        //spdlog::info("tecture const");
     }
 
     Texture::Texture(std::string_view path)
         : m_Width(0), m_Height(0), m_NumChannels(0)
     {
         LoadTexture(path);
-        spdlog::info("tecture const");
+       // spdlog::info("tecture const");
     }
 
     void Texture::Bind(unsigned int slot) const

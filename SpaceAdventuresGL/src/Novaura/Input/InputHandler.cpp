@@ -36,6 +36,11 @@ namespace Novaura {
 		return glfwGetKey(window, keyCode) == GLFW_PRESS;
 	}
 
+	bool InputHandler::IsPressed(int keyCode)
+	{
+		return glfwGetKey(GetCurrentWindow()->Window, keyCode) == GLFW_PRESS;
+	}
+
 	std::shared_ptr<InputController> InputHandler::CreateNewInputController()
 	{
 		//s_InputController.reset(new InputController());

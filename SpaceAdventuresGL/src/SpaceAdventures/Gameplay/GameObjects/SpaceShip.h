@@ -10,8 +10,8 @@ namespace SpaceAdventures {
 	{
 	public:			
 
-		virtual ~Ship() {}		
-		inline void FireGun() { spdlog::info("firing gun from ship class");	m_Gun->FireGun(); }
+		virtual ~Ship() = default;
+		virtual void FireGun() { /*spdlog::info("firing gun from ship class");	*/m_Gun->FireGun(); }
 		inline bool IsReloading() { return m_Gun->IsReloading(); }
 		virtual void Update(float dt) override {}
 

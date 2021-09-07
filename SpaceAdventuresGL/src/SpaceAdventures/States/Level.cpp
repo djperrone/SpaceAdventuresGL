@@ -31,7 +31,7 @@ namespace SpaceAdventures {
 
 	void Level::Draw(float deltaTime)
 	{
-		Novaura::Renderer::SetClearColor(0.4f, 0.2f, 0.0f, 1.0f);
+		Novaura::Renderer::SetClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		Novaura::Renderer::Clear();
 		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());
 
@@ -59,6 +59,9 @@ namespace SpaceAdventures {
 		m_InputController = Novaura::InputHandler::CreateNewInputController();
 		Novaura::InputHandler::SetCurrentController(m_InputController);
 		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_KEY_ESCAPE, &Level::Pause, this);
+
+		
+
 
 		m_ObjectManager = std::make_unique<ObjectManager>();
 	}

@@ -48,6 +48,16 @@ namespace Novaura {
 		m_DeltaTime = currentFrame - m_LastFrame;
 		m_LastFrame = currentFrame;
 		m_Context.PollEvents();
+
+
+		for (auto& [key, command] : InputHandler::GetCurrentController().GetAxisInputBindings())
+		{
+			if (InputHandler::IsPressed(key))
+			{
+				command.Execute();
+			}
+		}
+
 		//m_CameraController.Update(GetWindow(), m_DeltaTime);
 
 		m_StateMachine->GetCurrentState().Update(m_DeltaTime);
@@ -79,10 +89,7 @@ namespace Novaura {
 			spdlog::info("space");
 		}
 
-		if (controller.GetAxisInputBindings().find(key) != controller.GetAxisInputBindings().end())
-		{
-			controller.GetAxisInputBindings()[key].Execute();
-		}
+		
 
 		if (controller.GetActionInputBindings().find(action) != controller.GetActionInputBindings().end())
 		{
