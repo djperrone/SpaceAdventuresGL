@@ -6,7 +6,7 @@
 
 #include "Novaura/Primitives/Rectangle.h"
 #include <GLFW/glfw3.h>
-
+#include <spdlog/spdlog.h>
 namespace SpaceAdventures {
 	ProjectileComponent::ProjectileComponent(Novaura::Rectangle* transform, MovementComponent* movement, Team team)
 		: m_TransformComponent(transform), m_MovementComponent(movement), m_Team(team)
@@ -18,6 +18,8 @@ namespace SpaceAdventures {
 
 	void ProjectileComponent::Reload()
 	{
+		
+
 		if (!m_IsReloading)
 		{
 			ReloadStartTime = glfwGetTime();
@@ -29,6 +31,7 @@ namespace SpaceAdventures {
 	{
 		if (m_IsReloading)
 		{
+			
 			if (glfwGetTime() - ReloadStartTime > m_ReloadTime)
 			{
 				m_UseCount = 0;
@@ -39,23 +42,25 @@ namespace SpaceAdventures {
 
 	void ProjectileComponent::FireGun()
 	{
-		glm::vec2 spawnLoc = { m_TransformComponent->GetPosition() };
+		/*glm::vec2 spawnLoc = { m_TransformComponent->GetPosition() };
 
 		m_ProjectileList.emplace_back(std::move(std::make_shared<Projectile>(spawnLoc,
-			m_MovementComponent->GetVelocity(), m_Team, m_TransformComponent->GetRotation())));
+			m_MovementComponent->GetVelocity(), m_Team, m_TransformComponent->GetRotation())));*/
 
-		/*if (!m_IsReloading)
+		if (!m_IsReloading)
 		{
 			if (m_UseCount >= m_MagazineSize)
 			{
 				Reload();
-				return false;
+				
+				return;
+				//return false;
 			}
-
 
 			currentTime = glfwGetTime();
 			if (currentTime - previousTime >= fireRate)
 			{
+			
 				glm::vec2 spawnLoc = { m_TransformComponent->GetPosition() };
 				
 
@@ -66,9 +71,9 @@ namespace SpaceAdventures {
 
 				m_UseCount++;
 			}
-			return true;
+			//return true;
 		}
-		return false;*/
+		//return false;
 	}
 	void ProjectileComponent::ClearGun()
 	{

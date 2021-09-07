@@ -159,7 +159,7 @@ namespace Novaura {
 		vertices.reserve(4);
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), rectangle.GetPosition())
-			* glm::rotate(glm::mat4(1.0f), rectangle.GetRotation(), glm::vec3(0.0f, 0.0f, 1.0f))
+			* glm::rotate(glm::mat4(1.0f), glm::radians(rectangle.GetRotation()), glm::vec3(0.0f, 0.0f, 1.0f))
 			* glm::scale(glm::mat4(1.0f), rectangle.GetScale());		
 
 		/*auto test = transform * s_RenderData.DefaultRectangleVertices[0];
@@ -193,22 +193,16 @@ namespace Novaura {
 	{
 		Texture tex = TextureLoader::LoadTexture(texture);
 
+		tex.Bind();
 
 		std::vector<VertexData> vertices;
 		vertices.reserve(4);
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), rectangle.GetPosition())
-			* glm::rotate(glm::mat4(1.0f), rectangle.GetRotation(), glm::vec3(0.0f, 0.0f, 1.0f))
+			* glm::rotate(glm::mat4(1.0f), glm::radians(rectangle.GetRotation()), glm::vec3(0.0f, 0.0f, 1.0f))
 			* glm::scale(glm::mat4(1.0f), rectangle.GetScale());
 
-		/*auto test = transform * s_RenderData.DefaultRectangleVertices[0];
-		spdlog::info("first {0}, {1}", test.x, test.y);
-		test = transform * s_RenderData.DefaultRectangleVertices[1];
-		spdlog::info("{0}, {1}", test.x, test.y);
-		test = transform * s_RenderData.DefaultRectangleVertices[2];
-		spdlog::info("{0}, {1}", test.x, test.y);
-		test = transform * s_RenderData.DefaultRectangleVertices[3];
-		spdlog::info("last {0}, {1}", test.x, test.y);*/
+		
 
 
 		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], rectangle.GetColor(), s_RenderData.DefaultTextureCoords[0]);

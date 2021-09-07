@@ -10,14 +10,16 @@ namespace SpaceAdventures {
 		//m_MouseCursor = mouseCursor;
 		std::cout << "player!\n";
 
+		m_Team = Team::Friend;
 		m_TextureFile = "Assets/Textures/Spaceship.png";
 		m_Rect = std::make_unique<Novaura::Rectangle>(glm::vec2(0.0f, 0.0f), glm::vec2(0.25f, 0.25f));
+		m_Rect->SetRotation(90.0f);
 		
 		m_MovementComponent = std::make_unique<MovementComponent>(glm::vec2(1.0f, 1.0f), 0.5f);
 		m_CombatComponent = std::make_unique<CombatComponent>(3.0f, 3.0f);
 		m_Gun = std::make_unique<ProjectileComponent>(m_Rect.get(), m_MovementComponent.get(), m_Team);
 
-		m_Team = Team::Friend;
+
 		m_Tag = Tag::Player;
 
 		/*InitComponents(350, 400, 32, 32, 3.5f, 90.0f, 4.0f, 0.0f, 0.0f, 5.0f, 1.0f);
@@ -29,6 +31,9 @@ namespace SpaceAdventures {
 		Novaura::InputHandler::GetCurrentController().BindAxisInputEvent(GLFW_KEY_S, &Player::MoveDown, this);
 		Novaura::InputHandler::GetCurrentController().BindAxisInputEvent(GLFW_KEY_A, &Player::MoveLeft, this);
 		Novaura::InputHandler::GetCurrentController().BindAxisInputEvent(GLFW_KEY_D, &Player::MoveRight, this);
+
+		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_MOUSE_BUTTON_LEFT, &Player::FireGun, this);
+
 		Novaura::InputHandler::GetCurrentController().BindAxisInputEvent(GLFW_KEY_T, []() {spdlog::info("test axis event T"); });
 		//Novaura::InputHandler::GetCurrentController().BindAxisInputEvent(GLFW_KEY_S, &Player::MoveDown, this);
 
@@ -80,6 +85,8 @@ namespace SpaceAdventures {
 	void Player::Update(float dt)
 	{
 		m_DeltaTime = dt;
+		m_Gun->Update();
+
 		//std::cout << "paused: " << Paused << std::endl;
 		//float dx = (m_MouseCursor->GetXPosition() - GetXPosition());
 		//float dy = (m_MouseCursor->GetYPosition() - GetYPosition());

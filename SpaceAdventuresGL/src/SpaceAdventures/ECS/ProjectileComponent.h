@@ -28,15 +28,15 @@ namespace SpaceAdventures {
 		MovementComponent* m_MovementComponent;
 		Team m_Team;
 
-		uint32_t currentTime = 0;
-		uint32_t previousTime = 0;
-		uint32_t ReloadStartTime = 0;
-		uint32_t fireRate = 250;
+		double currentTime = 0;
+		double previousTime = 0;
+		double ReloadStartTime = 0;
+		double fireRate =0.25;
 
 		int m_MagazineSize = 10;
 		int m_UseCount = 0;
 
-		uint32_t m_ReloadTime = 2500;
+		double m_ReloadTime = 2.5;
 
 		bool m_IsReloading = false;
 
