@@ -21,6 +21,10 @@ namespace SpaceAdventures {
 		
 		inline bool IsReloading() const { return m_IsReloading; }
 
+	public:
+		inline int GetMagazineSize() const { return m_MagazineSize; }
+		inline int GetBulletsUsed() const { return m_UseCount; }
+
 	private:
 
 		std::vector<std::shared_ptr<Projectile>> m_ProjectileList;
@@ -36,7 +40,7 @@ namespace SpaceAdventures {
 		int m_MagazineSize = 10;
 		int m_UseCount = 0;
 
-		double m_ReloadTime = 2.5;
+		double m_ReloadTime = 2.0;
 
 		bool m_IsReloading = false;
 

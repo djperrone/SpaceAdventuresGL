@@ -18,8 +18,6 @@ namespace SpaceAdventures {
 
 	void ProjectileComponent::Reload()
 	{
-		
-
 		if (!m_IsReloading)
 		{
 			ReloadStartTime = glfwGetTime();
@@ -32,7 +30,7 @@ namespace SpaceAdventures {
 		if (m_IsReloading)
 		{
 			
-			if (glfwGetTime() - ReloadStartTime > m_ReloadTime)
+			if (glfwGetTime() - ReloadStartTime >= m_ReloadTime)
 			{
 				m_UseCount = 0;
 				m_IsReloading = false;
@@ -70,6 +68,13 @@ namespace SpaceAdventures {
 				previousTime = currentTime;
 
 				m_UseCount++;
+				if (m_UseCount >= m_MagazineSize)
+				{
+					Reload();
+
+					return;
+					//return false;
+				}
 			}
 			//return true;
 		}

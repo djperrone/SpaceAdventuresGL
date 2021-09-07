@@ -20,6 +20,9 @@ namespace SpaceAdventures {
 			return m_Gun->GetProjectileList();
 		}	
 
+		inline ProjectileComponent& GetGun() { return *m_Gun; }
+		inline const ProjectileComponent& GetGun() const { return *m_Gun; }
+
 	protected:
 
 		std::unique_ptr<ProjectileComponent> m_Gun;	

@@ -33,6 +33,7 @@ namespace SpaceAdventures {
 		Novaura::InputHandler::GetCurrentController().BindAxisInputEvent(GLFW_KEY_D, &Player::MoveRight, this);
 
 		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_MOUSE_BUTTON_LEFT, &Player::FireGun, this);
+		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_KEY_R, &Player::Reload, this);
 
 		Novaura::InputHandler::GetCurrentController().BindAxisInputEvent(GLFW_KEY_T, []() {spdlog::info("test axis event T"); });
 		//Novaura::InputHandler::GetCurrentController().BindAxisInputEvent(GLFW_KEY_S, &Player::MoveDown, this);
@@ -87,6 +88,16 @@ namespace SpaceAdventures {
 		m_DeltaTime = dt;
 		m_Gun->Update();
 
+		Novaura::MousePosition pos = Novaura::InputHandler::GetMouseDeviceCoordinates();
+
+		float dx = (pos.x - m_Rect->GetPosition().x);
+		float dy = (pos.y - m_Rect->GetPosition().y);
+
+		float angle;
+		angle = atan2(dy, dx) * (180 / 3.146f);
+
+		m_Rect->SetRotation(angle);
+
 		//std::cout << "paused: " << Paused << std::endl;
 		//float dx = (m_MouseCursor->GetXPosition() - GetXPosition());
 		//float dy = (m_MouseCursor->GetYPosition() - GetYPosition());
@@ -133,11 +144,11 @@ namespace SpaceAdventures {
 		//m_Gun->Update();
 	}
 
-	bool Player::Reload()
+	void Player::Reload()
 	{
-		std::cout << "relloading!\n";
+		
 		m_Gun->Reload();
-		return true;
+	
 	}
 
 

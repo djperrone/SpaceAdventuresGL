@@ -18,7 +18,7 @@ namespace SpaceAdventures {
 		void MoveDown();
 		void MoveLeft();
 		void MoveRight();
-		bool Reload();
+		void Reload();
 
 	private:		
 		float m_DeltaTime;

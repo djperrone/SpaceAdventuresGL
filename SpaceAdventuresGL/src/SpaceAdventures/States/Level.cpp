@@ -35,6 +35,40 @@ namespace SpaceAdventures {
 		Novaura::Renderer::Clear();
 		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());
 
+		//if(m_ObjectManager->GetPlayer().IsReloading())
+		//float size = m_ObjectManager->GetPlayer().GetGun().GetMagazineSize();
+
+		float aspectRatio = Novaura::InputHandler::GetCurrentWindow()->AspectRatio;
+		
+		float quantity = m_ObjectManager->GetPlayer().GetGun().GetMagazineSize() - m_ObjectManager->GetPlayer().GetGun().GetBulletsUsed();
+
+	
+		glm::vec3 scale = glm::vec3(quantity / 10.0f, 0.1f, 0.0f);
+		glm::vec3 pos = glm::vec3(aspectRatio * 0.7f, aspectRatio * -0.5f, 0.0f);
+
+
+		
+
+		if (m_ObjectManager->GetPlayer().GetGun().IsReloading())
+		{
+			//Novaura::Renderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/WoodenBox.png", m_ObjectManager->GetPlayer().GetGun().GetMagazineSize());
+			//Novaura::Renderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/WoodenBox.png", 1.0f);
+			//Novaura::Renderer::DrawRectangle(m_ObjectManager->GetPlayer().GetRectangle(), "Assets/Textures/WoodenBox.png");
+
+			m_CurrentTime = glfwGetTime();
+			if (m_CurrentTime - m_PreviousTime >= 0.5)
+			{
+				//Novaura::Renderer::DrawRectangle(pos, glm::vec3(1.0f, 0.1f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/ReloadIcon.png", 1.0f);
+				Novaura::Renderer::DrawRectangle(pos, glm::vec3(1.0f,0.1f,0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/ReloadIcon.png", m_ObjectManager->GetPlayer().GetGun().GetMagazineSize());
+				m_PreviousTime = m_CurrentTime;
+			}
+
+		}
+		else
+		{
+			Novaura::Renderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/ReloadIcon.png", quantity);
+
+		}
 		for (auto& projectile : m_ObjectManager->GetProjectileList())
 		{
 			Novaura::Renderer::DrawRotatedRectangle(projectile->GetRectangle(), projectile->GetTextureFile());

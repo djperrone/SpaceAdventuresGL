@@ -25,7 +25,10 @@ namespace SpaceAdventures {
 
 	
 	private:
-
+		double m_CurrentTime = 0.0;
+		double m_PreviousTime = 0.0;
+		int bulletCounter = 0;
+		double m_DisplayTime = 0.25;
 		std::unique_ptr<ObjectManager> m_ObjectManager;
 
 	};
