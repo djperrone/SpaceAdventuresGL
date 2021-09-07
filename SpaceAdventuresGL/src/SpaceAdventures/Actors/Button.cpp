@@ -13,7 +13,7 @@ namespace SpaceAdventures {
 		m_TextureFile = fileName;
 	}
 
-	void Button::Update()
+	void Button::Update(float dt)
 	{
 		const bool state = Novaura::InputHandler::IsRectHovered(GetRectangle());
 		if (state && !m_IsHovered)

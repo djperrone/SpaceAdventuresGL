@@ -49,6 +49,8 @@ namespace Novaura {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
 
+		
+
 		SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 
 		s_RenderData.VertexArray = std::make_unique<VertexArray>();
@@ -149,6 +151,8 @@ namespace Novaura {
 
 		//shader.SetUniform4f("u_Color", m_Color);
 		glDrawElements(GL_TRIANGLES, s_RenderData.IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+		tex.UnBind();
+
 	}
 	void Renderer::DrawRotatedRectangle(const Rectangle& rectangle)
 	{
@@ -224,5 +228,7 @@ namespace Novaura {
 
 		//shader.SetUniform4f("u_Color", m_Color);
 		glDrawElements(GL_TRIANGLES, s_RenderData.IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+		tex.UnBind();
+
 	}
 }

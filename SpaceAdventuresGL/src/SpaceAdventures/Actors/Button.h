@@ -21,7 +21,7 @@ namespace SpaceAdventures {
 		Button() = default;
 		Button(std::string_view fileName, ButtonType type, const glm::vec2& position, const glm::vec2& scale);	
 
-		virtual void Update() override;
+		virtual void Update(float dt) override;
 
 		inline bool IsHovered() { return m_IsHovered; }
 		inline void SetHovered(bool isHovered) {m_IsHovered = isHovered; }

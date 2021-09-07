@@ -3,7 +3,7 @@
 #include "Novaura/Camera/CameraController.h"
 #include "Novaura/Primitives/Rectangle.h"
 
-
+#include "SpaceAdventures/Gameplay/Managers/ObjectManager.h"
 namespace SpaceAdventures {
 
 	class Level : public Novaura::State
@@ -26,7 +26,7 @@ namespace SpaceAdventures {
 	
 	private:
 
-		
+		std::unique_ptr<ObjectManager> m_ObjectManager;
 
 	};
 }

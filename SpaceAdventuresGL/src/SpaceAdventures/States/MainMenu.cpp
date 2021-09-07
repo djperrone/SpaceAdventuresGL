@@ -37,7 +37,7 @@ namespace SpaceAdventures {
 	{
 		for (auto& button : m_ButtonList)
 		{
-			button->Update();
+			button->Update(deltaTime);
 		}
 
 		Draw(deltaTime);

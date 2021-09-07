@@ -13,7 +13,8 @@ namespace SpaceAdventures {
 		None = 0,
 		Asteroid,
 		Ship,
-		Player
+		Player,
+		Projectile
 	};
 
 	enum class Team
@@ -29,7 +30,9 @@ namespace SpaceAdventures {
 		Character() = default;
 		Character(std::string_view textureFile, const glm::vec2& position, const glm::vec2& scale, float rotation, const::glm::vec2& velocity, float speed, float health, float damage);
 		Character(std::string_view textureFile, const Novaura::Rectangle& rect, const MovementComponent& mc, const CombatComponent& cc);
+		//Character(std::string_view textureFile, Novaura::Rectangle&& rect, MovementComponent&& mc, CombatComponent&& cc);
 
+		virtual ~Character() = default;
 		
 		glm::vec2 GetVelocity() const;
 		void SetVelocity(glm::vec2 velocity);		
@@ -37,7 +40,7 @@ namespace SpaceAdventures {
 		float GetSpeed() const;
 		void SetSpeed(float speed);
 
-		glm::vec2 GetVelocityVec() const;
+		void UpdateLocation(float dt);
 
 		float GetLeftBound() const;
 		float GetRightBound()const;
@@ -57,6 +60,9 @@ namespace SpaceAdventures {
 	protected:
 		std::unique_ptr<MovementComponent> m_MovementComponent;
 		std::unique_ptr<CombatComponent> m_CombatComponent;
+
+		Team m_Team;
+		Tag m_Tag = Tag::None;
 		//ColliderComponent m_ColliderComponent;
 	};
 }
