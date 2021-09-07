@@ -29,11 +29,15 @@ namespace SpaceAdventures {
 	{
 		if (m_IsReloading)
 		{
-			
-			if (glfwGetTime() - ReloadStartTime >= m_ReloadTime)
+			float currentTime = glfwGetTime() - ReloadStartTime;
+			if (currentTime >= m_ReloadTime)
 			{
 				m_UseCount = 0;
 				m_IsReloading = false;
+			}
+			else
+			{
+				m_UseCount = glm::mix(0.0f, (float)m_ReloadTime, currentTime);
 			}
 		}
 	}

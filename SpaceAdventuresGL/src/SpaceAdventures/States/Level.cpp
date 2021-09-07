@@ -26,49 +26,44 @@ namespace SpaceAdventures {
 	void Level::Update(float deltaTime)
 	{		
 		m_ObjectManager->Update(deltaTime);
+		m_CameraController->Update(*Novaura::InputHandler::GetCurrentWindow(),deltaTime);
 		Draw(deltaTime);
+		
 	}
 
 	void Level::Draw(float deltaTime)
 	{
 		Novaura::Renderer::SetClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		Novaura::Renderer::Clear();
-		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());
-
-		//if(m_ObjectManager->GetPlayer().IsReloading())
-		//float size = m_ObjectManager->GetPlayer().GetGun().GetMagazineSize();
+		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());		
 
 		float aspectRatio = Novaura::InputHandler::GetCurrentWindow()->AspectRatio;
 		
 		float quantity = m_ObjectManager->GetPlayer().GetGun().GetMagazineSize() - m_ObjectManager->GetPlayer().GetGun().GetBulletsUsed();
-
 	
 		glm::vec3 scale = glm::vec3(quantity / 10.0f, 0.1f, 0.0f);
-		glm::vec3 pos = glm::vec3(aspectRatio * 0.7f, aspectRatio * -0.5f, 0.0f);
+		glm::vec3 pos = glm::vec3(aspectRatio - scale.x * 0.5f,  -1.0f + scale.y, 0.0f);
 
 
-		
+		glm::vec3 healthScale = glm::vec3(0.75f, 0.15f, 0.0f);
+		Novaura::Renderer::DrawRectangle(glm::vec3(-aspectRatio + healthScale.x * 0.5f, -1.0f + healthScale.y, 0.0f), healthScale, glm::vec4(0.5f, 1.0f, 0.2f, 0.8f));
+
 
 		if (m_ObjectManager->GetPlayer().GetGun().IsReloading())
-		{
-			//Novaura::Renderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/WoodenBox.png", m_ObjectManager->GetPlayer().GetGun().GetMagazineSize());
-			//Novaura::Renderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/WoodenBox.png", 1.0f);
-			//Novaura::Renderer::DrawRectangle(m_ObjectManager->GetPlayer().GetRectangle(), "Assets/Textures/WoodenBox.png");
-
-			m_CurrentTime = glfwGetTime();
-			if (m_CurrentTime - m_PreviousTime >= 0.5)
-			{
-				//Novaura::Renderer::DrawRectangle(pos, glm::vec3(1.0f, 0.1f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/ReloadIcon.png", 1.0f);
-				Novaura::Renderer::DrawRectangle(pos, glm::vec3(1.0f,0.1f,0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/ReloadIcon.png", m_ObjectManager->GetPlayer().GetGun().GetMagazineSize());
-				m_PreviousTime = m_CurrentTime;
-			}
-
+		{						
+			scale = glm::vec3(m_ObjectManager->GetPlayer().GetGun().GetBulletsUsed()/10.0f, 0.1f, 0.0f);
+			pos = glm::vec3(aspectRatio - scale.x * 0.5f, -1.0f + scale.y, 0.0f);
+			Novaura::Renderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/ReloadIcon.png", m_ObjectManager->GetPlayer().GetGun().GetBulletsUsed());		
 		}
 		else
 		{
 			Novaura::Renderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/ReloadIcon.png", quantity);
-
 		}
+
+
+
+
+
 		for (auto& projectile : m_ObjectManager->GetProjectileList())
 		{
 			Novaura::Renderer::DrawRotatedRectangle(projectile->GetRectangle(), projectile->GetTextureFile());

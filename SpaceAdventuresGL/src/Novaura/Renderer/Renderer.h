@@ -26,7 +26,7 @@ namespace Novaura {
 		static void DrawTiledRect(const Rectangle& rectangle, std::string_view texture, float quantity);
 
 
-		static void DrawRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color);
+		static void DrawRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, float quantity = 1.0f);
 		static void DrawRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, std::string_view texture, float quantity = 1.0f);
 
 

@@ -12,6 +12,7 @@
 #include "SpaceAdventures/GamePlay/GameObjects/SpaceShip.h"
 
 #include "ProjectileManager.h"
+#include "SpaceAdventures/Gameplay/Managers/CollisionManager.h"
 
 
 namespace SpaceAdventures {
@@ -32,6 +33,9 @@ namespace SpaceAdventures {
 		std::list<std::unique_ptr<Asteroid>>& GetAsteroidList() { return m_AsteroidList; }
 		std::list<std::shared_ptr<Ship>>& GetShipList() { return m_ShipList; }
 		std::list<std::shared_ptr<Character>>& GetProjectileList() { return m_ProjectileList; }
+
+	private:
+		std::unique_ptr<CollisionManager> m_CollisionManager;
 
 
 	private:

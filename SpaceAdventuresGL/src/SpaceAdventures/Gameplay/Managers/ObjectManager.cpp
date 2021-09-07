@@ -38,6 +38,7 @@ namespace SpaceAdventures {
 
 		m_Player = std::make_shared<Player>();	
 		m_ShipList.push_back(m_Player);
+		m_CollisionManager = std::make_unique<CollisionManager>(&m_ShipList, &m_AsteroidList, &m_ProjectileList);
 
 
 		//m_ProjectileList.emplace_back(std::make_unique<Projectile>(glm::vec2(0.0f, 0.0f), glm::vec2(0.05f, 0.5f), Team::Enemy,45.0f));
@@ -73,7 +74,7 @@ namespace SpaceAdventures {
 			}
 
 			LoadAllProjectiles();
-
+			m_CollisionManager->Tick();
 
 			CleanList();
 	}

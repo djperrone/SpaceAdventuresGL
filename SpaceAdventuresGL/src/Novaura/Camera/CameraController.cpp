@@ -9,7 +9,7 @@ namespace Novaura {
 	}
 	void CameraController::Update(Window& window, float deltaTime)
 	{
-		if (glfwGetKey(window.Window, GLFW_KEY_A) == GLFW_PRESS)
+		if (glfwGetKey(window.Window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		{
 			//spdlog::info("a pressed");
 			m_Position.x -= m_CameraSpeed * deltaTime;
@@ -18,7 +18,7 @@ namespace Novaura {
 			m_Position.y -= sin(glm::radians(m_Rotation)) * m_CameraSpeed * deltaTime;*/
 			//spdlog::info("camera pos {0}, {1}", m_Position.x, m_Position.y);
 		}
-		if (glfwGetKey(window.Window, GLFW_KEY_D) == GLFW_PRESS)
+		if (glfwGetKey(window.Window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		{
 			//spdlog::info("d pressed");
 			m_Position.x+= m_CameraSpeed * deltaTime;
@@ -26,7 +26,7 @@ namespace Novaura {
 			m_Position.y += sin(glm::radians(m_Rotation)) * m_CameraSpeed * deltaTime;*/
 			//spdlog::info("camera pos {0}, {1}", m_Position.x, m_Position.y);
 		}
-		if (glfwGetKey(window.Window, GLFW_KEY_W) == GLFW_PRESS)
+		if (glfwGetKey(window.Window, GLFW_KEY_UP) == GLFW_PRESS)
 		{
 		//	spdlog::info("w pressed");
 			m_Position.y+= m_CameraSpeed * deltaTime;
@@ -34,7 +34,7 @@ namespace Novaura {
 			m_Position.y += cos(glm::radians(m_Rotation)) * m_CameraSpeed * deltaTime;*/
 			//spdlog::info("camera pos {0}, {1}",m_Position.x, m_Position.y);
 		}
-		if (glfwGetKey(window.Window, GLFW_KEY_S) == GLFW_PRESS)
+		if (glfwGetKey(window.Window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		{
 			//spdlog::info("s pressed");
 		//	spdlog::info("camera pos {0}, {1}", m_Position.x, m_Position.y);

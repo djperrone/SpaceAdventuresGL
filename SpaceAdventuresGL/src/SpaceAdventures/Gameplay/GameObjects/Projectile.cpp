@@ -7,6 +7,7 @@ namespace SpaceAdventures {
 
 	Projectile::Projectile(glm::vec2 position, glm::vec2 velocity, Team team, float angle)
 	{
+		m_Team = team;
 		m_Rect = std::make_unique<Novaura::Rectangle>(glm::vec2(position), glm::vec2(0.15f, 0.15f),angle);
 		//m_MovementComponent = std::make_unique<MovementComponent>(glm::vec2((cos(angle) * 3.14159 / 180.0f), (sin(angle) * 3.14159 / 180.0f)), 10.0f);
 		m_MovementComponent = std::make_unique<MovementComponent>(glm::vec2(glm::cos(glm::radians(angle)), glm::sin(glm::radians(angle))), 1.0f);

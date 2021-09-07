@@ -23,6 +23,8 @@ namespace SpaceAdventures {
 		virtual void Pause() override;
 		virtual void Resume() override;
 
+		void HandleCollision();
+
 	
 	private:
 		double m_CurrentTime = 0.0;
