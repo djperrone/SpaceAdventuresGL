@@ -35,6 +35,11 @@ namespace SpaceAdventures {
 		Novaura::Renderer::Clear();
 		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());
 
+		for (auto& projectile : m_ObjectManager->GetProjectileList())
+		{
+			Novaura::Renderer::DrawRectangle(projectile->GetRectangle(), projectile->GetTextureFile());
+		}
+
 		for (auto& asteroid : m_ObjectManager->GetAsteroidList())
 		{
 			Novaura::Renderer::DrawRectangle(asteroid->GetRectangle(), asteroid->GetTextureFile());
@@ -43,10 +48,7 @@ namespace SpaceAdventures {
 		{
 			Novaura::Renderer::DrawRectangle(ship->GetRectangle(), ship->GetTextureFile());
 		}
-		for (auto& projectile : m_ObjectManager->GetProjectileList())
-		{
-			Novaura::Renderer::DrawRectangle(projectile->GetRectangle(), projectile->GetTextureFile());
-		}
+		
 		/*auto asteroid = std::make_unique<Asteroid>(0.0f, 0.0f);
 		Novaura::Renderer::DrawRectangle(asteroid->GetRectangle(), asteroid->GetTextureFile());*/
 

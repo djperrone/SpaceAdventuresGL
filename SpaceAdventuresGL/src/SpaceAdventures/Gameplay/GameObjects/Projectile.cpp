@@ -33,6 +33,7 @@ namespace SpaceAdventures {
 
 
 		}
+		//m_Rect->SetPosition(glm::vec3(position, -0.3f));
 
 		//float xRad = glm::degrees(cos(180.0f));
 		//float yRad = glm::degrees(glm::sin(180.0f));
