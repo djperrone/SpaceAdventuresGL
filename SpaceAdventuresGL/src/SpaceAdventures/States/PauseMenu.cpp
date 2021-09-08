@@ -30,6 +30,7 @@ namespace SpaceAdventures {
 		m_ButtonList.emplace_back(std::make_unique<Button>("Assets/Textures/Buttons/ResumeButtonLight.png", ButtonType::Resume, glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.20f)));
 		m_ButtonList.emplace_back(std::make_unique<Button>("Assets/Textures/Buttons/MainMenuLight.png", ButtonType::MainMenu, glm::vec2(0.0f, -0.250f), glm::vec2(1.0f, 0.20f)));
 		m_ButtonList.emplace_back(std::make_unique<Button>("Assets/Textures/Buttons/ExitButtonLight.png", ButtonType::Exit, glm::vec2(0.0f, -0.50f), glm::vec2(1.0f, 0.20f)));
+		m_IsPaused = true;
 	}
 
 	void PauseMenu::HandleInput()
@@ -66,13 +67,13 @@ namespace SpaceAdventures {
 			button->Update(deltaTime);
 		}
 
-		Draw(deltaTime);
+	//	Draw(deltaTime);
 	}
 
 	void PauseMenu::Draw(float deltaTime)
 	{
-		Novaura::Renderer::SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
-		Novaura::Renderer::Clear();
+		//Novaura::Renderer::SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+		//Novaura::Renderer::Clear();
 		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());
 		//Novaura::Renderer::DrawRectangle(m_Title->GetRectangle(), m_Button->GetTextureFile());
 		Novaura::Renderer::DrawRectangle(*m_Title, "Assets/Textures/Buttons/TitleLight.png");

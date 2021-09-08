@@ -1,7 +1,7 @@
 #pragma once
 #include <random>
 // https://github.com/TheCherno/OneHourParticleSystem/blob/master/OpenGL-Sandbox/src/Random.h
-
+#include <spdlog/spdlog.h>
 namespace Novaura {
 	
 	class Random
@@ -9,7 +9,8 @@ namespace Novaura {
 	public:
 		static void Init()
 		{
-			s_RandomEngine.seed(std::random_device()());
+			s_RandomEngine.seed(std::random_device{}());
+			spdlog::info("entropy {0}", rd.entropy());
 		}
 
 		static float Float()
@@ -27,5 +28,6 @@ namespace Novaura {
 	private:
 		static std::mt19937 s_RandomEngine;
 		static std::uniform_real_distribution<> s_Distribution;
+		static std::random_device rd;
 	};
 }

@@ -57,6 +57,8 @@ namespace SpaceAdventures {
 		Team GetTeam()const;
 		Tag GetTag() const;
 
+		inline float GetMaxHealth() { return m_CombatComponent->GetMaxHealth(); }
+
 	protected:
 		std::unique_ptr<MovementComponent> m_MovementComponent;
 		std::unique_ptr<CombatComponent> m_CombatComponent;

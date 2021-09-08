@@ -45,7 +45,7 @@ namespace SpaceAdventures {
 		}
 
 
-		Draw(deltaTime);		
+		//Draw(deltaTime);		
 
 	}
 

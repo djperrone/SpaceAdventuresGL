@@ -41,12 +41,15 @@ namespace Novaura {
 		bool IsOverLay() { return m_IsOverlay; }
 		bool SetIsOverLay(bool isOverlay) { m_IsOverlay = isOverlay; }		
 
+		inline bool IsPaused() { return m_IsPaused; }
+
 	protected:
 		std::shared_ptr<InputController> m_InputController;
 		std::shared_ptr<CameraController> m_CameraController;
 		std::shared_ptr<Window> m_Window;
 		std::shared_ptr<StateMachine> m_StateMachine;
-		bool m_IsOverlay;
+		bool m_IsOverlay = false;
+		bool m_IsPaused = false;
 		
 	};
 }

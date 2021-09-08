@@ -7,4 +7,5 @@ namespace Novaura {
 
 	std::mt19937 Random::s_RandomEngine;
 	std::uniform_real_distribution<> Random::s_Distribution;	
+	std::random_device Random::rd;
 }

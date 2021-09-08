@@ -93,7 +93,7 @@ namespace SpaceAdventures {
 	{
 		m_DeltaTime = dt;
 		m_Gun->Update();
-		spdlog::info("playe health: {0}", m_CombatComponent->GetHealth());
+		//spdlog::info("playe health: {0}", m_CombatComponent->GetHealth());
 		Novaura::MousePosition pos = Novaura::InputHandler::GetMouseDeviceCoordinates();
 
 		float dx = (pos.x - m_Rect->GetPosition().x);

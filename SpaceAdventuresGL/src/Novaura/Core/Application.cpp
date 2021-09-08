@@ -6,6 +6,7 @@
 #include "glfwCallBackWrapper.h"
 #include "Novaura/Input/InputHandler.h"
 #include "Novaura/StateMachine/State.h"
+#include "Novaura/Random.h"
 namespace test {
 
 	glm::vec3 velocity(0.5f, 0.5f, 0.0f);
@@ -22,6 +23,7 @@ namespace Novaura {
 		Novaura::Renderer::Init();
 		Novaura::InputHandler::Init();
 		Novaura::InputHandler::SetCurrentWindow(m_Context.GetWindow());
+		
 		SetCallBackFunctions();				
 	}
 
@@ -33,7 +35,7 @@ namespace Novaura {
 		InputHandler::Init();
 		InputHandler::SetCurrentWindow(m_Context.GetWindow());
 		Novaura::Renderer::Init();
-
+		Random::Init();
 		SetCallBackFunctions();
 	}
 
@@ -59,8 +61,24 @@ namespace Novaura {
 		}
 
 		//m_CameraController.Update(GetWindow(), m_DeltaTime);
+		if (m_StateMachine->GetCurrentState().IsPaused())
+		{
+			auto currentState = std::move(m_StateMachine->GetStateStack().top());
 
-		m_StateMachine->GetCurrentState().Update(m_DeltaTime);
+			m_StateMachine->GetStateStack().pop();
+			//m_StateMachine->GetCurrentState().Update(m_DeltaTime);
+			m_StateMachine->GetCurrentState().Draw(m_DeltaTime);
+
+			currentState->Update(m_DeltaTime);
+			currentState->Draw(m_DeltaTime);
+			m_StateMachine->PushState(std::move(currentState));
+
+		}
+		else
+		{
+			m_StateMachine->GetCurrentState().Update(m_DeltaTime);
+			m_StateMachine->GetCurrentState().Draw(m_DeltaTime);
+		}
 		m_Context.SwapBuffers();
 		
 	}	

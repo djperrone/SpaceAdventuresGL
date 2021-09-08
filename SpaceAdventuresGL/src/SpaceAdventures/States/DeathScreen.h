@@ -2,6 +2,8 @@
 #include "Novaura/StateMachine/State.h"
 #include "Novaura/Camera/CameraController.h"
 #include "Novaura/Primitives/Rectangle.h"
+#include "SpaceAdventures/Actors/Button.h"
+
 
 namespace SpaceAdventures {
 
@@ -11,7 +13,7 @@ namespace SpaceAdventures {
 	public:
 		DeathScreen() = default;
 		DeathScreen(Novaura::Window& window);
-		DeathScreen(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> cameraController);
+		DeathScreen(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> cameraController, std::shared_ptr<Novaura::StateMachine> stateMachine);
 
 		virtual void HandleInput() override;
 		virtual void Update(float deltaTime)override;
@@ -23,8 +25,9 @@ namespace SpaceAdventures {
 		virtual void Pause() override;
 		virtual void Resume() override;
 		
-	private:
-
+	private:	
+		std::vector<std::unique_ptr<Button>> m_ButtonList;
+		std::unique_ptr<Novaura::Rectangle> m_Title;
 		
 
 	};

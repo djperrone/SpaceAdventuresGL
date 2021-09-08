@@ -40,7 +40,7 @@ namespace SpaceAdventures {
 			button->Update(deltaTime);
 		}
 
-		Draw(deltaTime);
+		//Draw(deltaTime);
 	}
 
 	void MainMenu::Draw(float deltaTime)
