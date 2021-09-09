@@ -5,6 +5,8 @@
 #include "InputController.h"
 #include "Novaura/Core/Window.h"
 
+#include <glm/glm.hpp>
+
 namespace Novaura {	
 	class Rectangle;
 	using EventType = int;

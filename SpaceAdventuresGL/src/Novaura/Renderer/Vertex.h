@@ -9,3 +9,4 @@ struct VertexData
 	glm::vec4 Color;
 	glm::vec2 TexCoord;
 };
+

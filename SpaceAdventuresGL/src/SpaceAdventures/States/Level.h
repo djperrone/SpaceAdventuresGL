@@ -4,6 +4,8 @@
 #include "Novaura/Primitives/Rectangle.h"
 
 #include "SpaceAdventures/Gameplay/Managers/ObjectManager.h"
+#include "SpaceAdventures/Gameplay/GameObjects/CursorTarget.h"
+
 namespace SpaceAdventures {
 
 	class Level : public Novaura::State
@@ -12,7 +14,7 @@ namespace SpaceAdventures {
 		Level() = default;
 		Level(Novaura::Window & window);
 		Level(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> cameraController, std::shared_ptr<Novaura::StateMachine> stateMachine);
-
+		~Level() { OnExit(); }
 		virtual void HandleInput() override;
 		virtual void Update(float deltaTime)override;
 		virtual void Draw(float deltaTime) override;
@@ -32,6 +34,7 @@ namespace SpaceAdventures {
 		int bulletCounter = 0;
 		double m_DisplayTime = 0.25;
 		std::unique_ptr<ObjectManager> m_ObjectManager;
+		std::unique_ptr<CursorTarget> m_Cursor;
 
 	};
 }

@@ -18,22 +18,23 @@ namespace Novaura {
 
 		static void BeginScene(Shader& shader, const Camera& camera);
 		static void BeginScene(const Camera& camera);
-		static void DrawRectangle(const Rectangle& rectangle);
-		static void DrawRectangle(const Rectangle& rectangle, std::string_view texture);
-		static void DrawRotatedRectangle(const Rectangle& rectangle);
-		static void DrawRotatedRectangle(const Rectangle& rectangle, std::string_view texture);
-
-		static void DrawTiledRect(const Rectangle& rectangle, std::string_view texture, float quantity);
+		static void DrawRectangle(const Rectangle& rectangle, const glm::vec2& quantity = { 1.0f,1.0f });
+		static void DrawRectangle(const Rectangle& rectangle, std::string_view texture, const glm::vec2& quantity = { 1.0f,1.0f });
 
 
-		static void DrawRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, float quantity = 1.0f);
-		static void DrawRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, std::string_view texture, float quantity = 1.0f);
+		static void DrawRotatedRectangle(const Rectangle& rectangle, const glm::vec2& quantity = { 1.0f,1.0f });
+		static void DrawRotatedRectangle(const Rectangle& rectangle, std::string_view texture, const glm::vec2& quantity = { 1.0f,1.0f });
 
-
-
-		static void DrawRotatedRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color);
-		static void DrawRotatedRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, std::string_view texture);	
-		
 	
+
+
+		static void DrawRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, const glm::vec2& quantity = { 1.0f,1.0f });
+		static void DrawRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, std::string_view texture, const glm::vec2& quantity = { 1.0f,1.0f });
+
+
+
+		static void DrawRotatedRectangle(const glm::vec3& position, const glm::vec3& scale, float rotation, const glm::vec4& color, const glm::vec2& quantity = { 1.0f,1.0f });
+		static void DrawRotatedRectangle(const glm::vec3& position, const glm::vec3& scale, float rotation, const glm::vec4& color, std::string_view texture, const glm::vec2& quantity = { 1.0f,1.0f });
+		
 	};
 }

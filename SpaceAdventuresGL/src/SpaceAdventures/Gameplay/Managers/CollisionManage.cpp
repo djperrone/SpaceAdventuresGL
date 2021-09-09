@@ -8,29 +8,29 @@
 namespace SpaceAdventures {
 
 	CollisionManager::CollisionManager(std::list<std::shared_ptr<Ship>>* objList, std::list<std::unique_ptr<Asteroid>>* asteroidList, std::list<std::shared_ptr<Character>>* projectileList)
-		: m_ObjectList(objList), m_AsteroidList(asteroidList), m_ProjectileList(projectileList)
+		: m_ShipList(objList), m_AsteroidList(asteroidList), m_ProjectileList(projectileList)
 	{
 		
 	}
 
 	CollisionManager::CollisionManager()
-		: m_AsteroidList(nullptr), m_ObjectList(nullptr)
+		: m_AsteroidList(nullptr), m_ShipList(nullptr)
 	{
 	}
 
 	void CollisionManager::Tick()
 	{
 
-		for (auto it = std::begin(*m_ObjectList); it != std::end(*m_ObjectList); it++)
+		for (auto it = std::begin(*m_ShipList); it != std::end(*m_ShipList); it++)
 		{
-			//std::cout << "col man objlist " << (m_ObjectList->size()) << "\n";
+			//std::cout << "col man objlist " << (m_ShipList->size()) << "\n";
 
-			for (auto otherIt = std::begin(*m_ObjectList); otherIt != std::end(*m_ObjectList); otherIt++)
+			for (auto otherIt = std::begin(*m_ShipList); otherIt != std::end(*m_ShipList); otherIt++)
 			{
 				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
 				{
 					HandleCollisionEvent(it->get(), otherIt->get());
-					std::cout << "collision!\n";
+					//std::cout << "collision!\n";
 				}
 			}
 
@@ -39,7 +39,7 @@ namespace SpaceAdventures {
 				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
 				{
 					HandleCollisionEvent(it->get(), otherIt->get());
-					std::cout << "collision!\n";
+					//std::cout << "collision!\n";
 				}
 			}
 
@@ -48,7 +48,7 @@ namespace SpaceAdventures {
 				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
 				{
 					HandleCollisionEvent(it->get(), otherIt->get());
-					std::cout << "collision!\n";
+				//	std::cout << "collision!\n";
 				}
 			}
 
@@ -62,16 +62,16 @@ namespace SpaceAdventures {
 				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
 				{
 					HandleCollisionEvent(it->get(), otherIt->get());
-					std::cout << "collision!\n";
+					//std::cout << "collision!\n";
 				}
 			}
 
-			for (auto otherIt = std::begin(*m_ObjectList); otherIt != std::end(*m_ObjectList); otherIt++)
+			for (auto otherIt = std::begin(*m_ShipList); otherIt != std::end(*m_ShipList); otherIt++)
 			{
 				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
 				{
 					HandleCollisionEvent(it->get(), otherIt->get());
-					std::cout << "collision!\n";
+					//std::cout << "collision!\n";
 				}
 			}
 			for (auto otherIt = std::begin(*m_ProjectileList); otherIt != std::end(*m_ProjectileList); otherIt++)
@@ -79,7 +79,7 @@ namespace SpaceAdventures {
 				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
 				{
 					HandleCollisionEvent(it->get(), otherIt->get());
-					std::cout << "collision!\n";
+					//std::cout << "collision!\n";
 				}
 			}
 
@@ -93,16 +93,16 @@ namespace SpaceAdventures {
 				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
 				{
 					HandleCollisionEvent(it->get(), otherIt->get());
-					std::cout << "collision!\n";
+					//std::cout << "collision!\n";
 				}
 			}
 
-			for (auto otherIt = std::begin(*m_ObjectList); otherIt != std::end(*m_ObjectList); otherIt++)
+			for (auto otherIt = std::begin(*m_ShipList); otherIt != std::end(*m_ShipList); otherIt++)
 			{
 				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
 				{
 					HandleCollisionEvent(it->get(), otherIt->get());
-					std::cout << "collision!\n";
+					//std::cout << "collision!\n";
 				}
 			}
 			for (auto otherIt = std::begin(*m_ProjectileList); otherIt != std::end(*m_ProjectileList); otherIt++)
@@ -110,13 +110,13 @@ namespace SpaceAdventures {
 				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
 				{
 					HandleCollisionEvent(it->get(), otherIt->get());
-					std::cout << "collision!\n";
+					//std::cout << "collision!\n";
 				}
 			}
 
 		}
 
-		/*for (int i = 0; i < m_ObjectList.size(); i++)
+		/*for (int i = 0; i < m_ShipList.size(); i++)
 		{
 
 		}*/
@@ -126,7 +126,7 @@ namespace SpaceAdventures {
 
 	void CollisionManager::HandleCollisionEvent(Character* current, Character* other)
 	{
-		std::cout << "collission detected!\n";
+		//std::cout << "collission detected!\n";
 		current->Attack(other);
 		//other->Attack(current);
 	}
@@ -158,7 +158,7 @@ namespace SpaceAdventures {
 			boundsA.TopLeft.y >= boundsB.BottomRight.y		  &&
 			boundsB.TopRight.y >= boundsA.BottomLeft.y)
 		{
-			spdlog::info(__FUNCTION__);
+			//spdlog::info(__FUNCTION__);
 
 			return true;
 		}

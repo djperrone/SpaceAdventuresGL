@@ -3,6 +3,10 @@
 
 namespace Novaura {	
 
+	struct Bounds
+	{
+		glm::vec2 BottomLeft, BottomRight, TopLeft, TopRight;
+	};
 	class Rectangle
 	{
 	public:
@@ -14,16 +18,19 @@ namespace Novaura {
 		Rectangle(const glm::vec2& position);
 		~Rectangle() = default;	
 
+		Bounds GetBounds() const;
+
+
 	public:
 		inline glm::vec3& GetPosition()  { return m_Position; }
 		inline glm::vec3& GetScale()		{ return m_Scale; }
 		inline glm::vec4& GetColor()		{ return m_Color; }
-		inline float GetRotation()		{ return m_Rotation; }
+		inline float GetRotation()	const	{ return m_Rotation; }
 
 		inline const glm::vec3& GetPosition() const { return m_Position; }
 		inline const glm::vec3& GetScale()    const { return m_Scale; }
 		inline const glm::vec4& GetColor()    const { return m_Color; }
-		inline const float GetRotation()     const { return m_Rotation; }
+		//inline const float GetRotation()     const { return m_Rotation; }
 
 
 		inline void SetPosition(const glm::vec3& position) { m_Position = position; }

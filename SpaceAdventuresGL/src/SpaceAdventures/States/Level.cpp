@@ -1,6 +1,7 @@
 #include "sapch.h"
 #include "Level.h"
 #include "Novaura/Novaura.h"
+#include "Novaura/Collision/Collision.h"
 #include "SpaceAdventures/States/PauseMenu.h"
 #include "SpaceAdventures/States/DeathScreen.h"
 
@@ -31,7 +32,7 @@ namespace SpaceAdventures {
 			 m_StateMachine->ReplaceCurrentState(std::make_unique<DeathScreen>(m_Window, m_CameraController, m_StateMachine));
 			 return;
 		}
-
+		m_Cursor->Update(deltaTime);
 		m_ObjectManager->Update(deltaTime);
 		m_CameraController->Update(*Novaura::InputHandler::GetCurrentWindow(),deltaTime);
 		//Draw(deltaTime);
@@ -44,27 +45,35 @@ namespace SpaceAdventures {
 		Novaura::Renderer::Clear();
 		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());		
 
-		float aspectRatio = Novaura::InputHandler::GetCurrentWindow()->AspectRatio;		
 		float width = Novaura::InputHandler::GetCurrentWindow()->Width;
 		float height = Novaura::InputHandler::GetCurrentWindow()->Height;
-
+		float aspectRatio = Novaura::InputHandler::GetCurrentWindow()->AspectRatio;		
+		//float aspectRatio = width / height;
 		// healthbar
 		glm::vec3 healthScale = glm::vec3(glm::mix(0.0f,0.25f,m_ObjectManager->GetPlayer().GetHealth()), 0.15f, 0.0f);
 		float currentHealth = m_ObjectManager->GetPlayer().GetHealth();
 		float maxHealth = m_ObjectManager->GetPlayer().GetMaxHealth();
 		glm::vec4 healthColor = glm::vec4((maxHealth - currentHealth) / maxHealth, currentHealth / maxHealth, 0.0f, 1.0f);
-		Novaura::Renderer::DrawRectangle(glm::vec3(-aspectRatio + healthScale.x * 0.5f, -1.0f + healthScale.y, 0.0f), healthScale, healthColor);
+
+		/*glm::vec3 healthPos = aspectRatio > 0 ? glm::vec3(-aspectRatio + healthScale.x * 0.5f, -1.0f + healthScale.y, 0.0f) :
+			glm::vec3(-1.0f + healthScale.x * 0.5f, -1.0f + healthScale.y, 0.0f);*/
+
+		glm::vec3 healthPos = glm::vec3(-aspectRatio + healthScale.x * 0.5f, -1.0f + healthScale.y, 0.0f);
+		spdlog::info("width: {0:03.3f},height: {1:03.3f}", width, height);
+		spdlog::info("{0:03.3f}, {1}", aspectRatio, healthPos.x);
+		Novaura::Renderer::DrawRectangle(healthPos, healthScale, healthColor);
 
 		// reload icon
 
-		float quantity = m_ObjectManager->GetPlayer().GetGun().GetMagazineSize() - m_ObjectManager->GetPlayer().GetGun().GetBulletsUsed();
-		glm::vec3 scale = glm::vec3(quantity / 10.0f, 0.1f, 0.0f);
+		glm::vec2 quantity = glm::vec2(1.0f,1.0f);
+		quantity.x = static_cast<float>(m_ObjectManager->GetPlayer().GetGun().GetMagazineSize() - m_ObjectManager->GetPlayer().GetGun().GetBulletsUsed());
+		glm::vec3 scale = glm::vec3(quantity.x / 10.0f, 0.1f, 0.0f);
 		glm::vec3 pos = glm::vec3(aspectRatio - scale.x * 0.5f, -1.0f + scale.y, 0.0f);
 		if (m_ObjectManager->GetPlayer().GetGun().IsReloading())
 		{						
 			scale = glm::vec3(m_ObjectManager->GetPlayer().GetGun().GetBulletsUsed()/10.0f, 0.1f, 0.0f);
 			pos = glm::vec3(aspectRatio - scale.x * 0.5f, -1.0f + scale.y, 0.0f);
-			Novaura::Renderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/ReloadIcon.png", m_ObjectManager->GetPlayer().GetGun().GetBulletsUsed());		
+			Novaura::Renderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/ReloadIcon.png", glm::vec2(m_ObjectManager->GetPlayer().GetGun().GetBulletsUsed(), 1.0f));		
 		}
 		else
 		{
@@ -85,29 +94,41 @@ namespace SpaceAdventures {
 		{
 			Novaura::Renderer::DrawRotatedRectangle(ship->GetRectangle(), ship->GetTextureFile());
 		}	
+		m_Cursor->CheckForCollision(m_ObjectManager->GetShipList());
 
+
+		// mouse cursor target
+		Novaura::Renderer::DrawRectangle(m_Cursor->GetRectangle(), m_Cursor->GetTextureFile());
 	}
 
 	void Level::OnEnter()
 	{
+		glfwSetInputMode(Novaura::InputHandler::GetCurrentWindow()->Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 		m_InputController = Novaura::InputHandler::CreateNewInputController();
 		Novaura::InputHandler::SetCurrentController(m_InputController);
 		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_KEY_ESCAPE, &Level::Pause, this);	
 
 		m_ObjectManager = std::make_unique<ObjectManager>();
+		m_Cursor = std::make_unique<CursorTarget>();
+
 	}
 
 	void Level::OnExit()
 	{
+		glfwSetInputMode(Novaura::InputHandler::GetCurrentWindow()->Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 
 	void Level::Pause()
 	{
+		glfwSetInputMode(Novaura::InputHandler::GetCurrentWindow()->Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
 		m_StateMachine->PushState(std::make_unique<PauseMenu>(m_Window, m_CameraController, m_StateMachine));
 	}
 
 	void Level::Resume()
 	{
 		Novaura::InputHandler::SetCurrentController(m_InputController);
+		glfwSetInputMode(Novaura::InputHandler::GetCurrentWindow()->Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
 	}
 }

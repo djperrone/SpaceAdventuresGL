@@ -6,6 +6,7 @@ namespace SpaceAdventures {
 	class Character;
 	class Ship;
 	class Projectile;
+	//class CursorTarget;
 	
 
 	class CollisionManager
@@ -23,10 +24,10 @@ namespace SpaceAdventures {
 	protected:
 
 	private:
-		std::list<std::shared_ptr<Ship>>* m_ObjectList;
+		std::list<std::shared_ptr<Ship>>* m_ShipList;
 		std::list<std::unique_ptr<Asteroid>>* m_AsteroidList;
 		std::list<std::shared_ptr<Character>>* m_ProjectileList;
-
+		//CursorTarget* m_CursorTarget;
 		//std::list<std::shared_ptr<Character>> m_FullList;
 
 

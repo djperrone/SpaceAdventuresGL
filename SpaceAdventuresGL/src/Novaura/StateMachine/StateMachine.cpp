@@ -11,6 +11,7 @@ namespace Novaura {
 
     void StateMachine::ReplaceCurrentState(std::unique_ptr<State> state)
     {
+        m_States.top()->OnExit();
         m_States.pop();
         m_States.push(std::move(state));
     }

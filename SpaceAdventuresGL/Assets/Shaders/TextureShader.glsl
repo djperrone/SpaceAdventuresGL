@@ -10,13 +10,14 @@ out vec4 v_Color;
 out vec3 v_Pos;
 out vec2 v_TexCoords;
 
-uniform mat4 u_ViewProjectionMatrix;
+//uniform mat4 u_ViewProjectionMatrix;
+uniform mat4 u_ViewMatrix;
 uniform mat4 u_ProjectionMatrix;
 
 void main()
 {
 	//gl_Position = u_ProjectionMatrix * vec4(aPos, 1.0);
-	gl_Position = u_ViewProjectionMatrix * vec4(aPos, 1.0);
+	gl_Position = u_ProjectionMatrix * u_ViewMatrix * vec4(aPos, 1.0);
 	//gl_Position = vec4(aPos, 1.0);
     v_Pos = aPos;
     v_Color = aColor;
@@ -31,7 +32,7 @@ in vec4 v_Color;
 in vec3 v_Pos;
 in vec2 v_TexCoords;
 uniform vec4 u_Color;
-uniform float u_Quantity;
+uniform vec2 u_Quantity;
 
 uniform sampler2D u_Texture;
 
@@ -40,7 +41,7 @@ void main()
     //FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
     //Color = v_Color;
    // Color = texture(u_Texture, v_TexCoords * 10.0f);
-    Color = texture(u_Texture, vec2(v_TexCoords.x * u_Quantity, v_TexCoords.y)) * v_Color;
+    Color = texture(u_Texture, vec2(v_TexCoords.x * u_Quantity.x, v_TexCoords.y * u_Quantity.y)) * v_Color;
    // Color = vec4(v_TexCoords,0.0f,1.0f);
 
 } 
