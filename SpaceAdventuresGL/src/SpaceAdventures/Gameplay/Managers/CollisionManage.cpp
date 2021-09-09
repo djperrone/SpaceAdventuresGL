@@ -113,15 +113,7 @@ namespace SpaceAdventures {
 					//std::cout << "collision!\n";
 				}
 			}
-
 		}
-
-		/*for (int i = 0; i < m_ShipList.size(); i++)
-		{
-
-		}*/
-
-
 	}
 
 	void CollisionManager::HandleCollisionEvent(Character* current, Character* other)
@@ -140,16 +132,6 @@ namespace SpaceAdventures {
 
 	bool CollisionManager::IsColliding(Character* current, Character* other)
 	{
-		/*if (current->GetRightBound() >= other->GetLeftBound() &&
-			other->GetRightBound() >= current->GetLeftBound() &&
-			current->GetUpperBound() >= other->GetLowerBound() &&
-			other->GetUpperBound() >= current->GetLowerBound())
-		{
-			return true;
-		}
-
-		return false;*/
-
 		Bounds boundsA = current->GetBounds();
 		Bounds boundsB = other->GetBounds();
 

@@ -44,30 +44,23 @@ namespace SpaceAdventures {
 
 	void ProjectileComponent::FireGun()
 	{
-		/*glm::vec2 spawnLoc = { m_TransformComponent->GetPosition() };
-
-		m_ProjectileList.emplace_back(std::move(std::make_shared<Projectile>(spawnLoc,
-			m_MovementComponent->GetVelocity(), m_Team, m_TransformComponent->GetRotation())));*/
-
 		if (!m_IsReloading)
 		{
 			if (m_UseCount >= m_MagazineSize)
 			{
 				Reload();
 				
-				return;
-				//return false;
+				return;				
 			}
 
 			currentTime = glfwGetTime();
 			if (currentTime - previousTime >= fireRate)
 			{
 			
-				glm::vec2 spawnLoc = { m_TransformComponent->GetPosition() };
-				
+				glm::vec2 spawnLoc = { m_TransformComponent->GetPosition() };				
 
-				m_ProjectileList.emplace_back(std::move(std::make_shared<Projectile>(spawnLoc,
-					m_MovementComponent->GetVelocity(), m_Team, m_TransformComponent->GetRotation())));
+				m_ProjectileList.emplace_back(std::make_shared<Projectile>(spawnLoc,
+					m_MovementComponent->GetVelocity(), m_Team, m_TransformComponent->GetRotation()));
 
 				previousTime = currentTime;
 
@@ -76,14 +69,12 @@ namespace SpaceAdventures {
 				{
 					Reload();
 
-					return;
-					//return false;
+					return;					
 				}
-			}
-			//return true;
-		}
-		//return false;
+			}			
+		}		
 	}
+
 	void ProjectileComponent::ClearGun()
 	{
 		m_ProjectileList.clear();

@@ -40,16 +40,11 @@ namespace Novaura {
 		void MouseButtonCallBack(int button, int action, int mods);
 		void MouseScrollCallBack(double xoffset, double yoffset);
 
-	public:
-		//std::shared_ptr<InputController> m_InputController;
-
-
 	private:
 		OpenGLContext m_Context;
-		//Camera m_Camera;
+		
 	public:
-		std::shared_ptr<CameraController> m_CameraController;
-	
+		std::shared_ptr<CameraController> m_CameraController;	
 
 	private:
 		float m_DeltaTime = 0.0f;

@@ -2,11 +2,11 @@
 #include "Novaura/StateMachine/State.h"
 #include "Novaura/Camera/CameraController.h"
 #include "Novaura/Primitives/Rectangle.h"
-#include "SpaceAdventures/Actors/Button.h"
 
 
 namespace SpaceAdventures {
 
+	class Button;
 
 	class DeathScreen : public Novaura::State
 	{

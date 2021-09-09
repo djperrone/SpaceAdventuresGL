@@ -4,6 +4,8 @@
 #include "SpaceAdventures/States/MainMenu.h"
 #include "SpaceAdventures/States/Level.h"
 
+#include "SpaceAdventures/Actors/Button.h"
+
 
 namespace SpaceAdventures {
 
@@ -42,14 +44,13 @@ namespace SpaceAdventures {
 				switch (button->GetButtonType())
 				{
 				case ButtonType::Play: m_StateMachine->ReplaceCurrentState(std::make_unique<Level>(m_Window, m_CameraController, m_StateMachine));
-
 					break;
-				case ButtonType::MainMenu:
 
+				case ButtonType::MainMenu:
 					m_StateMachine->ClearPastStates();
 					m_StateMachine->ReplaceCurrentState(std::make_unique<MainMenu>(m_Window, m_CameraController, m_StateMachine));
-
 					break;
+
 				case ButtonType::Exit: m_StateMachine->ShutDown();
 					break;
 
@@ -65,17 +66,14 @@ namespace SpaceAdventures {
 		for (auto& button : m_ButtonList)
 		{
 			button->Update(deltaTime);
-		}
-
-		//Draw(deltaTime);
+		}		
 	}
 
 	void DeathScreen::Draw(float deltaTime)
 	{
 		Novaura::Renderer::SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		Novaura::Renderer::Clear();
-		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());
-		//Novaura::Renderer::DrawRectangle(m_Title->GetRectangle(), m_Button->GetTextureFile());
+		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());		
 		Novaura::Renderer::DrawRectangle(*m_Title, "Assets/Textures/Buttons/DeathScreenRed2.png");
 
 		for (auto& button : m_ButtonList)
@@ -83,8 +81,6 @@ namespace SpaceAdventures {
 			Novaura::Renderer::DrawRectangle(button->GetRectangle(), button->GetTextureFile());
 		}
 	}
-
-
 
 	void DeathScreen::OnExit()
 	{

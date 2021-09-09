@@ -28,8 +28,7 @@ namespace SpaceAdventures {
 	}
 
 	void UFO::Update(float dt)
-	{
-		//UpdateLocation(dt);
+	{		
 		m_Gun->Update();
 		time(&currentTime);
 		if (currentTime - previousTime >= 2)

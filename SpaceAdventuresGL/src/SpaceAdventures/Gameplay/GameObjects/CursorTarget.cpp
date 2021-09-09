@@ -4,8 +4,6 @@
 
 namespace SpaceAdventures {
 
-
-
 	CursorTarget::CursorTarget()
 	{
 		m_TextureFile = "Assets/Textures/CursorTarget.png";
@@ -18,7 +16,7 @@ namespace SpaceAdventures {
 	{
 		auto[x,y]  = Novaura::InputHandler::GetMouseDeviceCoordinates();
 		m_Rect->SetPosition(glm::vec3(static_cast<float>(x),static_cast<float>(y),0.0f));
-		//m_Rect->SetPosition();
+		
 	}
 
 	void CursorTarget::CheckForCollision(const std::list<std::shared_ptr<Ship>>& shipList)
@@ -29,28 +27,19 @@ namespace SpaceAdventures {
 			if (state && ship->GetTeam() == Team::Enemy)
 			{
 				m_IsHovered = true;
-			}
-			else //(!state && m_IsHovered)
-			{
-				//m_IsHovered = false;
-			}
-
-			
+			}			
 		}
+
 		if (m_IsHovered)
 		{
 			m_Rect->SetColor(glm::vec4(0.8f, 0.2f, 0.2f, 1.0f));
-
 		}
 		else
 		{
 			m_Rect->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
 		}
 		m_IsHovered = false;
 		
-	}
-
-	
+	}	
 
 }

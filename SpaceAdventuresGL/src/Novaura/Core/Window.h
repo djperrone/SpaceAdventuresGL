@@ -3,7 +3,6 @@
 
 namespace Novaura {
 
-
 	struct Window
 	{
 		GLFWwindow* Window;

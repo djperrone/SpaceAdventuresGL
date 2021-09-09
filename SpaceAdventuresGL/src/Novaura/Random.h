@@ -9,8 +9,7 @@ namespace Novaura {
 	public:
 		static void Init()
 		{
-			s_RandomEngine.seed(std::random_device{}());
-			spdlog::info("entropy {0}", rd.entropy());
+			s_RandomEngine.seed(std::random_device{}());			
 		}
 
 		static float Float()

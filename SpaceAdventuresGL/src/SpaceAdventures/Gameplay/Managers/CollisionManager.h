@@ -6,8 +6,6 @@ namespace SpaceAdventures {
 	class Character;
 	class Ship;
 	class Projectile;
-	//class CursorTarget;
-	
 
 	class CollisionManager
 	{
@@ -16,8 +14,7 @@ namespace SpaceAdventures {
 		CollisionManager();
 
 		void Tick();
-		bool IsColliding(Character* current, Character* other);
-		//bool IsColliding(Actor* current, Vector2i pos);
+		bool IsColliding(Character* current, Character* other);	
 		void HandleCollisionEvent(Character* current, Character* other);
 		bool IsOnSameTeam(Character* current, Character* other);
 
@@ -26,11 +23,6 @@ namespace SpaceAdventures {
 	private:
 		std::list<std::shared_ptr<Ship>>* m_ShipList;
 		std::list<std::unique_ptr<Asteroid>>* m_AsteroidList;
-		std::list<std::shared_ptr<Character>>* m_ProjectileList;
-		//CursorTarget* m_CursorTarget;
-		//std::list<std::shared_ptr<Character>> m_FullList;
-
-
-		
+		std::list<std::shared_ptr<Character>>* m_ProjectileList;		
 	};
 }

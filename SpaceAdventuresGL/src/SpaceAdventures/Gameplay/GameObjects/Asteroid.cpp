@@ -9,17 +9,7 @@ namespace SpaceAdventures {
 	}
 
 	Asteroid::Asteroid(float x, float y)
-	{
-		m_Team = Team::Enemy;
-		//std::cout << "Asteroid!" << static_cast<std::size_t>(m_Team) << std::endl;
-
-		
-		/*if (m_Team == Team::Enemy)
-		{
-			InitComponents(x, y, 32, 32, 2.0f, 0.0f, 1.5f, 0.0f, 1.0f, 1.0f, 1.0f);
-
-		}*/
-
+	{		
 		m_Tag = Tag::Asteroid;
 		m_Team = Team::Enemy;
 
@@ -29,7 +19,6 @@ namespace SpaceAdventures {
 		m_MovementComponent = std::make_unique<MovementComponent>(glm::vec2(0.0f,1.0f), 0.5f);
 		m_CombatComponent = std::make_unique<CombatComponent>(1.0f, 1.0f);
 		m_Rect->SetPosition(glm::vec3(x, y, -0.2f));
-
 	}
 
 	void Asteroid::Update(float dt)

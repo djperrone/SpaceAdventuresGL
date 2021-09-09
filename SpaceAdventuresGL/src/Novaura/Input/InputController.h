@@ -9,6 +9,8 @@ namespace Novaura {
 	class InputController
 	{
 	public:
+		InputController() = default;
+
 		template <typename... T>
 		void BindAxisInputEvent(KeyCode code, T&&... args)
 		{
@@ -20,11 +22,11 @@ namespace Novaura {
 			m_ActionInputBindings[action][code] = Command(std::bind(args...));
 		}
 
-		std::unordered_map<int, Command>& GetAxisInputBindings() { return m_AxisInputBindings; }
-		const std::unordered_map<int, Command>&  GetAxisInputBindings() const{ return m_AxisInputBindings; }
+		inline std::unordered_map<int, Command>& GetAxisInputBindings() { return m_AxisInputBindings; }
+		inline const std::unordered_map<int, Command>&  GetAxisInputBindings() const{ return m_AxisInputBindings; }
 
-		std::unordered_map<EventType, std::unordered_map<KeyCode, Command>>& GetActionInputBindings(){ return m_ActionInputBindings; }
-		const std::unordered_map<EventType, std::unordered_map<KeyCode, Command>>& GetActionInputBindings() const { return m_ActionInputBindings; }
+		inline std::unordered_map<EventType, std::unordered_map<KeyCode, Command>>& GetActionInputBindings(){ return m_ActionInputBindings; }
+		inline const std::unordered_map<EventType, std::unordered_map<KeyCode, Command>>& GetActionInputBindings() const { return m_ActionInputBindings; }
 
 	private:
 		std::unordered_map<int, Command> m_AxisInputBindings;

@@ -9,8 +9,7 @@ namespace SpaceAdventures {
 	class ComponentManager
 	{
 	private:
-		//std::unordered_map<ComponentType, Component> components_map;
-		//std::vector<std::unique_ptr<Component>> components;
+		
 		std::array<std::shared_ptr<Component>, 32> componentArray;
 	public:
 		ComponentManager() = default;		

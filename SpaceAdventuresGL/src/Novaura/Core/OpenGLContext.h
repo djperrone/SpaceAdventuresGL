@@ -17,15 +17,11 @@ namespace Novaura {
 	
 		std::shared_ptr<Window> GetWindow() { return m_Window; }
 		const std::shared_ptr<Window> GetWindow() const { return m_Window; }
-		//const Window& GetWindow() const { return m_Window; }
-	
+		
 		void SwapBuffers() const;
-		bool OpenGLContext::IsRunning() const;
-	
+		bool OpenGLContext::IsRunning() const;	
 	
 	private:
-		std::shared_ptr<Window> m_Window;
-	
-	
+		std::shared_ptr<Window> m_Window;	
 	};
 }

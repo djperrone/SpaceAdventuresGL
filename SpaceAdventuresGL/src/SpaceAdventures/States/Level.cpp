@@ -1,12 +1,16 @@
 #include "sapch.h"
 #include "Level.h"
+
 #include "Novaura/Novaura.h"
 #include "Novaura/Collision/Collision.h"
 #include "SpaceAdventures/States/PauseMenu.h"
 #include "SpaceAdventures/States/DeathScreen.h"
 
+
+
 namespace SpaceAdventures {
 
+	
 
 	Level::Level(Novaura::Window& window)		
 	{
@@ -19,6 +23,19 @@ namespace SpaceAdventures {
 		m_CameraController = cameraController;
 		m_StateMachine = stateMachine;
 		OnEnter();
+	}
+
+	void Level::OnEnter()
+	{
+		glfwSetInputMode(Novaura::InputHandler::GetCurrentWindow()->Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		m_InputController = Novaura::InputHandler::CreateNewInputController();
+		Novaura::InputHandler::SetCurrentController(m_InputController);
+		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_KEY_ESCAPE, &Level::Pause, this);
+
+		m_ObjectManager = std::make_unique<ObjectManager>();
+		m_Cursor = std::make_unique<CursorTarget>();
+
+		// player controlls setup in player class
 	}
 
 	void Level::HandleInput()
@@ -34,9 +51,7 @@ namespace SpaceAdventures {
 		}
 		m_Cursor->Update(deltaTime);
 		m_ObjectManager->Update(deltaTime);
-		m_CameraController->Update(*Novaura::InputHandler::GetCurrentWindow(),deltaTime);
-		//Draw(deltaTime);
-		
+		m_CameraController->Update(*Novaura::InputHandler::GetCurrentWindow(),deltaTime);		
 	}
 
 	void Level::Draw(float deltaTime)
@@ -48,7 +63,7 @@ namespace SpaceAdventures {
 		float width = Novaura::InputHandler::GetCurrentWindow()->Width;
 		float height = Novaura::InputHandler::GetCurrentWindow()->Height;
 		float aspectRatio = Novaura::InputHandler::GetCurrentWindow()->AspectRatio;		
-		//float aspectRatio = width / height;
+		
 		// healthbar
 		glm::vec3 healthScale = glm::vec3(glm::mix(0.0f,0.25f,m_ObjectManager->GetPlayer().GetHealth()), 0.15f, 0.0f);
 		float currentHealth = m_ObjectManager->GetPlayer().GetHealth();
@@ -59,8 +74,7 @@ namespace SpaceAdventures {
 			glm::vec3(-1.0f + healthScale.x * 0.5f, -1.0f + healthScale.y, 0.0f);*/
 
 		glm::vec3 healthPos = glm::vec3(-aspectRatio + healthScale.x * 0.5f, -1.0f + healthScale.y, 0.0f);
-		spdlog::info("width: {0:03.3f},height: {1:03.3f}", width, height);
-		spdlog::info("{0:03.3f}, {1}", aspectRatio, healthPos.x);
+		
 		Novaura::Renderer::DrawRectangle(healthPos, healthScale, healthColor);
 
 		// reload icon
@@ -79,7 +93,6 @@ namespace SpaceAdventures {
 		{
 			Novaura::Renderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.75f), "Assets/Textures/ReloadIcon.png", quantity);
 		}
-
 
 		for (auto& projectile : m_ObjectManager->GetProjectileList())
 		{
@@ -101,17 +114,7 @@ namespace SpaceAdventures {
 		Novaura::Renderer::DrawRectangle(m_Cursor->GetRectangle(), m_Cursor->GetTextureFile());
 	}
 
-	void Level::OnEnter()
-	{
-		glfwSetInputMode(Novaura::InputHandler::GetCurrentWindow()->Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-		m_InputController = Novaura::InputHandler::CreateNewInputController();
-		Novaura::InputHandler::SetCurrentController(m_InputController);
-		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_KEY_ESCAPE, &Level::Pause, this);	
-
-		m_ObjectManager = std::make_unique<ObjectManager>();
-		m_Cursor = std::make_unique<CursorTarget>();
-
-	}
+	
 
 	void Level::OnExit()
 	{
@@ -129,6 +132,5 @@ namespace SpaceAdventures {
 	{
 		Novaura::InputHandler::SetCurrentController(m_InputController);
 		glfwSetInputMode(Novaura::InputHandler::GetCurrentWindow()->Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-
 	}
 }

@@ -3,9 +3,7 @@
 
 #include <spdlog/spdlog.h>
 
-//OpenGLContext* OpenGLContext::GLFWCallbackWrapper::s_Application = nullptr;
 namespace Novaura {
-
 
     OpenGLContext::OpenGLContext(std::string_view title, float width, float height)
     {

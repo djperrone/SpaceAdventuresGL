@@ -5,6 +5,7 @@
 #include "Novaura/Novaura.h"
 
 #include "Level.h"
+#include "Novaura/Primitives/Rectangle.h"
 
 namespace SpaceAdventures {
 
@@ -38,17 +39,14 @@ namespace SpaceAdventures {
 		for (auto& button : m_ButtonList)
 		{
 			button->Update(deltaTime);
-		}
-
-		//Draw(deltaTime);
+		}		
 	}
 
 	void MainMenu::Draw(float deltaTime)
 	{
 		Novaura::Renderer::SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		Novaura::Renderer::Clear();
-		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());
-		//Novaura::Renderer::DrawRectangle(m_Title->GetRectangle(), m_Button->GetTextureFile());
+		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());		
 		Novaura::Renderer::DrawRectangle(*m_Title, "Assets/Textures/Buttons/TitleLight.png");
 
 		for (auto& button : m_ButtonList)

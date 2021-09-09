@@ -13,11 +13,8 @@ namespace Novaura {
 			boundsA.TopLeft.y >= boundsB.BottomRight.y &&
 			boundsB.TopRight.y >= boundsA.BottomLeft.y)
 		{
-			//spdlog::info(__FUNCTION__);
-
 			return true;
 		}
-
 		return false;
 	}
 }

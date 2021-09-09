@@ -41,7 +41,7 @@ namespace Novaura {
 
 	Application::~Application()
 	{
-		InputHandler::ShutDown();
+		
 	}
 
 	void Application::Update()
@@ -60,13 +60,12 @@ namespace Novaura {
 			}
 		}
 
-		//m_CameraController.Update(GetWindow(), m_DeltaTime);
+		
 		if (m_StateMachine->GetCurrentState().IsPaused())
 		{
 			auto currentState = std::move(m_StateMachine->GetStateStack().top());
 
-			m_StateMachine->GetStateStack().pop();
-			//m_StateMachine->GetCurrentState().Update(m_DeltaTime);
+			m_StateMachine->GetStateStack().pop();			
 			m_StateMachine->GetCurrentState().Draw(m_DeltaTime);
 
 			currentState->Update(m_DeltaTime);
@@ -79,8 +78,8 @@ namespace Novaura {
 			m_StateMachine->GetCurrentState().Update(m_DeltaTime);
 			m_StateMachine->GetCurrentState().Draw(m_DeltaTime);
 		}
-		m_Context.SwapBuffers();
-		
+
+		m_Context.SwapBuffers();		
 	}	
 
 	void Application::WindowResizeCallBack(int width, int height)
