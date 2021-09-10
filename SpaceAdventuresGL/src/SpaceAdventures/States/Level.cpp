@@ -50,6 +50,8 @@ namespace SpaceAdventures {
 		{
 			if (firstTimeDead)
 			{
+				m_DiedMessage = std::make_unique<Novaura::Rectangle>(glm::vec2(0.0f, 0.5f), glm::vec2(2.0f, 0.40f));
+
 				//m_DeadPlayer = std::make_uni
 				startTime = glfwGetTime();
 				firstTimeDead = false;
@@ -138,8 +140,11 @@ namespace SpaceAdventures {
 		// mouse cursor target
 		Novaura::Renderer::DrawRectangle(m_Cursor->GetRectangle(), m_Cursor->GetTextureFile());
 
-		if (!m_ObjectManager->GetPlayer().IsAlive())
+		if (!m_ObjectManager->GetPlayer().IsAlive() && !firstTimeDead)
 		{
+			float alpha = 0.0f;
+			glm::mix(0.0f, 0.15f, m_DiedMessage->GetColor().a);
+			Novaura::Renderer::DrawRectangle(*m_DiedMessage, "Assets/Textures/Buttons/DeathScreenRed2.png");
 
 		}
 	}

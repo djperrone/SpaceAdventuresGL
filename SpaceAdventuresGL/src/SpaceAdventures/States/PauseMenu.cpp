@@ -66,9 +66,7 @@ namespace SpaceAdventures {
 		for (auto& button : m_ButtonList)
 		{
 			button->Update();
-		}
-
-	
+		}	
 	}
 
 	void PauseMenu::Draw(float deltaTime)

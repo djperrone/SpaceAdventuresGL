@@ -44,6 +44,7 @@ namespace SpaceAdventures {
 		double totalEventTime = 1.5;
 		bool firstTimeDead = true;
 		std::unique_ptr<Player> m_DeadPlayer;
+		std::unique_ptr<Novaura::Rectangle> m_DiedMessage;
 
 	};
 }
