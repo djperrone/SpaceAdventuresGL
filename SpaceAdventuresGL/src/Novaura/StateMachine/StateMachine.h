@@ -12,6 +12,7 @@ namespace Novaura {
 		void ShutDown();
 		void ClearPastStates();
 
+
 		inline State& GetCurrentState() { return *m_States.top(); }
 		inline const State& GetCurrentState() const { return *m_States.top(); }
 

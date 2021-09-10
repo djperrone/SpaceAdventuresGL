@@ -14,12 +14,14 @@ namespace test {
 }
 
 namespace Novaura {
+	std::shared_ptr<CameraController> Application::m_CameraController;
+	std::shared_ptr <StateMachine> Application::m_StateMachine;
 
 	Application::Application()
-		: m_Context("Space Adventures", 1280.0f,720.0f), m_CameraController(std::make_shared<CameraController>(m_Context.GetWindow()->Width, m_Context.GetWindow()->Height))
+		: m_Context("Space Adventures", 1280.0f,720.0f)
 	{		
 		m_StateMachine = std::make_shared<StateMachine>();
-
+		m_CameraController = std::make_shared<CameraController>(m_Context.GetWindow()->Width, m_Context.GetWindow()->Height);
 		Novaura::Renderer::Init();
 		Novaura::InputHandler::Init();
 		Novaura::InputHandler::SetCurrentWindow(m_Context.GetWindow());
@@ -28,10 +30,10 @@ namespace Novaura {
 	}
 
 	Application::Application(std::string_view title, float width, float height)
-		: m_Context(title, width, height), m_CameraController(std::make_shared<CameraController>(width, height))
+		: m_Context(title, width, height) 
 	{
 		m_StateMachine = std::make_shared<StateMachine>();
-
+		m_CameraController = std::make_shared<CameraController>(width, height);
 		InputHandler::Init();
 		InputHandler::SetCurrentWindow(m_Context.GetWindow());
 		Novaura::Renderer::Init();

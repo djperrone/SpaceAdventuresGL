@@ -3,6 +3,7 @@
 #include "Novaura/Camera/CameraController.h"
 
 #include "SpaceAdventures/Actors/Button.h"
+#include "UI/ToggleButton.h"
 
 namespace SpaceAdventures {
 
@@ -11,8 +12,7 @@ namespace SpaceAdventures {
 	class MainMenu : public Novaura::State
 	{
 	public:
-		MainMenu() = default;
-		MainMenu(Novaura::Window & window);
+		MainMenu();		
 		MainMenu(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> cameraController, std::shared_ptr<Novaura::StateMachine> stateMachine);
 
 		virtual void OnEnter() override;
@@ -28,7 +28,7 @@ namespace SpaceAdventures {
 		
 	private:			
 		
-		std::vector<std::unique_ptr<Button>> m_ButtonList;
+		std::vector<std::unique_ptr<UI::Button>> m_ButtonList;
 		std::unique_ptr<Novaura::Rectangle> m_Title;
 
 	};

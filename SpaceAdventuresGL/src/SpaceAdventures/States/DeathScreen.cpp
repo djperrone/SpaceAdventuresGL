@@ -5,13 +5,17 @@
 #include "SpaceAdventures/States/Level.h"
 
 #include "SpaceAdventures/Actors/Button.h"
+#include "Novaura/Core/Application.h"
 
 
 namespace SpaceAdventures {
 
-	DeathScreen::DeathScreen(Novaura::Window& window)		
+	DeathScreen::DeathScreen()
 	{
-		
+		m_Window = Novaura::InputHandler::GetCurrentWindow();
+		m_CameraController = Novaura::Application::GetCameraController();
+		m_StateMachine = Novaura::Application::GetStateMachine();
+		OnEnter();
 	}
 
 	DeathScreen::DeathScreen(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> cameraController, std::shared_ptr<Novaura::StateMachine> stateMachine)
@@ -29,10 +33,21 @@ namespace SpaceAdventures {
 		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_MOUSE_BUTTON_LEFT, &DeathScreen::HandleInput, this);
 
 		m_Title = std::make_unique<Novaura::Rectangle>(glm::vec2(0.0f, 0.5f), glm::vec2(2.0f, 0.40f));
-		m_ButtonList.emplace_back(std::make_unique<Button>("Assets/Textures/Buttons/PlayAgainButtonLight.png", ButtonType::Play, glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.20f)));
-		m_ButtonList.emplace_back(std::make_unique<Button>("Assets/Textures/Buttons/MainMenuLight.png", ButtonType::MainMenu, glm::vec2(0.0f, -0.250f), glm::vec2(1.0f, 0.20f)));
 
-		m_ButtonList.emplace_back(std::make_unique<Button>("Assets/Textures/Buttons/ExitButtonLight.png", ButtonType::Exit, glm::vec2(0.0f, -0.50f), glm::vec2(1.0f, 0.20f)));
+		m_ButtonList.emplace_back(std::make_unique<UI::ToggleButton>("Assets/Textures/Buttons/ExitButtonLight.png", glm::vec3(0.0f, -0.50f, 0.0f), glm::vec3(1.0f, 0.20f, 0.0f),
+			Novaura::Command([](){
+				Novaura::Application::GetStateMachine()->ShutDown();	}
+			)));
+
+		m_ButtonList.emplace_back(std::make_unique<UI::ToggleButton>("Assets/Textures/Buttons/MainMenuLight.png", glm::vec3(0.0f, -0.250f, 0.0f), glm::vec3(1.0f, 0.20f, 0.0f),
+			Novaura::Command([]() {
+				Novaura::Application::GetStateMachine()->ClearPastStates();
+				Novaura::Application::GetStateMachine()->ReplaceCurrentState(std::make_unique<MainMenu>());	}
+		)));
+
+		m_ButtonList.emplace_back(std::make_unique<UI::ToggleButton>("Assets/Textures/Buttons/PlayAgainButtonLight.png", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.20f, 0.0f),
+			Novaura::Command([]() {Novaura::Application::GetStateMachine()->ReplaceCurrentState(std::make_unique<Level>()); }
+			)));
 	}
 
 	void DeathScreen::HandleInput()
@@ -41,22 +56,7 @@ namespace SpaceAdventures {
 		{
 			if (button->IsHovered())
 			{
-				switch (button->GetButtonType())
-				{
-				case ButtonType::Play: m_StateMachine->ReplaceCurrentState(std::make_unique<Level>(m_Window, m_CameraController, m_StateMachine));
-					break;
-
-				case ButtonType::MainMenu:
-					m_StateMachine->ClearPastStates();
-					m_StateMachine->ReplaceCurrentState(std::make_unique<MainMenu>(m_Window, m_CameraController, m_StateMachine));
-					break;
-
-				case ButtonType::Exit: m_StateMachine->ShutDown();
-					break;
-
-				default:
-					return;
-				}
+				button->Execute();			
 			}
 		}
 	}
@@ -65,7 +65,7 @@ namespace SpaceAdventures {
 	{
 		for (auto& button : m_ButtonList)
 		{
-			button->Update(deltaTime);
+			button->Update();
 		}		
 	}
 

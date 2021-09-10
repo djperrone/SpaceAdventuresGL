@@ -5,18 +5,20 @@
 #include "Novaura/Collision/Collision.h"
 #include "SpaceAdventures/States/PauseMenu.h"
 #include "SpaceAdventures/States/DeathScreen.h"
-
+#include "Novaura/Core/Application.h"
 
 
 namespace SpaceAdventures {
-
 	
 
-	Level::Level(Novaura::Window& window)		
+	Level::Level()
 	{
-		
+		m_Window = Novaura::InputHandler::GetCurrentWindow();
+		m_CameraController = Novaura::Application::GetCameraController();
+		m_StateMachine = Novaura::Application::GetStateMachine();
+		OnEnter();
 	}
-
+	
 	Level::Level(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> cameraController, std::shared_ptr<Novaura::StateMachine> stateMachine)
 	{
 		m_Window = window;
@@ -46,9 +48,32 @@ namespace SpaceAdventures {
 	{		
 		if (!m_ObjectManager->GetPlayer().IsAlive())
 		{
-			 m_StateMachine->ReplaceCurrentState(std::make_unique<DeathScreen>(m_Window, m_CameraController, m_StateMachine));
-			 return;
+			if (firstTimeDead)
+			{
+				//m_DeadPlayer = std::make_uni
+				startTime = glfwGetTime();
+				firstTimeDead = false;
+				return;
+			}
+			else
+			{
+				double currentTime = glfwGetTime();
+				if (currentTime - startTime >= totalEventTime)
+				{
+					m_StateMachine->ReplaceCurrentState(std::make_unique<DeathScreen>(m_Window, m_CameraController, m_StateMachine));
+					return;
+
+				}
+				else
+				{
+					return;
+				}
+			}
+			
+			 //return;
 		}
+		//previousTime = currentTime;
+
 		m_Cursor->Update(deltaTime);
 		m_ObjectManager->Update(deltaTime);
 		m_CameraController->Update(*Novaura::InputHandler::GetCurrentWindow(),deltaTime);		
@@ -112,12 +137,21 @@ namespace SpaceAdventures {
 
 		// mouse cursor target
 		Novaura::Renderer::DrawRectangle(m_Cursor->GetRectangle(), m_Cursor->GetTextureFile());
+
+		if (!m_ObjectManager->GetPlayer().IsAlive())
+		{
+
+		}
 	}
 
 	
 
 	void Level::OnExit()
 	{
+
+
+
+
 		glfwSetInputMode(Novaura::InputHandler::GetCurrentWindow()->Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 
@@ -132,5 +166,8 @@ namespace SpaceAdventures {
 	{
 		Novaura::InputHandler::SetCurrentController(m_InputController);
 		glfwSetInputMode(Novaura::InputHandler::GetCurrentWindow()->Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	}
+	void Level::DeathAnimation()
+	{
 	}
 }

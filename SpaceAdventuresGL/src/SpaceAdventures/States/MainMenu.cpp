@@ -3,15 +3,20 @@
 #include "MainMenu.h"
 #include "SpaceAdventures/Actors/Button.h"
 #include "Novaura/Novaura.h"
+#include "Novaura/Core/Application.h"
 
 #include "Level.h"
 #include "Novaura/Primitives/Rectangle.h"
 
+
 namespace SpaceAdventures {
 
-	MainMenu::MainMenu(Novaura::Window& window)		
+	MainMenu::MainMenu()		
 	{
-		
+		m_Window = Novaura::InputHandler::GetCurrentWindow();
+		m_CameraController = Novaura::Application::GetCameraController();
+		m_StateMachine = Novaura::Application::GetStateMachine();
+		OnEnter();
 	}
 
 	MainMenu::MainMenu(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> cameraController, std::shared_ptr<Novaura::StateMachine> stateMachine)
@@ -22,23 +27,27 @@ namespace SpaceAdventures {
 		OnEnter();
 	}
 
-
 	void MainMenu::OnEnter()
 	{
 		m_InputController = Novaura::InputHandler::CreateNewInputController();
 		Novaura::InputHandler::SetCurrentController(m_InputController);
 		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_MOUSE_BUTTON_LEFT, &MainMenu::HandleInput, this);
 
-		m_Title = std::make_unique<Novaura::Rectangle>(glm::vec2(0.0f, 0.5f), glm::vec2(2.0f, 0.40f));
-		m_ButtonList.emplace_back(std::make_unique<Button>("Assets/Textures/Buttons/PlayButtonLight.png", ButtonType::Play, glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.20f)));
-		m_ButtonList.emplace_back(std::make_unique<Button>("Assets/Textures/Buttons/ExitButtonLight.png", ButtonType::Exit, glm::vec2(0.0f, -0.250f), glm::vec2(1.0f, 0.20f)));
+		m_Title = std::make_unique<Novaura::Rectangle>(glm::vec2(0.0f, 0.5f), glm::vec2(2.0f, 0.40f));		
+		
+		m_ButtonList.emplace_back(std::make_unique<UI::ToggleButton>("Assets/Textures/Buttons/PlayButtonLight.png", std::move(glm::vec3{ 0.0f, 0.0f,0.0f }), std::move(glm::vec3{ 1.0f, 0.2f, 0.0f }),
+			Novaura::Command([]() {Novaura::Application::GetStateMachine()->ReplaceCurrentState(std::make_unique<Level>()); }
+			)));
+
+		m_ButtonList.emplace_back(std::make_unique<UI::ToggleButton>("Assets/Textures/Buttons/ExitButtonLight.png", std::move(glm::vec3{ 0.0f, -0.25f,0.0f }), std::move(glm::vec3{ 1.0f, 0.2f, 0.0f }),
+			Novaura::Command([]() {Novaura::Application::GetStateMachine()->ShutDown(); }	)));
 	}
 
 	void MainMenu::Update(float deltaTime)
 	{
 		for (auto& button : m_ButtonList)
 		{
-			button->Update(deltaTime);
+			button->Update();
 		}		
 	}
 
@@ -61,16 +70,7 @@ namespace SpaceAdventures {
 		{
 			if (button->IsHovered())
 			{
-				switch (button->GetButtonType())
-				{
-				case ButtonType::Play: m_StateMachine->ReplaceCurrentState(std::make_unique<Level>(m_Window, m_CameraController, m_StateMachine));
-					break;
-				case ButtonType::Exit: m_StateMachine->ShutDown();
-					break;
-
-				default:
-					return;
-				}
+				button->Execute();				
 			}
 		}
 	}	

@@ -13,7 +13,7 @@ namespace SpaceAdventures {
 	class TestState : public Novaura::State
 	{
 	public:
-		TestState() = default;
+		TestState();
 		TestState(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> m_CameraController);
 		
 		virtual void OnEnter() override;

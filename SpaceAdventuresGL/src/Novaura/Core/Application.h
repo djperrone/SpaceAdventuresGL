@@ -26,7 +26,7 @@ namespace Novaura {
 		inline bool IsRunning() const { return m_Context.IsRunning(); }
 
 	protected:
-		std::shared_ptr <StateMachine> m_StateMachine;
+		static std::shared_ptr <StateMachine> m_StateMachine;
 
 	private:
 		void ScreenSaver();
@@ -40,11 +40,14 @@ namespace Novaura {
 		void MouseButtonCallBack(int button, int action, int mods);
 		void MouseScrollCallBack(double xoffset, double yoffset);
 
+		static std::shared_ptr<CameraController> GetCameraController() { return m_CameraController; }
+		static std::shared_ptr<StateMachine> GetStateMachine() { return m_StateMachine; }
+
 	private:
 		OpenGLContext m_Context;
 		
 	public:
-		std::shared_ptr<CameraController> m_CameraController;	
+		static std::shared_ptr<CameraController> m_CameraController;	
 
 	private:
 		float m_DeltaTime = 0.0f;

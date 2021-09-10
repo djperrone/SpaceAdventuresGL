@@ -3,7 +3,7 @@
 #include "Novaura/Camera/CameraController.h"
 #include "Novaura/Primitives/Rectangle.h"
 
-#include "SpaceAdventures/Actors/Button.h"
+#include "UI/ToggleButton.h"
 
 
 namespace SpaceAdventures {
@@ -12,8 +12,7 @@ namespace SpaceAdventures {
 	class PauseMenu : public Novaura::State
 	{
 	public:
-		PauseMenu() = default;
-		PauseMenu(Novaura::Window& window);
+		PauseMenu();		
 		PauseMenu(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> cameraController, std::shared_ptr<Novaura::StateMachine> stateMachine);
 
 		virtual void OnEnter() override;
@@ -27,9 +26,7 @@ namespace SpaceAdventures {
 		virtual void Resume() override;
 
 	private:
-		std::vector<std::unique_ptr<Button>> m_ButtonList;
+		std::vector<std::unique_ptr<UI::Button>> m_ButtonList;
 		std::unique_ptr<Novaura::Rectangle> m_Title;
-
-
 	};
 }
