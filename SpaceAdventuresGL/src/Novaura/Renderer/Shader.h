@@ -35,6 +35,7 @@ namespace Novaura {
 		void SetUniformMat3f(const std::string& name, const glm::mat3& matrix);
 		void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
 
+		void SetIntArray(const std::string& name, int* values, uint32_t count);
 
 
 		inline unsigned int GetID() const { return m_ShaderID; }

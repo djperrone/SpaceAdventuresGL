@@ -4,7 +4,7 @@
 
 namespace Novaura {
 
-    std::unordered_map<std::string, Novaura::Texture> TextureLoader::LoadedTextures;
+    std::unordered_map<std::string, Texture> TextureLoader::LoadedTextures;
 
    /* Novaura::Texture TextureLoader::LoadTexture(const std::string& path)
     {
@@ -38,8 +38,31 @@ namespace Novaura {
     {
         if (LoadedTextures.find(path.data()) == LoadedTextures.end())
         {
-            LoadedTextures[path.data()] = Novaura::Texture(path);
+            LoadedTextures[path.data()] = Texture(path);
+        }       
+    }
+
+    // batch renderer
+    std::unordered_map <std::string_view, std::shared_ptr<Texture>> BatchTextureLoader::LoadedTextures;
+
+    std::shared_ptr<Texture> BatchTextureLoader::LoadTexture(std::string_view path)
+    {
+        if (LoadedTextures.find(path.data()) != LoadedTextures.end())
+        {
+            return LoadedTextures[path.data()];
         }
-       
+        else
+        {
+            LoadedTextures[path.data()] = std::make_shared<Texture>(path);
+        }
+        return LoadedTextures[path.data()];
+    }
+
+    void BatchTextureLoader::CacheTexture(std::string_view path)
+    {
+        if (LoadedTextures.find(path.data()) == LoadedTextures.end())
+        {
+            LoadedTextures[path.data()] = std::make_shared<Texture>(path);
+        }
     }
 }

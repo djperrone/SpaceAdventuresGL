@@ -27,7 +27,7 @@ namespace Novaura {
 		glm::vec2 DefaultTextureCoords[4];
 	};
 
-	const Camera* SceneCamera = nullptr;
+	
 
 	static RenderData s_RenderData;
 
@@ -148,7 +148,6 @@ namespace Novaura {
 		vertices.reserve(4);
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), scale);
-
 
 		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.DefaultTextureCoords[0]);
 		vertices.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1]);

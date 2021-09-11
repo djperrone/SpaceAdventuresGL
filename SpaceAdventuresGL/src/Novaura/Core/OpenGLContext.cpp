@@ -10,9 +10,9 @@ namespace Novaura {
         // glfw
         m_Window = std::make_shared<Window>();
         glfwInit();
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         m_Window->Width = width;
         m_Window->Height = height;
         m_Window->AspectRatio = m_Window->Width / m_Window->Height;
@@ -36,6 +36,18 @@ namespace Novaura {
         glViewport(0, 0, m_Window->Width, m_Window->Height);      
 
         spdlog::info("glfw initialized");
+
+       spdlog::info("OpenGL Info:");
+       spdlog::info("  Vendor: {0}", glGetString(GL_VENDOR));
+       spdlog::info("  Renderer: {0}", glGetString(GL_RENDERER));
+       spdlog::info("  Version: {0}", glGetString(GL_VERSION));
+
+       int versionMajor;
+       int versionMinor;
+       glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);
+       glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
+
+       spdlog::info("{0}, {1}", versionMajor, versionMinor);
     }
     void OpenGLContext::SwapBuffers() const
     {

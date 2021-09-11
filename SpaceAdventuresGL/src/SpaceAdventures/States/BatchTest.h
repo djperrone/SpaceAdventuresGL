@@ -10,11 +10,11 @@ namespace SpaceAdventures {
 
 
 
-	class TestState : public Novaura::State
+	class BatchTest : public Novaura::State
 	{
 	public:
-		TestState();
-		TestState(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> m_CameraController, std::shared_ptr<Novaura::StateMachine> stateMachine);
+		BatchTest();
+		BatchTest(std::shared_ptr<Novaura::Window> window, std::shared_ptr<Novaura::CameraController> m_CameraController, std::shared_ptr<Novaura::StateMachine> stateMachine);
 		
 		virtual void OnEnter() override;
 		virtual void HandleInput() override;

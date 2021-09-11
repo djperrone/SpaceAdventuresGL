@@ -221,4 +221,9 @@ namespace Novaura {
         glUniform1f(GetUniformLocation(name), value);
     }
 
+    void Shader::SetIntArray(const std::string& name, int* values, uint32_t count)
+    {      
+        glUniform1iv(GetUniformLocation(name), count, values);
+    }
+
 }
