@@ -43,7 +43,11 @@ uniform sampler2D u_Textures[32];
 void main()
 {   
    if(v_TexCoords.x == -1.0f)
+   {
         Color = v_Color;
+   }
     else
+    {     
        Color = texture(u_Textures[int(v_TexIndex)], vec2(v_TexCoords.x * v_Quantity.x, v_TexCoords.y * v_Quantity.y)) * v_Color;
+    }
 } 

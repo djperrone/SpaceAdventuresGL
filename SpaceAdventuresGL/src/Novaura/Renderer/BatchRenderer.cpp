@@ -12,13 +12,23 @@
 #include "Novaura/Renderer/VertexArray.h"
 #include "Novaura/Renderer/VertexBuffer.h"
 
+
+// store main shape then store outline shape
+// draw call - statr 0 inc by 2 - actual render fill stencil buffer
+// after start 1, inc 2 - stencil draw
+
 namespace Novaura {
 
 	struct BatchRendererData
 	{
-		std::unique_ptr<VertexArray> VertexArray;
-		std::unique_ptr<IndexBuffer> IndexBuffer;
-		std::unique_ptr<VertexBuffer> VertexBuffer;
+		std::unique_ptr<VertexArray> BatchVertexArray;
+		std::unique_ptr<IndexBuffer> BatchIndexBuffer;
+		std::unique_ptr<VertexBuffer> BatchVertexBuffer;
+
+		std::unique_ptr<VertexArray> StencilVertexArray;
+		std::unique_ptr<IndexBuffer> StencilIndexBuffer;
+		std::unique_ptr<VertexBuffer> StencilVertexBuffer;
+		uint32_t StencilIndex = 0;
 
 		std::unique_ptr<Shader> TextureShader;	
 
@@ -30,7 +40,8 @@ namespace Novaura {
 		static const uint32_t MaxVertices = MaxRectangles * 4;
 		static const uint32_t MaxIndices = MaxRectangles * 6;
 
-		std::vector<VertexData> RectBuffer;		
+		std::vector<VertexData> BatchRectBuffer;
+		std::vector<VertexData> StencilRectBuffer;
 		
 		static const uint32_t MaxTextures = 32;
 		uint32_t CurrentTextureSlot = 1;
@@ -46,16 +57,19 @@ namespace Novaura {
 		glEnable(GL_BLEND);
 		SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 
+		
+
+
 		//--------------------------------------------------------------------
-		s_RenderData.VertexArray = std::make_unique<VertexArray>();
-		s_RenderData.VertexBuffer = std::make_unique<VertexBuffer>();
+		s_RenderData.BatchVertexArray = std::make_unique<VertexArray>();
+		s_RenderData.BatchVertexBuffer = std::make_unique<VertexBuffer>();
 		s_RenderData.TextureShader = std::make_unique<Shader>("Assets/Shaders/BatchTextureShader.glsl");	
 
-		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
-		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, Color));
-		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, TexCoord));
-		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 3, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, Quantity));
-		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 4, 1, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, TextureSlot));
+		s_RenderData.BatchVertexArray->AddBuffer(*s_RenderData.BatchVertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
+		s_RenderData.BatchVertexArray->AddBuffer(*s_RenderData.BatchVertexBuffer, 1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, Color));
+		s_RenderData.BatchVertexArray->AddBuffer(*s_RenderData.BatchVertexBuffer, 2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, TexCoord));
+		s_RenderData.BatchVertexArray->AddBuffer(*s_RenderData.BatchVertexBuffer, 3, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, Quantity));
+		s_RenderData.BatchVertexArray->AddBuffer(*s_RenderData.BatchVertexBuffer, 4, 1, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, TextureSlot));
 	
 		
 		s_RenderData.DefaultRectangleVertices[0] = glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);
@@ -69,7 +83,7 @@ namespace Novaura {
 		s_RenderData.DefaultTextureCoords[3] = glm::vec2(0.0f, 1.0f);
 
 
-		s_RenderData.RectBuffer.reserve(s_RenderData.MaxVertices * sizeof(VertexData));		
+		s_RenderData.BatchRectBuffer.reserve(s_RenderData.MaxVertices * sizeof(VertexData));		
 
 		std::vector<uint32_t> indices;
 		indices.reserve(s_RenderData.MaxIndices);
@@ -87,7 +101,7 @@ namespace Novaura {
 			offset += 4;
 		}		
 
-		s_RenderData.IndexBuffer = std::make_unique <IndexBuffer>(&indices[0], s_RenderData.MaxIndices);		
+		s_RenderData.BatchIndexBuffer = std::make_unique <IndexBuffer>(&indices[0], s_RenderData.MaxIndices);		
 
 		int32_t samplers[s_RenderData.MaxTextures];
 		for (uint32_t i = 0; i < s_RenderData.MaxTextures; i++)
@@ -97,6 +111,25 @@ namespace Novaura {
 
 		s_RenderData.TextureShader->Bind();
 		s_RenderData.TextureShader->SetIntArray("u_Textures", samplers, s_RenderData.MaxTextures);
+
+
+		// stencil
+		glEnable(GL_STENCIL_TEST);
+		glStencilMask(0x00);
+		glStencilFunc(GL_NOTEQUAL, 1, 0XFF);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+		s_RenderData.StencilVertexArray = std::make_unique<VertexArray>();
+		s_RenderData.StencilVertexBuffer = std::make_unique<VertexBuffer>();
+
+		s_RenderData.StencilVertexArray->AddBuffer(*s_RenderData.StencilVertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
+		s_RenderData.StencilVertexArray->AddBuffer(*s_RenderData.StencilVertexBuffer, 1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, Color));
+		s_RenderData.StencilVertexArray->AddBuffer(*s_RenderData.StencilVertexBuffer, 2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, TexCoord));
+		s_RenderData.StencilVertexArray->AddBuffer(*s_RenderData.StencilVertexBuffer, 3, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, Quantity));
+		s_RenderData.StencilVertexArray->AddBuffer(*s_RenderData.StencilVertexBuffer, 4, 1, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, TextureSlot));
+
+		s_RenderData.StencilRectBuffer.reserve(s_RenderData.MaxVertices * sizeof(VertexData));
+		s_RenderData.StencilIndexBuffer = std::make_unique <IndexBuffer>(&indices[0], s_RenderData.MaxIndices);
 	}
 
 	void BatchRenderer::SetClearColor(float r, float g, float b, float a)
@@ -106,7 +139,7 @@ namespace Novaura {
 
 	void BatchRenderer::Clear()
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	}
 
 	void BatchRenderer::BeginScene(const Camera& camera)
@@ -115,23 +148,69 @@ namespace Novaura {
 		
 		s_RenderData.TextureShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
 
-		s_RenderData.VertexArray->Bind();
-		s_RenderData.VertexBuffer->Bind();
-		s_RenderData.IndexBuffer->Bind();
+		
 	}
 	void BatchRenderer::EndScene()
-	{				
-		s_RenderData.VertexBuffer->SetData(s_RenderData.RectBuffer);		
-
+	{		
 		for (uint32_t i = 1; i < s_RenderData.CurrentTextureSlot; i++)
 		{
-			s_RenderData.Textures[i]->Bind(i);			
+			s_RenderData.Textures[i]->Bind(i);
 		}
 
-		glDrawElements(GL_TRIANGLES, (s_RenderData.RectBuffer.size() / 4 * 6), GL_UNSIGNED_INT, nullptr);	
+		if (s_RenderData.BatchRectBuffer.size() > 0)
+		{
+			s_RenderData.BatchVertexArray->Bind();
+			s_RenderData.BatchVertexBuffer->Bind();
+			s_RenderData.BatchIndexBuffer->Bind();
 
-		s_RenderData.RectBuffer.clear();
+			s_RenderData.BatchVertexBuffer->SetData(s_RenderData.BatchRectBuffer);
+			glDrawElements(GL_TRIANGLES, (s_RenderData.BatchRectBuffer.size() / 4 * 6), GL_UNSIGNED_INT, nullptr);
+
+		}
+		
+
+		
+
+
+		s_RenderData.BatchRectBuffer.clear();
 		s_RenderData.CurrentTextureSlot = 1;
+
+		// stencil draw
+		s_RenderData.StencilVertexArray->Bind();
+		s_RenderData.StencilVertexBuffer->Bind();
+		//?????????????
+		s_RenderData.BatchIndexBuffer->Bind();
+		if (s_RenderData.StencilRectBuffer.size() > 0)
+		{
+			//spdlog::info(__FUNCTION__);
+
+			// initial draw
+
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LESS);
+			glStencilFunc(GL_ALWAYS, 1, 0XFF);
+			glStencilMask(0xFF);
+
+			s_RenderData.StencilVertexBuffer->SetData(s_RenderData.StencilRectBuffer, 0, s_RenderData.StencilIndex);
+			//s_RenderData.StencilVertexBuffer->SetData(s_RenderData.StencilRectBuffer);
+			glDrawElements(GL_TRIANGLES, ((s_RenderData.StencilRectBuffer.size() / 4 * 6) * 0.5f), GL_UNSIGNED_INT, nullptr);
+
+
+			// stencil draw
+			glDisable(GL_DEPTH_TEST);
+			glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+			glStencilMask(0x00);
+			//
+			s_RenderData.StencilVertexBuffer->SetData(s_RenderData.StencilRectBuffer, s_RenderData.StencilIndex, s_RenderData.StencilRectBuffer.size());
+			glDrawElements(GL_TRIANGLES, ((s_RenderData.StencilRectBuffer.size() / 4 * 6) * 0.5f), GL_UNSIGNED_INT, nullptr);
+			
+			glStencilMask(0x00);
+			glStencilFunc(GL_ALWAYS, 1, 0XFF);
+
+			s_RenderData.StencilIndex = 0;
+			s_RenderData.StencilRectBuffer.clear();
+
+		}
 	}
 	void BatchRenderer::DrawRectangle(const Rectangle& rectangle, const glm::vec2& quantity)
 	{
@@ -139,13 +218,81 @@ namespace Novaura {
 	}
 	void BatchRenderer::DrawRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, const glm::vec2& quantity)
 	{		
+		constexpr float texIndex = 0.0f;
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), scale);
 		
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.NegativeTextureCoords, quantity);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.NegativeTextureCoords, quantity);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.NegativeTextureCoords, quantity);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.NegativeTextureCoords, quantity);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.NegativeTextureCoords, quantity, texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.NegativeTextureCoords, quantity, texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.NegativeTextureCoords, quantity, texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.NegativeTextureCoords, quantity, texIndex);
 	}
+
+	void BatchRenderer::StencilDraw(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, const glm::vec4& outlineColor, const glm::vec2& quantity)
+	{
+		//s_RenderData.StencilVertexArray->Bind();
+		//s_RenderData.StencilVertexBuffer->Bind();		
+		constexpr float texIndex = 0.0f;
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), scale);
+
+		s_RenderData.StencilRectBuffer.emplace(s_RenderData.StencilRectBuffer.begin()+s_RenderData.StencilIndex++,transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.NegativeTextureCoords, quantity, texIndex);
+		s_RenderData.StencilRectBuffer.emplace(s_RenderData.StencilRectBuffer.begin()+s_RenderData.StencilIndex++,transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.NegativeTextureCoords, quantity, texIndex);
+		s_RenderData.StencilRectBuffer.emplace(s_RenderData.StencilRectBuffer.begin()+s_RenderData.StencilIndex++,transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.NegativeTextureCoords, quantity, texIndex);
+		s_RenderData.StencilRectBuffer.emplace(s_RenderData.StencilRectBuffer.begin()+s_RenderData.StencilIndex++,transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.NegativeTextureCoords, quantity, texIndex);
+
+		glm::vec3 outlineScale = scale * 1.1f;
+		transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), outlineScale);
+		
+		s_RenderData.StencilRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], outlineColor, s_RenderData.NegativeTextureCoords, quantity);
+		s_RenderData.StencilRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], outlineColor, s_RenderData.NegativeTextureCoords, quantity);
+		s_RenderData.StencilRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], outlineColor, s_RenderData.NegativeTextureCoords, quantity);
+		s_RenderData.StencilRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], outlineColor, s_RenderData.NegativeTextureCoords, quantity);
+
+		
+	}
+
+	void BatchRenderer::StencilDraw(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, const glm::vec4& outlineColor, std::string_view texture, const glm::vec2& quantity)
+	{
+
+		auto tex = BatchTextureLoader::LoadTexture(texture);
+		float texIndex = 0.0f;
+		for (auto i = 1; i < s_RenderData.CurrentTextureSlot; i++)
+		{
+			if (s_RenderData.Textures[i]->GetTextureFile() == tex->GetTextureFile())
+			{
+				texIndex = static_cast<float>(i);
+				break;
+			}
+		}
+		if (texIndex == 0.0f)
+		{
+			texIndex = static_cast<float>(s_RenderData.CurrentTextureSlot);
+			s_RenderData.Textures[s_RenderData.CurrentTextureSlot] = tex;
+			s_RenderData.CurrentTextureSlot++;
+		}
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), scale);
+
+		s_RenderData.StencilRectBuffer.emplace(s_RenderData.StencilRectBuffer.begin() + s_RenderData.StencilIndex++, transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.DefaultTextureCoords[0], quantity, texIndex);
+		s_RenderData.StencilRectBuffer.emplace(s_RenderData.StencilRectBuffer.begin() + s_RenderData.StencilIndex++, transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1], quantity, texIndex);
+		s_RenderData.StencilRectBuffer.emplace(s_RenderData.StencilRectBuffer.begin() + s_RenderData.StencilIndex++, transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.DefaultTextureCoords[2], quantity, texIndex);
+		s_RenderData.StencilRectBuffer.emplace(s_RenderData.StencilRectBuffer.begin() + s_RenderData.StencilIndex++, transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.DefaultTextureCoords[3], quantity, texIndex);
+
+		glm::vec3 outlineScale = scale * 1.1f;
+		transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), outlineScale);
+		
+		s_RenderData.StencilRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], outlineColor, s_RenderData.NegativeTextureCoords, quantity, texIndex);
+		s_RenderData.StencilRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], outlineColor, s_RenderData.NegativeTextureCoords, quantity, texIndex);
+		s_RenderData.StencilRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], outlineColor, s_RenderData.NegativeTextureCoords, quantity, texIndex);
+		s_RenderData.StencilRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], outlineColor, s_RenderData.NegativeTextureCoords, quantity, texIndex);
+	}
+
+	void BatchRenderer::StencilDraw(const Rectangle& rectangle, const glm::vec4& outlineColor, std::string_view texture, const glm::vec2& quantity)
+	{
+		StencilDraw(rectangle.GetPosition(), rectangle.GetScale(), rectangle.GetColor(),outlineColor, texture, quantity);
+	}
+
+
 	void BatchRenderer::DrawRectangle(const Rectangle& rectangle, std::string_view texture, const glm::vec2& quantity)
 	{
 		DrawRectangle(rectangle.GetPosition(), rectangle.GetScale(), rectangle.GetColor(), texture, quantity);
@@ -171,10 +318,10 @@ namespace Novaura {
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), scale);
 
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.DefaultTextureCoords[0], quantity, texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1], quantity, texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.DefaultTextureCoords[2], quantity, texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.DefaultTextureCoords[3], quantity, texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.DefaultTextureCoords[0], quantity, texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1], quantity, texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.DefaultTextureCoords[2], quantity, texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.DefaultTextureCoords[3], quantity, texIndex);
 	}
 	void BatchRenderer::DrawRotatedRectangle(const Rectangle& rectangle, const glm::vec2& quantity)
 	{
@@ -182,14 +329,16 @@ namespace Novaura {
 	}
 	void BatchRenderer::DrawRotatedRectangle(const glm::vec3& position, const glm::vec3& scale, float rotation, const glm::vec4& color, const glm::vec2& quantity)
 	{
+		constexpr float texIndex = 0.0f;
+
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f))
 			* glm::scale(glm::mat4(1.0f), scale);
 
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.NegativeTextureCoords, quantity);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.NegativeTextureCoords, quantity);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.NegativeTextureCoords, quantity);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.NegativeTextureCoords, quantity);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.NegativeTextureCoords, quantity, texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.NegativeTextureCoords, quantity, texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.NegativeTextureCoords, quantity, texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.NegativeTextureCoords, quantity, texIndex);
 	}
 	void BatchRenderer::DrawRotatedRectangle(const Rectangle& rectangle, std::string_view texture, const glm::vec2& quantity)
 	{
@@ -219,9 +368,9 @@ namespace Novaura {
 			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f))
 			* glm::scale(glm::mat4(1.0f), scale);
 
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.DefaultTextureCoords[0], quantity, texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1], quantity, texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.DefaultTextureCoords[2], quantity, texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.DefaultTextureCoords[3], quantity, texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.DefaultTextureCoords[0], quantity, texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1], quantity, texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.DefaultTextureCoords[2], quantity, texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.DefaultTextureCoords[3], quantity, texIndex);
 	}
 }

@@ -40,14 +40,7 @@ namespace Novaura {
        spdlog::info("OpenGL Info:");
        spdlog::info("  Vendor: {0}", glGetString(GL_VENDOR));
        spdlog::info("  Renderer: {0}", glGetString(GL_RENDERER));
-       spdlog::info("  Version: {0}", glGetString(GL_VERSION));
-
-       int versionMajor;
-       int versionMinor;
-       glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);
-       glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
-
-       spdlog::info("{0}, {1}", versionMajor, versionMinor);
+       spdlog::info("  Version: {0}", glGetString(GL_VERSION));       
     }
     void OpenGLContext::SwapBuffers() const
     {

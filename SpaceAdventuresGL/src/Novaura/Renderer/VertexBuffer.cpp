@@ -34,6 +34,12 @@ namespace Novaura {
 		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBufferID);
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexData), &vertices[0], GL_STATIC_DRAW);
 	}
+	void VertexBuffer::SetData(const std::vector<VertexData>& vertices, uint32_t start, uint32_t end)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBufferID);
+		glBufferData(GL_ARRAY_BUFFER, (end - start) * sizeof(VertexData), &vertices[start], GL_STATIC_DRAW);
+		//glBufferData(GL_ARRAY_BUFFER, end - start * sizeof(VertexData), &vertices[start], GL_STATIC_DRAW);
+	}
 	void VertexBuffer::SetData(float* vertices, unsigned int size)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBufferID);

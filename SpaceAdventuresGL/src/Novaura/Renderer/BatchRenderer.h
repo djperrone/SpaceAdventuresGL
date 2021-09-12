@@ -23,6 +23,13 @@ namespace Novaura {
 		static void DrawRectangle(const Rectangle& rectangle, const glm::vec2& quantity = { 1.0f,1.0f });
 		static void DrawRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, const glm::vec2& quantity = { 1.0f,1.0f });
 
+		//static void DrawOutlinedRectangle(const Rectangle& rectangle, const glm::vec2& quantity = { 1.0f,1.0f });
+		//static void DrawOutlinedRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, const glm::vec4& outlineColor, const glm::vec2& quantity = { 1.0f,1.0f });
+
+		static void StencilDraw(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, const glm::vec4& outlineColor, const glm::vec2& quantity = { 1.0f,1.0f });
+		static void StencilDraw(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, const glm::vec4& outlineColor, std::string_view texture, const glm::vec2& quantity = { 1.0f,1.0f });
+		static void StencilDraw(const Rectangle& rectangle, const glm::vec4& outlineColor, std::string_view texture, const glm::vec2& quantity = { 1.0f,1.0f });
+
 		static void DrawRectangle(const Rectangle& rectangle, std::string_view texture, const glm::vec2& quantity = { 1.0f,1.0f });
 		static void DrawRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, std::string_view texture, const glm::vec2& quantity = { 1.0f,1.0f });
 
