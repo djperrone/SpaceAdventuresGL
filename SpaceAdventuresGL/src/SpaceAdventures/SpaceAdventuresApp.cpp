@@ -14,8 +14,8 @@ namespace SpaceAdventures {
 		:Application(title, width, height)
 	{
 		//m_StateMachine.PushState(std::make_unique<TestState>(GetWindow(), m_CameraController));
-		//m_StateMachine->PushState(std::make_unique<MainMenu>(GetWindow(), m_CameraController, m_StateMachine));
+		m_StateMachine->PushState(std::make_unique<MainMenu>(GetWindow(), m_CameraController, m_StateMachine));
 		//m_StateMachine->PushState(std::make_unique<TestState>(GetWindow(), m_CameraController, m_StateMachine));
-		m_StateMachine->PushState(std::make_unique<BatchTest>(GetWindow(), m_CameraController, m_StateMachine));
+		//m_StateMachine->PushState(std::make_unique<BatchTest>(GetWindow(), m_CameraController, m_StateMachine));
 	}
 }

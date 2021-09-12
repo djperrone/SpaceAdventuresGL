@@ -20,8 +20,7 @@ namespace Novaura {
 		std::unique_ptr<IndexBuffer> IndexBuffer;
 		std::unique_ptr<VertexBuffer> VertexBuffer;
 
-		std::unique_ptr<Shader> TextureShader;
-		//std::unique_ptr<Shader> ColorShader;
+		std::unique_ptr<Shader> TextureShader;	
 
 		glm::vec4 DefaultRectangleVertices[4];
 		glm::vec2 DefaultTextureCoords[4];
@@ -31,9 +30,8 @@ namespace Novaura {
 		static const uint32_t MaxVertices = MaxRectangles * 4;
 		static const uint32_t MaxIndices = MaxRectangles * 6;
 
-		std::vector<VertexData> RectBuffer;
-		//std::vector<uint32_t> Indices;
-		//uint32_t RectIndexCount;
+		std::vector<VertexData> RectBuffer;		
+		
 		static const uint32_t MaxTextures = 32;
 		uint32_t CurrentTextureSlot = 1;
 		std::array<std::shared_ptr<Texture>, MaxTextures> Textures;	
@@ -51,8 +49,7 @@ namespace Novaura {
 		//--------------------------------------------------------------------
 		s_RenderData.VertexArray = std::make_unique<VertexArray>();
 		s_RenderData.VertexBuffer = std::make_unique<VertexBuffer>();
-		s_RenderData.TextureShader = std::make_unique<Shader>("Assets/Shaders/TextureShader.glsl");
-		//s_RenderData.ColorShader = std::make_unique<Shader>("Assets/Shaders/BasicColorShader.glsl");
+		s_RenderData.TextureShader = std::make_unique<Shader>("Assets/Shaders/TextureShader.glsl");	
 
 		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
 		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, Color));
@@ -90,14 +87,15 @@ namespace Novaura {
 			offset += 4;
 		}		
 
-		s_RenderData.IndexBuffer = std::make_unique <IndexBuffer>(&indices[0], s_RenderData.MaxIndices);
-		//s_RenderData.IndexBuffer = std::make_unique <IndexBuffer>(&s_RenderData.Indices[0], s_RenderData.MaxIndices);
+		s_RenderData.IndexBuffer = std::make_unique <IndexBuffer>(&indices[0], s_RenderData.MaxIndices);		
 
 		int32_t samplers[s_RenderData.MaxTextures];
 		for (uint32_t i = 0; i < s_RenderData.MaxTextures; i++)
 		{
 			samplers[i] = i;
 		}
+
+		s_RenderData.TextureShader->Bind();
 		s_RenderData.TextureShader->SetIntArray("u_Textures", samplers, s_RenderData.MaxTextures);
 	}
 
@@ -113,37 +111,24 @@ namespace Novaura {
 
 	void BatchRenderer::BeginScene(const Camera& camera)
 	{
-		//s_RenderData.ColorShader->Bind();
-		//s_RenderData.ColorShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
-		//s_RenderData.ColorShader->SetUniformMat4f("u_ViewMatrix", camera.GetViewMatrix());
-		//s_RenderData.ColorShader->SetUniformMat4f("u_ProjectionMatrix", camera.GetProjectionMatrix());
-
 		s_RenderData.TextureShader->Bind();
-		s_RenderData.TextureShader->SetUniformMat4f("u_ViewMatrix", camera.GetViewMatrix());
-		s_RenderData.TextureShader->SetUniformMat4f("u_ProjectionMatrix", camera.GetProjectionMatrix());
+		
+		s_RenderData.TextureShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
 
 		s_RenderData.VertexArray->Bind();
 		s_RenderData.VertexBuffer->Bind();
 		s_RenderData.IndexBuffer->Bind();
 	}
 	void BatchRenderer::EndScene()
-	{		
-		
+	{				
 		s_RenderData.VertexBuffer->SetData(s_RenderData.RectBuffer);		
 
-		//for (uint32_t i = 1; i < s_RenderData.CurrentTextureSlot; i++)
-		//{
-		//	s_RenderData.Textures[i]->Bind(i);
-		//	
-		//	//spdlog::info("hasdasder {}", s_RenderData.Textures[i]->GetSlot());			
-		//}
+		for (uint32_t i = 1; i < s_RenderData.CurrentTextureSlot; i++)
+		{
+			s_RenderData.Textures[i]->Bind(i);			
+		}
 
-
-		glDrawElements(GL_TRIANGLES, (s_RenderData.RectBuffer.size() / 4 * 6), GL_UNSIGNED_INT, nullptr);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		
-		//if(s_RenderData.CurrentTextureSlot > 0)
-		//spdlog::info("{}", s_RenderData.CurrentTextureSlot);
+		glDrawElements(GL_TRIANGLES, (s_RenderData.RectBuffer.size() / 4 * 6), GL_UNSIGNED_INT, nullptr);	
 
 		s_RenderData.RectBuffer.clear();
 		s_RenderData.CurrentTextureSlot = 1;
@@ -153,9 +138,7 @@ namespace Novaura {
 		DrawRectangle(rectangle.GetPosition(), rectangle.GetScale(), rectangle.GetColor(), quantity);
 	}
 	void BatchRenderer::DrawRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, const glm::vec2& quantity)
-	{
-		//s_RenderData.ColorShader->Bind();
-
+	{		
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), scale);
 		
 		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.NegativeTextureCoords, quantity);
@@ -168,42 +151,30 @@ namespace Novaura {
 		DrawRectangle(rectangle.GetPosition(), rectangle.GetScale(), rectangle.GetColor(), texture, quantity);
 	}
 	void BatchRenderer::DrawRectangle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, std::string_view texture, const glm::vec2& quantity)
-	{
-		/*auto tex = BatchTextureLoader::LoadTexture(texture);
-		tex->Bind();*/
-		//if (BatchTextureLoader::LoadedTextures.find(texture.data()) == BatchTextureLoader::LoadedTextures.end())
-		//{
-			auto tex = BatchTextureLoader::LoadTexture(texture);
-			float texIndex = 0.0f;
-			for (auto i = 1; i < s_RenderData.CurrentTextureSlot; i++)
+	{	
+		auto tex = BatchTextureLoader::LoadTexture(texture);
+		float texIndex = 0.0f;
+		for (auto i = 1; i < s_RenderData.CurrentTextureSlot; i++)
+		{
+			if (s_RenderData.Textures[i]->GetTextureFile() == tex->GetTextureFile())
 			{
-				if (s_RenderData.Textures[i]->GetTextureFile() == tex->GetTextureFile())
-				{
-					texIndex = static_cast<float>(i);
-					break;
-				}
+				texIndex = static_cast<float>(i);
+				break;
 			}
-			if (texIndex == 0.0f)
-			{
-				texIndex = static_cast<float>(s_RenderData.CurrentTextureSlot);
-				s_RenderData.Textures[s_RenderData.CurrentTextureSlot] = tex;
-				//tex->SetSlot(s_RenderData.CurrentTextureSlot);
-				s_RenderData.CurrentTextureSlot++;
-			}		
-			tex->Bind();
-			//spdlog::info("her {}", s_RenderData.CurrentTextureSlot);
-			//spdlog::info("{0:.3f},  {1}", texIndex, texture.data());		
-
-		//tex.Bind(s_RenderData.CurrentTextureSlot++);
-		//tex.SetSlot(s_RenderData.CurrentTextureSlot++);
-		s_RenderData.TextureShader->SetUniform2f("u_Quantity", quantity.x, quantity.y);
+		}
+		if (texIndex == 0.0f)
+		{
+			texIndex = static_cast<float>(s_RenderData.CurrentTextureSlot);
+			s_RenderData.Textures[s_RenderData.CurrentTextureSlot] = tex;			
+			s_RenderData.CurrentTextureSlot++;
+		}				
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), scale);
 
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.DefaultTextureCoords[0], quantity, texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1], quantity, texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.DefaultTextureCoords[2], quantity, texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.DefaultTextureCoords[3], quantity, texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.DefaultTextureCoords[0], glm::vec2(1.0f), texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1], glm::vec2(1.0f), texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.DefaultTextureCoords[2], glm::vec2(1.0f), texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.DefaultTextureCoords[3], glm::vec2(1.0f), texIndex);
 	}
 	void BatchRenderer::DrawRotatedRectangle(const Rectangle& rectangle, const glm::vec2& quantity)
 	{
@@ -227,26 +198,30 @@ namespace Novaura {
 	}
 	void BatchRenderer::DrawRotatedRectangle(const glm::vec3& position, const glm::vec3& scale, float rotation, const glm::vec4& color, std::string_view texture, const glm::vec2& quantity)
 	{
-		/*Texture tex = TextureLoader::LoadTexture(texture);
-		tex.Bind(s_RenderData.CurrentTextureSlot++);*/
-
-		if (BatchTextureLoader::LoadedTextures.find(texture.data()) == BatchTextureLoader::LoadedTextures.end())
+		auto tex = BatchTextureLoader::LoadTexture(texture);
+		float texIndex = 0.0f;
+		for (auto i = 1; i < s_RenderData.CurrentTextureSlot; i++)
 		{
-			//Texture tex = TextureLoader::LoadTexture(texture);
-
-			s_RenderData.Textures[s_RenderData.CurrentTextureSlot++] = BatchTextureLoader::LoadTexture(texture);
-			s_RenderData.Textures[s_RenderData.CurrentTextureSlot]->SetSlot(s_RenderData.CurrentTextureSlot);
+			if (s_RenderData.Textures[i]->GetTextureFile() == tex->GetTextureFile())
+			{
+				texIndex = static_cast<float>(i);
+				break;
+			}
 		}
-
-		s_RenderData.TextureShader->SetUniform2f("u_Quantity", quantity.x, quantity.y);
+		if (texIndex == 0.0f)
+		{
+			texIndex = static_cast<float>(s_RenderData.CurrentTextureSlot);
+			s_RenderData.Textures[s_RenderData.CurrentTextureSlot] = tex;			
+			s_RenderData.CurrentTextureSlot++;
+		}
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f))
 			* glm::scale(glm::mat4(1.0f), scale);
 
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.DefaultTextureCoords[0], quantity, static_cast<float>(TextureLoader::LoadedTextures[texture.data()].GetSlot()));
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1], quantity, static_cast<float>(TextureLoader::LoadedTextures[texture.data()].GetSlot()));
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.DefaultTextureCoords[2], quantity, static_cast<float>(TextureLoader::LoadedTextures[texture.data()].GetSlot()));
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.DefaultTextureCoords[3], quantity, static_cast<float>(TextureLoader::LoadedTextures[texture.data()].GetSlot()));
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.DefaultTextureCoords[0], glm::vec2(1.0f), texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1], glm::vec2(1.0f), texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.DefaultTextureCoords[2], glm::vec2(1.0f), texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.DefaultTextureCoords[3], glm::vec2(1.0f), texIndex);
 	}
 }

@@ -73,14 +73,15 @@ namespace SpaceAdventures {
 	{
 		Novaura::BatchRenderer::SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		Novaura::BatchRenderer::Clear();
-		//m_Rect->SetRotation(45.0f);
+		spdlog::info("{0:.5f}", glfwGetTime() * 10.0f);
+		m_Rect->SetRotation(glfwGetTime() * 10.0f);
 		Novaura::BatchRenderer::BeginScene(m_CameraController->GetCamera());
 		Novaura::BatchRenderer::DrawRectangle(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 1.0f), glm::vec4(0.2f, 0.8f, 0.2f, 1.0f), "Assets/Textures/UFO.png");
 		Novaura::BatchRenderer::DrawRectangle(glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.5f, 0.5f, 0.2f), glm::vec4(0.8f, 0.2f, 0.2f, 1.0f), "Assets/Textures/UFO.png");
-		Novaura::BatchRenderer::DrawRectangle(*m_Rect, "Assets/Textures/Spaceship.png");		
+		Novaura::BatchRenderer::DrawRotatedRectangle(*m_Rect, "Assets/Textures/Spaceship.png");		
 		Novaura::BatchRenderer::DrawRectangle(glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.5f, 0.5f, 1.0f), glm::vec4(0.5f, 0.8f, 0.8f, 1.0f));
 
-		Novaura::BatchRenderer::DrawRectangle(glm::vec3(-0.50f, -0.5f, 0.0f), glm::vec3(0.5f, 0.5f, 0.2f), glm::vec4(0.5f, 0.5f, 0.8f, 1.0f), "Assets/Textures/Spaceship.png");
+	//	Novaura::BatchRenderer::DrawRectangle(glm::vec3(-0.50f, -0.5f, 0.0f), glm::vec3(0.5f, 0.5f, 0.2f), glm::vec4(0.5f, 0.5f, 0.8f, 1.0f), "Assets/Textures/Spaceship.png");
 		//Novaura::BatchRenderer::DrawRectangle(glm::vec3(0.75f, 0.75f, 0.0f), glm::vec3(0.5f, 0.5f, 1.0f), glm::vec4(0.7f, 0.3f, 0.5f, 1.0f));
 
 		Novaura::BatchRenderer::EndScene();

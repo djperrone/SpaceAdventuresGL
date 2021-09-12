@@ -51,10 +51,6 @@ namespace SpaceAdventures {
 	{
 		m_CameraController->Update(GetWindow(), deltaTime);		
 		float aspectRatio = m_Window->Width / m_Window->Height;
-
-		
-		
-
 		
 		m_Rect->GetPosition().x += testState::velocity;
 		if (m_Rect->GetPosition().x > aspectRatio)

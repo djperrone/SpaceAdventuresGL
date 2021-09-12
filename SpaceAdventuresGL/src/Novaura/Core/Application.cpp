@@ -1,6 +1,7 @@
 #include "sapch.h"
 #include "Application.h"
 #include "Novaura/Renderer/Renderer.h"
+#include "Novaura/Renderer/BatchRenderer.h"
 #include <spdlog/spdlog.h>
 #include "Novaura/Renderer/Texture.h"
 #include "glfwCallBackWrapper.h"
@@ -22,7 +23,9 @@ namespace Novaura {
 	{		
 		m_StateMachine = std::make_shared<StateMachine>();
 		m_CameraController = std::make_shared<CameraController>(m_Context.GetWindow()->Width, m_Context.GetWindow()->Height);
+		//Novaura::BatchRenderer::Init();
 		Novaura::Renderer::Init();
+
 		Novaura::InputHandler::Init();
 		Novaura::InputHandler::SetCurrentWindow(m_Context.GetWindow());
 		
