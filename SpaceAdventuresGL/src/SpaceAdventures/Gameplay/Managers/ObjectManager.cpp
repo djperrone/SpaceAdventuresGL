@@ -20,7 +20,6 @@ namespace SpaceAdventures {
 			m_Spawner->SpawnAsteroid();
 			m_Spawner->SpawnUFO();
 
-
 			for (auto& obj : m_AsteroidList)
 			{
 				obj->Update(dt);

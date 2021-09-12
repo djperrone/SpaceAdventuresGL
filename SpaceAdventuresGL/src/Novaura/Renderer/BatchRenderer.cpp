@@ -57,12 +57,11 @@ namespace Novaura {
 		glEnable(GL_BLEND);
 		SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 
-		
-
-
 		//--------------------------------------------------------------------
 		s_RenderData.BatchVertexArray = std::make_unique<VertexArray>();
 		s_RenderData.BatchVertexBuffer = std::make_unique<VertexBuffer>();
+		s_RenderData.BatchVertexArray->Bind();
+		s_RenderData.BatchVertexBuffer->Bind();
 		s_RenderData.TextureShader = std::make_unique<Shader>("Assets/Shaders/BatchTextureShader.glsl");	
 
 		s_RenderData.BatchVertexArray->AddBuffer(*s_RenderData.BatchVertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
@@ -102,6 +101,7 @@ namespace Novaura {
 		}		
 
 		s_RenderData.BatchIndexBuffer = std::make_unique <IndexBuffer>(&indices[0], s_RenderData.MaxIndices);		
+		s_RenderData.BatchIndexBuffer->Bind();
 
 		int32_t samplers[s_RenderData.MaxTextures];
 		for (uint32_t i = 0; i < s_RenderData.MaxTextures; i++)
@@ -117,19 +117,9 @@ namespace Novaura {
 		glEnable(GL_STENCIL_TEST);
 		glStencilMask(0x00);
 		glStencilFunc(GL_NOTEQUAL, 1, 0XFF);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);		
 
-		s_RenderData.StencilVertexArray = std::make_unique<VertexArray>();
-		s_RenderData.StencilVertexBuffer = std::make_unique<VertexBuffer>();
-
-		s_RenderData.StencilVertexArray->AddBuffer(*s_RenderData.StencilVertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
-		s_RenderData.StencilVertexArray->AddBuffer(*s_RenderData.StencilVertexBuffer, 1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, Color));
-		s_RenderData.StencilVertexArray->AddBuffer(*s_RenderData.StencilVertexBuffer, 2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, TexCoord));
-		s_RenderData.StencilVertexArray->AddBuffer(*s_RenderData.StencilVertexBuffer, 3, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, Quantity));
-		s_RenderData.StencilVertexArray->AddBuffer(*s_RenderData.StencilVertexBuffer, 4, 1, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, TextureSlot));
-
-		s_RenderData.StencilRectBuffer.reserve(s_RenderData.MaxVertices * sizeof(VertexData));
-		s_RenderData.StencilIndexBuffer = std::make_unique <IndexBuffer>(&indices[0], s_RenderData.MaxIndices);
+		s_RenderData.StencilRectBuffer.reserve(s_RenderData.MaxVertices * sizeof(VertexData));		
 	}
 
 	void BatchRenderer::SetClearColor(float r, float g, float b, float a)
@@ -143,12 +133,8 @@ namespace Novaura {
 	}
 
 	void BatchRenderer::BeginScene(const Camera& camera)
-	{
-		//s_RenderData.TextureShader->Bind();
-		
-		s_RenderData.TextureShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
-
-		
+	{		
+		s_RenderData.TextureShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());		
 	}
 	void BatchRenderer::EndScene()
 	{		
@@ -165,21 +151,12 @@ namespace Novaura {
 
 			s_RenderData.BatchVertexBuffer->SetData(s_RenderData.BatchRectBuffer);
 			glDrawElements(GL_TRIANGLES, (s_RenderData.BatchRectBuffer.size() / 4 * 6), GL_UNSIGNED_INT, nullptr);
-
 		}
 		
 
-		
-
-
 		s_RenderData.BatchRectBuffer.clear();
-		s_RenderData.CurrentTextureSlot = 1;
-
-		// stencil draw
-		s_RenderData.StencilVertexArray->Bind();
-		s_RenderData.StencilVertexBuffer->Bind();
-		//?????????????
-		s_RenderData.BatchIndexBuffer->Bind();
+		s_RenderData.CurrentTextureSlot = 1;		
+	
 		if (s_RenderData.StencilRectBuffer.size() > 0)
 		{
 			//spdlog::info(__FUNCTION__);
@@ -191,8 +168,8 @@ namespace Novaura {
 			glStencilFunc(GL_ALWAYS, 1, 0XFF);
 			glStencilMask(0xFF);
 
-			s_RenderData.StencilVertexBuffer->SetData(s_RenderData.StencilRectBuffer, 0, s_RenderData.StencilIndex);
-			//s_RenderData.StencilVertexBuffer->SetData(s_RenderData.StencilRectBuffer);
+			s_RenderData.BatchVertexBuffer->SetData(s_RenderData.StencilRectBuffer, 0, s_RenderData.StencilIndex);
+			
 			glDrawElements(GL_TRIANGLES, ((s_RenderData.StencilRectBuffer.size() / 4 * 6) * 0.5f), GL_UNSIGNED_INT, nullptr);
 
 
@@ -201,7 +178,7 @@ namespace Novaura {
 			glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 			glStencilMask(0x00);
 			//
-			s_RenderData.StencilVertexBuffer->SetData(s_RenderData.StencilRectBuffer, s_RenderData.StencilIndex, s_RenderData.StencilRectBuffer.size());
+			s_RenderData.BatchVertexBuffer->SetData(s_RenderData.StencilRectBuffer, s_RenderData.StencilIndex, s_RenderData.StencilRectBuffer.size());
 			glDrawElements(GL_TRIANGLES, ((s_RenderData.StencilRectBuffer.size() / 4 * 6) * 0.5f), GL_UNSIGNED_INT, nullptr);
 			
 			glStencilMask(0x00);

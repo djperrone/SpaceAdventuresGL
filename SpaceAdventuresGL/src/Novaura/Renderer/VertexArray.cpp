@@ -10,7 +10,6 @@ namespace Novaura {
 	VertexArray::VertexArray()
 	{
 		glGenVertexArrays(1, &m_VertexArrayID);
-
 	}
 
 	VertexArray::~VertexArray()

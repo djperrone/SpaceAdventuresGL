@@ -15,34 +15,12 @@ namespace SpaceAdventures {
 		void SpawnAsteroid();
 		void SpawnAsteroid(float x, float y);
 		void SpawnUFO();
-		void SpawnUFO(float x, float y);
-
-		template <typename T>
-		void Spawn()
-		{
-
-			//T* temp1 = new T();
-
-
-		/*	std::shared_ptr<T> temp = std::make_shared<T>();
-			if (temp.get()->GetTag() == Tag::Ship)
-			{
-				m_ShipList->push_back((temp));
-
-			}
-
-			m_ObjList->push_back(std::move(temp));*/
-
-
-		}
+		void SpawnUFO(float x, float y);		
 
 	private:
-		//std::list <std::shared_ptr<Character>>* m_ObjList;
-		std::list <std::shared_ptr<Ship>>* m_ShipList;
-		std::list <std::unique_ptr<Asteroid>>* m_AsteroidList;
-		//Dimensions m_Dimensions;
 		
-
+		std::list <std::shared_ptr<Ship>>* m_ShipList;
+		std::list <std::unique_ptr<Asteroid>>* m_AsteroidList;	
 
 		time_t currentTime = 0;
 		time_t previousTime = 0;
@@ -52,12 +30,8 @@ namespace SpaceAdventures {
 		double UFO_SPAWN_RATE = 5000;
 
 		double ASTEROID_SPAWN_RATE = 1000;
-
-
-
 		
 	};
-	
 
 }
 
