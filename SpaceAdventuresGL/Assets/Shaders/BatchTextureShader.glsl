@@ -45,5 +45,5 @@ void main()
    if(v_TexCoords.x == -1.0f)
         Color = v_Color;
     else
-       Color = texture(u_Textures[int(v_TexIndex)], v_TexCoords * v_Quantity) * v_Color;
+       Color = texture(u_Textures[int(v_TexIndex)], vec2(v_TexCoords.x * v_Quantity.x, v_TexCoords.y * v_Quantity.y)) * v_Color;
 } 

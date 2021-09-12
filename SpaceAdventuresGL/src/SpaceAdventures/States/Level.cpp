@@ -83,9 +83,9 @@ namespace SpaceAdventures {
 
 	void Level::Draw(float deltaTime)
 	{
-		Novaura::Renderer::SetClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		Novaura::Renderer::Clear();
-		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());		
+		Novaura::BatchRenderer::SetClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		Novaura::BatchRenderer::Clear();
+		Novaura::BatchRenderer::BeginScene(m_CameraController->GetCamera());		
 
 		float width = Novaura::InputHandler::GetCurrentWindow()->Width;
 		float height = Novaura::InputHandler::GetCurrentWindow()->Height;
@@ -102,7 +102,7 @@ namespace SpaceAdventures {
 
 		glm::vec3 healthPos = glm::vec3(-aspectRatio + healthScale.x * 0.5f, -1.0f + healthScale.y, 0.0f);
 		
-		Novaura::Renderer::DrawRectangle(healthPos, healthScale, healthColor);
+		Novaura::BatchRenderer::DrawRectangle(healthPos, healthScale, healthColor);
 
 		// reload icon
 
@@ -114,39 +114,41 @@ namespace SpaceAdventures {
 		{						
 			scale = glm::vec3(m_ObjectManager->GetPlayer().GetGun().GetBulletsUsed()/10.0f, 0.1f, 0.0f);
 			pos = glm::vec3(aspectRatio - scale.x * 0.5f, -1.0f + scale.y, 0.0f);
-			Novaura::Renderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/ReloadIcon.png", glm::vec2(m_ObjectManager->GetPlayer().GetGun().GetBulletsUsed(), 1.0f));		
+			Novaura::BatchRenderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.5f), "Assets/Textures/ReloadIcon.png", glm::vec2(m_ObjectManager->GetPlayer().GetGun().GetBulletsUsed(), 1.0f));		
 		}
 		else
 		{
-			Novaura::Renderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.75f), "Assets/Textures/ReloadIcon.png", quantity);
+			Novaura::BatchRenderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.75f), "Assets/Textures/ReloadIcon.png", quantity);
 		}
 
 		for (auto& projectile : m_ObjectManager->GetProjectileList())
 		{
-			Novaura::Renderer::DrawRotatedRectangle(projectile->GetRectangle(), projectile->GetTextureFile());
+			Novaura::BatchRenderer::DrawRotatedRectangle(projectile->GetRectangle(), projectile->GetTextureFile());
 		}
 
 		for (auto& asteroid : m_ObjectManager->GetAsteroidList())
 		{
-			Novaura::Renderer::DrawRectangle(asteroid->GetRectangle(), asteroid->GetTextureFile());
+			Novaura::BatchRenderer::DrawRectangle(asteroid->GetRectangle(), asteroid->GetTextureFile());
 		}
 		for (auto& ship : m_ObjectManager->GetShipList())
 		{
-			Novaura::Renderer::DrawRotatedRectangle(ship->GetRectangle(), ship->GetTextureFile());
+			Novaura::BatchRenderer::DrawRotatedRectangle(ship->GetRectangle(), ship->GetTextureFile());
 		}	
 		m_Cursor->CheckForCollision(m_ObjectManager->GetShipList());
 
 
 		// mouse cursor target
-		Novaura::Renderer::DrawRectangle(m_Cursor->GetRectangle(), m_Cursor->GetTextureFile());
+		Novaura::BatchRenderer::DrawRectangle(m_Cursor->GetRectangle(), m_Cursor->GetTextureFile());
 
 		if (!m_ObjectManager->GetPlayer().IsAlive() && !firstTimeDead)
 		{
 			float alpha = 0.0f;
 			glm::mix(0.0f, 0.15f, m_DiedMessage->GetColor().a);
-			Novaura::Renderer::DrawRectangle(*m_DiedMessage, "Assets/Textures/Buttons/DeathScreenRed2.png");
+			Novaura::BatchRenderer::DrawRectangle(*m_DiedMessage, "Assets/Textures/Buttons/DeathScreenRed2.png");
 
 		}
+
+		Novaura::BatchRenderer::EndScene();
 	}
 
 	

@@ -23,8 +23,8 @@ namespace Novaura {
 	{		
 		m_StateMachine = std::make_shared<StateMachine>();
 		m_CameraController = std::make_shared<CameraController>(m_Context.GetWindow()->Width, m_Context.GetWindow()->Height);
-		//Novaura::BatchRenderer::Init();
-		Novaura::Renderer::Init();
+		Novaura::BatchRenderer::Init();
+		//Novaura::Renderer::Init();
 
 		Novaura::InputHandler::Init();
 		Novaura::InputHandler::SetCurrentWindow(m_Context.GetWindow());
@@ -39,7 +39,9 @@ namespace Novaura {
 		m_CameraController = std::make_shared<CameraController>(width, height);
 		InputHandler::Init();
 		InputHandler::SetCurrentWindow(m_Context.GetWindow());
-		Novaura::Renderer::Init();
+		//Novaura::Renderer::Init();
+		Novaura::BatchRenderer::Init();
+
 		Random::Init();
 		SetCallBackFunctions();
 	}

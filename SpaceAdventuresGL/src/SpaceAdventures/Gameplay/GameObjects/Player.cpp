@@ -7,9 +7,6 @@ namespace SpaceAdventures {
 
 	Player::Player()
 	{
-		//m_MouseCursor = mouseCursor;
-		std::cout << "player!\n";
-
 		m_Team = Team::Friend;
 		m_TextureFile = "Assets/Textures/Spaceship.png";
 		m_Rect = std::make_unique<Novaura::Rectangle>(glm::vec2(0.0f, 0.0f), glm::vec2(0.25f, 0.25f));
@@ -20,8 +17,7 @@ namespace SpaceAdventures {
 		m_Gun = std::make_unique<ProjectileComponent>(m_Rect.get(), m_MovementComponent.get(), m_Team);
 
 
-		m_Tag = Tag::Player;
-		m_Team = Team::Friend;
+		m_Tag = Tag::Player;		
 
 		m_PreviousPosition = m_Rect->GetPosition();
 
@@ -32,8 +28,7 @@ namespace SpaceAdventures {
 
 		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_MOUSE_BUTTON_LEFT, &Player::FireGun, this);
 		Novaura::InputHandler::GetCurrentController().BindActionInputEvent(GLFW_PRESS, GLFW_KEY_R, &Player::Reload, this);
-
-		//Novaura::InputHandler::GetCurrentController().BindAxisInputEvent(GLFW_KEY_T, []() {spdlog::info("test axis event T"); });
+		
 	}
 
 	void Player::FireGun()

@@ -26,7 +26,6 @@ namespace SpaceAdventures {
 
 	void Projectile::Update(float dt)
 	{	
-
 		m_Rect->GetPosition().y += m_MovementComponent->GetVelocity().y * dt * m_MovementComponent->GetSpeed();
 		m_Rect->GetPosition().x += m_MovementComponent->GetVelocity().x * dt * m_MovementComponent->GetSpeed();		
 	}

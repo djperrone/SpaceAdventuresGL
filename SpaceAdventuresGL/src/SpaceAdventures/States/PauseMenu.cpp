@@ -73,14 +73,16 @@ namespace SpaceAdventures {
 	{
 		//Novaura::Renderer::SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		//Novaura::Renderer::Clear();
-		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());
+		Novaura::BatchRenderer::BeginScene(m_CameraController->GetCamera());
 		//Novaura::Renderer::DrawRectangle(m_Title->GetRectangle(), m_Button->GetTextureFile());
-		Novaura::Renderer::DrawRectangle(*m_Title, "Assets/Textures/Buttons/TitleLight.png");
+		Novaura::BatchRenderer::DrawRectangle(*m_Title, "Assets/Textures/Buttons/TitleLight.png");
 
 		for (auto& button : m_ButtonList)
 		{
-			Novaura::Renderer::DrawRectangle(button->GetRectangle(), button->GetTextureFile());
+			Novaura::BatchRenderer::DrawRectangle(button->GetRectangle(), button->GetTextureFile());
 		}
+
+		Novaura::BatchRenderer::EndScene();
 	}	
 
 	void PauseMenu::OnExit()

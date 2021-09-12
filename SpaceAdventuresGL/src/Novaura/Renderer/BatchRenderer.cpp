@@ -49,7 +49,7 @@ namespace Novaura {
 		//--------------------------------------------------------------------
 		s_RenderData.VertexArray = std::make_unique<VertexArray>();
 		s_RenderData.VertexBuffer = std::make_unique<VertexBuffer>();
-		s_RenderData.TextureShader = std::make_unique<Shader>("Assets/Shaders/TextureShader.glsl");	
+		s_RenderData.TextureShader = std::make_unique<Shader>("Assets/Shaders/BatchTextureShader.glsl");	
 
 		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
 		s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, Color));
@@ -111,7 +111,7 @@ namespace Novaura {
 
 	void BatchRenderer::BeginScene(const Camera& camera)
 	{
-		s_RenderData.TextureShader->Bind();
+		//s_RenderData.TextureShader->Bind();
 		
 		s_RenderData.TextureShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
 
@@ -171,10 +171,10 @@ namespace Novaura {
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), scale);
 
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.DefaultTextureCoords[0], glm::vec2(1.0f), texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1], glm::vec2(1.0f), texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.DefaultTextureCoords[2], glm::vec2(1.0f), texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.DefaultTextureCoords[3], glm::vec2(1.0f), texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.DefaultTextureCoords[0], quantity, texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1], quantity, texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.DefaultTextureCoords[2], quantity, texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.DefaultTextureCoords[3], quantity, texIndex);
 	}
 	void BatchRenderer::DrawRotatedRectangle(const Rectangle& rectangle, const glm::vec2& quantity)
 	{
@@ -219,9 +219,9 @@ namespace Novaura {
 			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f))
 			* glm::scale(glm::mat4(1.0f), scale);
 
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.DefaultTextureCoords[0], glm::vec2(1.0f), texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1], glm::vec2(1.0f), texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.DefaultTextureCoords[2], glm::vec2(1.0f), texIndex);
-		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.DefaultTextureCoords[3], glm::vec2(1.0f), texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, s_RenderData.DefaultTextureCoords[0], quantity, texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1], quantity, texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.DefaultTextureCoords[2], quantity, texIndex);
+		s_RenderData.RectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.DefaultTextureCoords[3], quantity, texIndex);
 	}
 }
