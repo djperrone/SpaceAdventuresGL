@@ -7,9 +7,9 @@ namespace SpaceAdventures {
 	{
 	public:
 
-		Projectile() = default;
-
+		Projectile();
 		Projectile(glm::vec2 position, glm::vec2 velocity, Team team, float angle);
+		void Reset(const Projectile& other);
 
 
 		virtual void Update(float dt) override;

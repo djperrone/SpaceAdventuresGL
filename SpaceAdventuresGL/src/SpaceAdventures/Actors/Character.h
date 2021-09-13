@@ -40,13 +40,11 @@ namespace SpaceAdventures {
 		float GetSpeed() const;
 		void SetSpeed(float speed);
 
-		void UpdateLocation(float dt);
+		void UpdateLocation(float dt);		
+		void SetPosition(float x, float y);
+		void SetPosition(const glm::vec3& position);
 
-		float GetLeftBound() const;
-		float GetRightBound()const;
-		float GetUpperBound()const;
-		float GetLowerBound()const;
-
+		void SetHealth(int health);
 		float GetHealth() const;
 		float GetDamage() const;
 
@@ -54,14 +52,20 @@ namespace SpaceAdventures {
 		void Attack(Character* Character);
 		bool IsAlive() const;
 
+		void SetTeam(Team team);
 		Team GetTeam()const;
 		Tag GetTag() const;
 
 		inline float GetMaxHealth() { return m_CombatComponent->GetMaxHealth(); }
 
+		inline bool IsCollidable() const { return m_IsCollidable; }
+		inline void SetIsCollidable(bool isCollidable) { m_IsCollidable = isCollidable; }
+
 	protected:
 		std::unique_ptr<MovementComponent> m_MovementComponent;
 		std::unique_ptr<CombatComponent> m_CombatComponent;
+
+		bool m_IsCollidable = false;
 
 		Team m_Team;
 		Tag m_Tag = Tag::None;

@@ -1,4 +1,5 @@
 #pragma once
+#include "GameObjectData.h"
 
 namespace SpaceAdventures {	
 	class Asteroid;
@@ -10,7 +11,7 @@ namespace SpaceAdventures {
 	class CollisionManager
 	{
 	public:
-		CollisionManager(std::list<std::shared_ptr<Ship>>* objList, std::list<std::unique_ptr<Asteroid>>* asteroidList, std::list<std::shared_ptr<Character>>* projectileList);
+		CollisionManager(std::vector<std::shared_ptr<Character>>* characterList);
 		CollisionManager();
 
 		void Tick();
@@ -21,8 +22,7 @@ namespace SpaceAdventures {
 	protected:
 
 	private:
-		std::list<std::shared_ptr<Ship>>* m_ShipList;
-		std::list<std::unique_ptr<Asteroid>>* m_AsteroidList;
-		std::list<std::shared_ptr<Character>>* m_ProjectileList;		
+		std::vector<std::shared_ptr<Character>>* m_CharacterList;
+
 	};
 }

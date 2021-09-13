@@ -6,7 +6,7 @@ namespace SpaceAdventures {
 	class UFO : public Ship
 	{
 	public:
-		UFO() = default;
+		UFO();
 		UFO(glm::vec2 pos);
 		UFO(float x, float y);
 

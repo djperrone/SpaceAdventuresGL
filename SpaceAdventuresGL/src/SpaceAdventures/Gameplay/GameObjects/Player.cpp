@@ -15,7 +15,8 @@ namespace SpaceAdventures {
 		m_MovementComponent = std::make_unique<MovementComponent>(glm::vec2(1.0f, 1.0f), 1.0f);
 		m_CombatComponent = std::make_unique<CombatComponent>(3.0f, 3.0f);
 		m_Gun = std::make_unique<ProjectileComponent>(m_Rect.get(), m_MovementComponent.get(), m_Team);
-
+		m_IsCollidable = true;
+		m_CombatComponent->SetMaxHealth(3);
 
 		m_Tag = Tag::Player;		
 

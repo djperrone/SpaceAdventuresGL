@@ -28,14 +28,31 @@ namespace SpaceAdventures {
 		m_Rect->SetPosition(pos);
 	}
 
+	void Character::SetPosition(float x, float y)
+	{
+		m_Rect->SetPosition(glm::vec3(x, y, 0));
+	}
+
+	void Character::SetPosition(const glm::vec3& position)
+	{
+		m_Rect->SetPosition(position);
+	}
 	
 	
-	
+	void Character::SetHealth(int health)
+	{
+		m_CombatComponent->SetHealth(health);
+	}
+
 	float Character::GetHealth() const { return m_CombatComponent->GetHealth(); }
 	float Character::GetDamage() const { return m_CombatComponent->GetDamage(); }
 	void Character::TakeDamage(float damage) { m_CombatComponent->TakeDamage(damage); }
 	void Character::Attack(Character* Character) { m_CombatComponent->Attack(Character); }
 	bool Character::IsAlive() const { return GetHealth() > 0; }
+	void Character::SetTeam(Team team)
+	{
+		m_Team = team;
+	}
 	Team Character::GetTeam()const { return m_Team; }
 	Tag Character::GetTag() const { return m_Tag; }
 }

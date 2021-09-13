@@ -7,12 +7,14 @@ namespace SpaceAdventures {
 
 	ObjectManager::ObjectManager()
 	{
-		m_Spawner = std::make_unique<Spawner>(&m_AsteroidList, &m_ShipList);
+		m_CharacterList.reserve(GameObjectData::MAX_CHARACTERS);
 		m_ProjectileManager = std::make_unique<ProjectileManager>();
 
 		m_Player = std::make_shared<Player>();	
-		m_ShipList.push_back(m_Player);
-		m_CollisionManager = std::make_unique<CollisionManager>(&m_ShipList, &m_AsteroidList, &m_ProjectileList);
+		m_CharacterList.push_back(m_Player);
+		m_Spawner = std::make_unique<Spawner>(m_CharacterList, m_Player);
+
+		m_CollisionManager = std::make_unique<CollisionManager>(&m_CharacterList);
 	}
 
 	void ObjectManager::Update(float dt)
@@ -20,19 +22,13 @@ namespace SpaceAdventures {
 			m_Spawner->SpawnAsteroid();
 			m_Spawner->SpawnUFO();
 
-			for (auto& obj : m_AsteroidList)
-			{
-				obj->Update(dt);
-			}
-			for (auto& obj : m_ShipList)
-			{				
-				obj->Update(dt);
-			}
+			int count = 0;
 
-			for (auto& obj : m_ProjectileList)
-			{				
-				obj->Update(dt);
-			}
+			for (auto& obj : m_CharacterList)
+			{								
+				if(obj->IsAlive())
+					obj->Update(dt);
+			}			
 
 			LoadAllProjectiles();
 			m_CollisionManager->Tick();
@@ -42,56 +38,36 @@ namespace SpaceAdventures {
 
 	void ObjectManager::CleanList()
 	{
-		for (auto it = m_AsteroidList.begin(); it != m_AsteroidList.end(); )
+		for (auto object : m_CharacterList)
 		{
-			if (!it->get()->IsAlive() || !IsWithinBounds(*it->get()))
+			if (!IsWithinBounds(*object))
 			{
-				it = m_AsteroidList.erase(it);
+				object->SetHealth(0);
 			}
-			else
+			if (!object->IsAlive())
 			{
-				it++;
+				object->SetIsCollidable(false);
 			}
-		}
-
-		for (auto it = m_ShipList.begin(); it != m_ShipList.end(); )
-		{
-			if (!it->get()->IsAlive() || !IsWithinBounds(*it->get()))
-			{
-				it = m_ShipList.erase(it);
-			}
-			else
-			{
-				it++;
-			}
-		}
-
-		for (auto it = m_ProjectileList.begin(); it != m_ProjectileList.end(); )
-		{
-			if (!it->get()->IsAlive() || !IsWithinBounds(*it->get()))
-			{
-				it = m_ProjectileList.erase(it);
-			}
-			else
-			{
-				it++;
-			}
-		}
+			
+		}		
 	}
 
 	void ObjectManager::LoadAllProjectiles()
 	{
-		m_ProjectileManager->LoadAllProjectiles(m_ShipList);
-		auto list = m_ProjectileManager->GetProjectileList();
-		std::copy(list.begin(), list.end(), std::back_inserter(m_ObjectList));
-		std::copy(list.begin(), list.end(), std::back_inserter(m_ProjectileList));
-		m_ProjectileManager->ClearProjectileList();
+		m_ProjectileManager->LoadAllProjectiles(m_Spawner->GetShipList());
+		auto& list = m_ProjectileManager->GetProjectileList();
+		if (list.size() > 0)
+		{
+			m_Spawner->SpawnProjectiles(list);
+			m_ProjectileManager->ClearProjectileList();
+		}		
 	}
 
 	bool ObjectManager::IsWithinBounds(const Character& object)
 	{
+		float aspectRatio = Novaura::InputHandler::GetCurrentWindow()->AspectRatio;
 		Bounds bounds = object.GetBounds();
-		if (bounds.TopLeft.y < -1.0f)
+		if (bounds.TopLeft.y < -1.0f || bounds.BottomLeft.y > 1.2f || bounds.BottomLeft.x > aspectRatio || bounds.BottomRight.x < -aspectRatio)
 			return false;
 		else
 			return true;

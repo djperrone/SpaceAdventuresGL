@@ -7,113 +7,33 @@
 
 namespace SpaceAdventures {
 
-	CollisionManager::CollisionManager(std::list<std::shared_ptr<Ship>>* objList, std::list<std::unique_ptr<Asteroid>>* asteroidList, std::list<std::shared_ptr<Character>>* projectileList)
-		: m_ShipList(objList), m_AsteroidList(asteroidList), m_ProjectileList(projectileList)
+	CollisionManager::CollisionManager(std::vector<std::shared_ptr<Character>>* characterList)
+		: m_CharacterList(characterList)
 	{
 		
 	}
 
-	CollisionManager::CollisionManager()
-		: m_AsteroidList(nullptr), m_ShipList(nullptr)
-	{
-	}
+	
 
 	void CollisionManager::Tick()
 	{
 
-		for (auto it = std::begin(*m_ShipList); it != std::end(*m_ShipList); it++)
+		for (auto& current : *m_CharacterList)
 		{
-			//std::cout << "col man objlist " << (m_ShipList->size()) << "\n";
-
-			for (auto otherIt = std::begin(*m_ShipList); otherIt != std::end(*m_ShipList); otherIt++)
+			if (current->IsCollidable())
 			{
-				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
+				for (auto& other : *m_CharacterList)
 				{
-					HandleCollisionEvent(it->get(), otherIt->get());
-					//std::cout << "collision!\n";
+					if (other->IsCollidable())
+					{
+						if (IsColliding(current.get(), other.get()) && !IsOnSameTeam(current.get(), other.get()))
+						{
+							HandleCollisionEvent(current.get(), other.get());
+						}
+					}					
 				}
-			}
-
-			for (auto otherIt = std::begin(*m_AsteroidList); otherIt != std::end(*m_AsteroidList); otherIt++)
-			{
-				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
-				{
-					HandleCollisionEvent(it->get(), otherIt->get());
-					//std::cout << "collision!\n";
-				}
-			}
-
-			for (auto otherIt = std::begin(*m_ProjectileList); otherIt != std::end(*m_ProjectileList); otherIt++)
-			{
-				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
-				{
-					HandleCollisionEvent(it->get(), otherIt->get());
-				//	std::cout << "collision!\n";
-				}
-			}
-
-		}
-
-		for (auto it = std::begin(*m_AsteroidList); it != std::end(*m_AsteroidList); it++)
-		{
-			//std::cout << "Asteroidsadasdasdasd\n";
-			for (auto otherIt = std::begin(*m_AsteroidList); otherIt != std::end(*m_AsteroidList); otherIt++)
-			{
-				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
-				{
-					HandleCollisionEvent(it->get(), otherIt->get());
-					//std::cout << "collision!\n";
-				}
-			}
-
-			for (auto otherIt = std::begin(*m_ShipList); otherIt != std::end(*m_ShipList); otherIt++)
-			{
-				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
-				{
-					HandleCollisionEvent(it->get(), otherIt->get());
-					//std::cout << "collision!\n";
-				}
-			}
-			for (auto otherIt = std::begin(*m_ProjectileList); otherIt != std::end(*m_ProjectileList); otherIt++)
-			{
-				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
-				{
-					HandleCollisionEvent(it->get(), otherIt->get());
-					//std::cout << "collision!\n";
-				}
-			}
-
-		}
-
-		for (auto it = std::begin(*m_ProjectileList); it != std::end(*m_ProjectileList); it++)
-		{
-			//std::cout << "Asteroidsadasdasdasd\n";
-			for (auto otherIt = std::begin(*m_AsteroidList); otherIt != std::end(*m_AsteroidList); otherIt++)
-			{
-				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
-				{
-					HandleCollisionEvent(it->get(), otherIt->get());
-					//std::cout << "collision!\n";
-				}
-			}
-
-			for (auto otherIt = std::begin(*m_ShipList); otherIt != std::end(*m_ShipList); otherIt++)
-			{
-				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
-				{
-					HandleCollisionEvent(it->get(), otherIt->get());
-					//std::cout << "collision!\n";
-				}
-			}
-			for (auto otherIt = std::begin(*m_ProjectileList); otherIt != std::end(*m_ProjectileList); otherIt++)
-			{
-				if (IsColliding(it->get(), otherIt->get()) && !IsOnSameTeam(it->get(), otherIt->get()))
-				{
-					HandleCollisionEvent(it->get(), otherIt->get());
-					//std::cout << "collision!\n";
-				}
-			}
-		}
+			}			
+		}		
 	}
 
 	void CollisionManager::HandleCollisionEvent(Character* current, Character* other)

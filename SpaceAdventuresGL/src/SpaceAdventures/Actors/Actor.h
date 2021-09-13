@@ -17,6 +17,7 @@ namespace SpaceAdventures {
 		inline const Novaura::Rectangle& GetRectangle() const { return *m_Rect; }
 		inline Novaura::Rectangle& GetRectangle() { return *m_Rect; }
 
+		inline void SetTextureFile(std::string_view texFile) { m_TextureFile = texFile; }
 		inline std::string_view GetTextureFile() { return m_TextureFile; }
 		inline const std::string_view GetTextureFile() const { return m_TextureFile; }
 

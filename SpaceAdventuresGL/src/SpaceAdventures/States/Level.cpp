@@ -13,6 +13,7 @@ namespace SpaceAdventures {
 
 	Level::Level()
 	{
+
 		m_Window = Novaura::InputHandler::GetCurrentWindow();
 		m_CameraController = Novaura::Application::GetCameraController();
 		m_StateMachine = Novaura::Application::GetStateMachine();
@@ -121,7 +122,14 @@ namespace SpaceAdventures {
 			Novaura::BatchRenderer::DrawRectangle(pos, scale, glm::vec4(1.0f, 1.0f, 1.0f, 0.75f), "Assets/Textures/ReloadIcon.png", quantity);
 		}
 
-		for (auto& projectile : m_ObjectManager->GetProjectileList())
+		/*for (auto& character : m_ObjectManager->GetCharacterList())
+		{
+			if(character->IsAlive())
+				Novaura::BatchRenderer::DrawRotatedRectangle(character->GetRectangle(), character->GetTextureFile());
+
+		}*/
+
+		/*for (auto& projectile : m_ObjectManager->GetProjectileList())
 		{
 			Novaura::BatchRenderer::DrawRotatedRectangle(projectile->GetRectangle(), projectile->GetTextureFile());
 		}
@@ -130,9 +138,11 @@ namespace SpaceAdventures {
 		{
 			Novaura::BatchRenderer::DrawRectangle(asteroid->GetRectangle(), asteroid->GetTextureFile());
 		}
-		for (auto& ship : m_ObjectManager->GetShipList())
+		*/
+		for (auto& object : m_ObjectManager->GetCharacterList())
 		{
-			Novaura::BatchRenderer::DrawRotatedRectangle(ship->GetRectangle(), ship->GetTextureFile());
+			if(object->IsAlive())
+				Novaura::BatchRenderer::DrawRotatedRectangle(object->GetRectangle(), object->GetTextureFile());
 		}	
 		m_Cursor->CheckForCollision(m_ObjectManager->GetShipList());
 
@@ -155,10 +165,6 @@ namespace SpaceAdventures {
 
 	void Level::OnExit()
 	{
-
-
-
-
 		glfwSetInputMode(Novaura::InputHandler::GetCurrentWindow()->Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 

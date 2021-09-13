@@ -11,7 +11,15 @@ namespace SpaceAdventures {
 		ProjectileManager() = default;
 		~ProjectileManager() { std::cout << "destroyed porjctile manager\n"; };
 
-		inline std::vector<std::shared_ptr<Projectile>> GetProjectileList()
+		static const uint32_t MAX_SHIPS = 32;
+
+
+		inline std::vector<std::shared_ptr<Projectile>>& GetProjectileList()
+		{
+			return m_ProjectileList;
+		}	
+
+		inline const std::vector<std::shared_ptr<Projectile>>& GetProjectileList() const
 		{
 			return m_ProjectileList;
 		}
@@ -21,11 +29,11 @@ namespace SpaceAdventures {
 			m_ProjectileList.clear();
 		}
 
-		void LoadAllProjectiles(std::list <std::shared_ptr<Ship>>& shipList);
+		void LoadAllProjectiles(std::vector<std::shared_ptr<Ship>>& shipList);
+
 
 	private:
-		std::vector <std::shared_ptr<Projectile>> m_ProjectileList;
-
+		std::vector<std::shared_ptr<Projectile>> m_ProjectileList;	
 
 	};
 }

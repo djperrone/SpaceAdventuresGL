@@ -19,15 +19,19 @@ namespace SpaceAdventures {
 		
 	}
 
-	void CursorTarget::CheckForCollision(const std::list<std::shared_ptr<Ship>>& shipList)
+	void CursorTarget::CheckForCollision(const std::vector<std::shared_ptr<Ship>>& shipList)
 	{
 		for (const auto& ship : shipList)
 		{
-			bool state = Novaura::InputHandler::IsRectHovered(ship->GetRectangle());
-			if (state && ship->GetTeam() == Team::Enemy)
+			if (ship->IsAlive())
 			{
-				m_IsHovered = true;
-			}			
+				bool state = Novaura::InputHandler::IsRectHovered(ship->GetRectangle());
+				if (state && ship->GetTeam() == Team::Enemy)
+				{
+					m_IsHovered = true;
+				}
+			}
+					
 		}
 
 		if (m_IsHovered)

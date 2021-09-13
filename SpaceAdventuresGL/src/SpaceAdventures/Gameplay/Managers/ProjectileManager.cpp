@@ -3,7 +3,7 @@
 
 namespace SpaceAdventures {
 
-	void ProjectileManager::LoadAllProjectiles(std::list <std::shared_ptr<Ship>>& shipList)
+	void ProjectileManager::LoadAllProjectiles(std::vector<std::shared_ptr<Ship>>& shipList)
 	{
 		for (auto it = shipList.begin(); it != shipList.end(); it++)
 		{
