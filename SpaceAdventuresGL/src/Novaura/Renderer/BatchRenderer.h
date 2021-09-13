@@ -41,7 +41,7 @@ namespace Novaura {
 		static void DrawRotatedRectangle(const glm::vec3& position, const glm::vec3& scale, float rotation, const glm::vec4& color, std::string_view texture, const glm::vec2& quantity = { 1.0f,1.0f });
 
 
-
+		static void RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
 
 	};
 }

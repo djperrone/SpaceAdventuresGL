@@ -18,9 +18,11 @@ IncludeDir["Glad"] = "SpaceAdventuresGL/vendor/Glad/include"
 IncludeDir["ImGui"] = "SpaceAdventuresGL/vendor/imgui"
 IncludeDir["stb_image"] = "SpaceAdventuresGL/vendor/stb_image"
 IncludeDir["glm"] = "SpaceAdventuresGL/vendor/glm"
+IncludeDir["FreeType"] = "SpaceAdventuresGL/vendor/FreeType/include"
 
 include "SpaceAdventuresGL/vendor/GLFW"
 include "SpaceAdventuresGL/vendor/Glad"
+include "SpaceAdventuresGL/vendor/FreeType"
 
 project "SpaceAdventuresGL"
 	location "SpaceAdventuresGL"
@@ -50,13 +52,16 @@ project "SpaceAdventuresGL"
 		"%{prj.name}/vendor/localimgui/imgui/*.h",
 		"%{prj.name}/vendor/localimgui/imgui/*.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl"
+		"%{prj.name}/vendor/glm/glm/**.inl",
+		--"%{prj.name}/vendor/freetype/src/**.h",		
+		--"%{prj.name}/vendor/freetype/src/**.c",	
 	}
 
 	includedirs
 	{
 		"%{prj.name}/src",		
 		"%{prj.name}/vendor/spdlog/include",				
+		"%{IncludeDir.FreeType}",				
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",	
@@ -68,6 +73,7 @@ project "SpaceAdventuresGL"
 	{
 		"GLFW",
 		"Glad",		
+		"FreeType",
 		"opengl32.lib"
 	}
 

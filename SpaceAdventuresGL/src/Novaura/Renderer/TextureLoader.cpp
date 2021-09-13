@@ -65,4 +65,6 @@ namespace Novaura {
             LoadedTextures[path.data()] = std::make_shared<Texture>(path);
         }
     }
+  
+
 }

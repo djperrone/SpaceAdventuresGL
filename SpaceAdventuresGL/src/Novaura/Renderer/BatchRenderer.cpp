@@ -7,6 +7,7 @@
 #include <spdlog/spdlog.h>
 
 #include "Novaura/Renderer/TextureLoader.h"
+#include "Novaura/Renderer/TextLoader.h"
 #include "Novaura/Renderer/Vertex.h"
 #include "Novaura/Renderer/IndexBuffer.h"
 #include "Novaura/Renderer/VertexArray.h"
@@ -25,12 +26,11 @@ namespace Novaura {
 		std::unique_ptr<IndexBuffer> BatchIndexBuffer;
 		std::unique_ptr<VertexBuffer> BatchVertexBuffer;
 
-		std::unique_ptr<VertexArray> StencilVertexArray;
-		std::unique_ptr<IndexBuffer> StencilIndexBuffer;
-		std::unique_ptr<VertexBuffer> StencilVertexBuffer;
+		
 		uint32_t StencilIndex = 0;
 
-		std::unique_ptr<Shader> TextureShader;	
+		std::unique_ptr<Shader> TextureShader;
+		std::unique_ptr<Shader> TextRenderShader;
 
 		glm::vec4 DefaultRectangleVertices[4];
 		glm::vec2 DefaultTextureCoords[4];
@@ -62,7 +62,8 @@ namespace Novaura {
 		s_RenderData.BatchVertexBuffer = std::make_unique<VertexBuffer>();
 		s_RenderData.BatchVertexArray->Bind();
 		s_RenderData.BatchVertexBuffer->Bind();
-		s_RenderData.TextureShader = std::make_unique<Shader>("Assets/Shaders/BatchTextureShader.glsl");	
+		s_RenderData.TextureShader = std::make_unique<Shader>("Assets/Shaders/BatchTextureShader.glsl");
+		s_RenderData.TextRenderShader = std::make_unique<Shader>("Assets/Shaders/TextRenderShader.glsl");
 
 		s_RenderData.BatchVertexArray->AddBuffer(*s_RenderData.BatchVertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
 		s_RenderData.BatchVertexArray->AddBuffer(*s_RenderData.BatchVertexBuffer, 1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, Color));
@@ -134,6 +135,11 @@ namespace Novaura {
 
 	void BatchRenderer::BeginScene(const Camera& camera)
 	{		
+		s_RenderData.TextRenderShader->Bind();
+		s_RenderData.TextRenderShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
+
+		s_RenderData.TextureShader->Bind();
+
 		s_RenderData.TextureShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());		
 	}
 	void BatchRenderer::EndScene()
@@ -349,5 +355,58 @@ namespace Novaura {
 		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, s_RenderData.DefaultTextureCoords[1], quantity, texIndex);
 		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, s_RenderData.DefaultTextureCoords[2], quantity, texIndex);
 		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, s_RenderData.DefaultTextureCoords[3], quantity, texIndex);
+	}
+	void BatchRenderer::RenderText(std::string text, float x, float y, float scale, glm::vec3 color)
+	{
+		s_RenderData.TextRenderShader->Bind();
+
+		s_RenderData.TextRenderShader->SetUniform3f("textColor", color);
+
+
+		std::string::const_iterator c;
+		for (c = text.begin(); c != text.end(); c++)
+		{
+			Text::Character ch = TextLoader::LoadedCharacters[*c];
+
+			float xpos = x + ch.Bearing.x * scale;
+			float ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+
+			float w = ch.Size.x * scale;
+			float h = ch.Size.y * scale;
+			// update VBO for each character
+			float vertices[6][4] = {
+				{ xpos,     ypos + h,   0.0f, 0.0f },
+				{ xpos,     ypos,       0.0f, 1.0f },
+				{ xpos + w, ypos,       1.0f, 1.0f },
+
+				{ xpos,     ypos + h,   0.0f, 0.0f },
+				{ xpos + w, ypos,       1.0f, 1.0f },
+				{ xpos + w, ypos + h,   1.0f, 0.0f }
+			};
+
+
+			float vertices1d[24];
+			int count = 0;
+			for (auto i = 0; i < 6; i++)
+			{
+				for (auto j = 0; j < 4; j++)
+				{
+					vertices1d[count++] = vertices[i][j];
+				}
+
+				VertexBuffer buffer;
+				buffer.SetData(vertices1d, sizeof(vertices1d));
+
+				glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+				// update content of VBO memory
+
+
+				// render quad
+				glDrawArrays(GL_TRIANGLES, 0, 6);
+				// now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+				x += (ch.Advance >> 6) * scale;
+				s_RenderData.TextureShader->Bind();
+			}
+		}
 	}
 }

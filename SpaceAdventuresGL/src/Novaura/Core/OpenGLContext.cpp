@@ -3,6 +3,8 @@
 
 #include <spdlog/spdlog.h>
 
+#include "Novaura/Renderer/TextLoader.h"
+
 namespace Novaura {
 
     OpenGLContext::OpenGLContext(std::string_view title, float width, float height)
@@ -41,6 +43,9 @@ namespace Novaura {
        spdlog::info("  Vendor: {0}", glGetString(GL_VENDOR));
        spdlog::info("  Renderer: {0}", glGetString(GL_RENDERER));
        spdlog::info("  Version: {0}", glGetString(GL_VERSION));       
+
+       TextLoader::Init();
+       
     }
     void OpenGLContext::SwapBuffers() const
     {
