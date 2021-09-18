@@ -3,6 +3,7 @@
 #include "States/TestState.h"
 #include "States/BatchTest.h"
 #include "States/StencilTest.h"
+#include "States/TextTest.h"
 #include "States/MainMenu.h"
 
 
@@ -17,6 +18,7 @@ namespace SpaceAdventures {
 		//m_StateMachine.PushState(std::make_unique<TestState>(GetWindow(), m_CameraController));
 		m_StateMachine->PushState(std::make_unique<MainMenu>(GetWindow(), m_CameraController, m_StateMachine));
 		//m_StateMachine->PushState(std::make_unique<TestState>(GetWindow(), m_CameraController, m_StateMachine));
+		//m_StateMachine->PushState(std::make_unique<TextTest>(GetWindow(), m_CameraController));
 		//m_StateMachine->PushState(std::make_unique<BatchTest>(GetWindow(), m_CameraController, m_StateMachine));
 		//m_StateMachine->PushState(std::make_unique<StencilTest>(GetWindow(), m_CameraController, m_StateMachine));
 	}

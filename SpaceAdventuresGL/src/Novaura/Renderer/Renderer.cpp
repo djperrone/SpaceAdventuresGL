@@ -10,6 +10,8 @@
 #include "Novaura/Renderer/Vertex.h"
 #include "Novaura/Renderer/IndexBuffer.h"
 #include "Novaura/Renderer/VertexArray.h"
+#include "Novaura/Renderer/TextLoader.h"
+
 #include "Novaura/Renderer/VertexBuffer.h"
 
 namespace Novaura {
@@ -25,6 +27,9 @@ namespace Novaura {
 
 		glm::vec4 DefaultRectangleVertices[4];
 		glm::vec2 DefaultTextureCoords[4];
+
+		std::unique_ptr<Shader> TextRenderShader;
+
 	};
 
 	
@@ -43,12 +48,17 @@ namespace Novaura {
 
 	void Renderer::Init()
 	{
-		//glEnable(GL_DEPTH_TEST);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
-		
+
+		//glEnable(GL_DEPTH_TEST);
+		//glDepthFunc(GL_LESS);
+		glEnable(GL_STENCIL_TEST);
+		glStencilMask(0x00); // disable writing to the stencil buffer
+		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
 		SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 
@@ -56,6 +66,7 @@ namespace Novaura {
 		s_RenderData.VertexBuffer = std::make_unique<VertexBuffer>();
 		s_RenderData.TextureShader = std::make_unique<Shader>("Assets/Shaders/TextureShader.glsl");
 		s_RenderData.ColorShader = std::make_unique<Shader>("Assets/Shaders/BasicColorShader.glsl");
+		s_RenderData.TextRenderShader = std::make_unique<Shader>("Assets/Shaders/TextRenderShader.glsl");
 
 		constexpr unsigned int numIndices = 6;
 		unsigned int indices[numIndices] = {
@@ -94,8 +105,12 @@ namespace Novaura {
 		s_RenderData.ColorShader->SetUniformMat4f("u_ProjectionMatrix", camera.GetProjectionMatrix());
 
 		s_RenderData.TextureShader->Bind();		
-		s_RenderData.TextureShader->SetUniformMat4f("u_ViewMatrix", camera.GetViewMatrix());
-		s_RenderData.TextureShader->SetUniformMat4f("u_ProjectionMatrix", camera.GetProjectionMatrix());
+		s_RenderData.TextureShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
+		//s_RenderData.TextureShader->SetUniformMat4f("u_ProjectionMatrix", camera.GetProjectionMatrix());
+
+		s_RenderData.TextRenderShader->Bind();
+		//s_RenderData.TextRenderShader->SetUniformMat4f("u_ViewMatrix", camera.GetViewMatrix());
+		s_RenderData.TextRenderShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
 	}
 
 	void Renderer::DrawRectangle(const Rectangle& rectangle, const glm::vec2& quantity)
@@ -241,6 +256,78 @@ namespace Novaura {
 		glDrawElements(GL_TRIANGLES, s_RenderData.IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 		tex.UnBind();
 	}
+
+	void Renderer::RenderText(std::string text, float x, float y, float scale, glm::vec3 color)
+	{
+
+		//spdlog::info(__FUNCTION__);
+		s_RenderData.TextRenderShader->Bind();
+		//s_RenderData.TextRenderShader->SetUniform3f("textColor", color);
+
+		unsigned int VAO, VBO;
+		std::unique_ptr<VertexArray> textVA;
+		std::unique_ptr<VertexBuffer> textBuffer;
+		//textVA->AddBuffer(*textBuffer,0,4, GL_FLOAT, GL_FALSE, 4,0);
+		//s_RenderData.VertexArray->AddBuffer(*s_RenderData.VertexBuffer, 1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, Color));
+
+		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1, &VBO);
+		glBindVertexArray(VAO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+
+		glUniform3f(glGetUniformLocation(s_RenderData.TextRenderShader->GetID(), "textColor"), color.x, color.y, color.z);
+		glActiveTexture(GL_TEXTURE0);
+		glBindVertexArray(VAO);
+
+		// iterate through all characters
+		std::vector<std::vector<float>> verts;
+
+		std::string::const_iterator c;
+		for (c = text.begin(); c != text.end(); c++)
+		{
+			Text::Character ch = TextLoader::LoadedCharacters[*c];
+
+			float xpos = x + ch.Bearing.x * scale;
+			float ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+
+			float w = ch.Size.x * scale;
+			float h = ch.Size.y * scale;
+			// update VBO for each character
+
+			
+			
+
+			float vertices[6][4] = {
+				{ xpos,     ypos + h,   0.0f, 0.0f },
+				{ xpos,     ypos,       0.0f, 1.0f },
+				{ xpos + w, ypos,       1.0f, 1.0f },
+
+				{ xpos,     ypos + h,   0.0f, 0.0f },
+				{ xpos + w, ypos,       1.0f, 1.0f },
+				{ xpos + w, ypos + h,   1.0f, 0.0f }
+			};
+			// render glyph texture over quad
+			glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+			// update content of VBO memory
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			// render quad
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+			verts.clear();
+
+			// now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+			x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
+		}
+		glBindVertexArray(0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
 
 	
 

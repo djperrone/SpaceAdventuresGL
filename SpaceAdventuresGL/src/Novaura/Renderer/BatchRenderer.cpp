@@ -362,6 +362,7 @@ namespace Novaura {
 
 		s_RenderData.TextRenderShader->SetUniform3f("textColor", color);
 
+		//VertexBuffer buffer;
 
 		std::string::const_iterator c;
 		for (c = text.begin(); c != text.end(); c++)
@@ -394,8 +395,7 @@ namespace Novaura {
 					vertices1d[count++] = vertices[i][j];
 				}
 
-				VertexBuffer buffer;
-				buffer.SetData(vertices1d, sizeof(vertices1d));
+				//s_RenderData..SetData(vertices1d, sizeof(vertices1d));
 
 				glBindTexture(GL_TEXTURE_2D, ch.TextureID);
 				// update content of VBO memory

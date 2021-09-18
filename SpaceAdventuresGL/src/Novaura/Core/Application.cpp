@@ -4,6 +4,7 @@
 #include "Novaura/Renderer/BatchRenderer.h"
 #include <spdlog/spdlog.h>
 #include "Novaura/Renderer/Texture.h"
+#include "Novaura/Renderer/TextLoader.h"
 #include "glfwCallBackWrapper.h"
 #include "Novaura/Input/InputHandler.h"
 #include "Novaura/StateMachine/State.h"
@@ -39,8 +40,8 @@ namespace Novaura {
 		m_CameraController = std::make_shared<CameraController>(width, height);
 		InputHandler::Init();
 		InputHandler::SetCurrentWindow(m_Context.GetWindow());
-		//Novaura::Renderer::Init();
 		Novaura::BatchRenderer::Init();
+		Novaura::Renderer::Init();
 
 		Random::Init();
 		SetCallBackFunctions();

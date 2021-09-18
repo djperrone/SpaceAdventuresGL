@@ -8,6 +8,7 @@
 
 #include "Novaura/Renderer/Texture.h"
 #include "Novaura/Renderer/TextureLoader.h"
+#include "Novaura/Renderer/TextLoader.h"
 #include "Novaura/Input/InputHandler.h"
 
 namespace SpaceAdventures {	
@@ -24,6 +25,8 @@ namespace SpaceAdventures {
 	{
 
 		Novaura::BatchRenderer::Init();
+		Novaura::Renderer::Init();
+		Novaura::TextLoader::Init();
 
 		m_Rect = std::make_unique<Novaura::Rectangle>(glm::vec2(0.0f, 0.0f), glm::vec2(0.5f, 0.5f), glm::vec4(0.2f, 0.2f, 0.8f, 1.0f));
 		Novaura::InputHandler::GetCurrentController().BindAxisInputEvent(GLFW_KEY_T, []() {spdlog::info("test axis event T"); });
@@ -71,20 +74,24 @@ namespace SpaceAdventures {
 
 	void BatchTest::Draw(float deltaTime)
 	{
-		Novaura::BatchRenderer::SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
-		Novaura::BatchRenderer::Clear();
+		Novaura::Renderer::SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+		Novaura::Renderer::Clear();
+		//Novaura::Renderer::DrawRectangle(*m_Rect);
+		Novaura::Renderer::BeginScene(m_CameraController->GetCamera());
+		//Novaura::Renderer::DrawRotatedRectangle(*m_Rect, "Assets/Textures/Spaceship.png");		
+		Novaura::Renderer::RenderText("A", 0.0F, 0.0F,1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+
 		/*spdlog::info("{0:.5f}", glfwGetTime() * 10.0f);
 		m_Rect->SetRotation(glfwGetTime() * 10.0f);
 		Novaura::BatchRenderer::BeginScene(m_CameraController->GetCamera());
 		Novaura::BatchRenderer::DrawRectangle(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 1.0f), glm::vec4(0.2f, 0.8f, 0.2f, 1.0f), "Assets/Textures/UFO.png");
 		Novaura::BatchRenderer::DrawRectangle(glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.5f, 0.5f, 0.2f), glm::vec4(0.8f, 0.2f, 0.2f, 1.0f), "Assets/Textures/UFO.png");
-		Novaura::BatchRenderer::DrawRotatedRectangle(*m_Rect, "Assets/Textures/Spaceship.png");		
 		Novaura::BatchRenderer::DrawRectangle(glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.5f, 0.5f, 1.0f), glm::vec4(0.5f, 0.8f, 0.8f, 1.0f));*/
 
 	//	Novaura::BatchRenderer::DrawRectangle(glm::vec3(-0.50f, -0.5f, 0.0f), glm::vec3(0.5f, 0.5f, 0.2f), glm::vec4(0.5f, 0.5f, 0.8f, 1.0f), "Assets/Textures/Spaceship.png");
 		//Novaura::BatchRenderer::DrawRectangle(glm::vec3(0.75f, 0.75f, 0.0f), glm::vec3(0.5f, 0.5f, 1.0f), glm::vec4(0.7f, 0.3f, 0.5f, 1.0f));
-		Novaura::BatchRenderer::RenderText("HELLO", 0.0F, 0.0F,1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-		Novaura::BatchRenderer::EndScene();
+		//Novaura::BatchRenderer::RenderText("HELLO", 0.0F, 0.0F,1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		//Novaura::BatchRenderer::EndScene();
 	}
 
 	
