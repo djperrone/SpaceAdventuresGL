@@ -288,8 +288,12 @@ namespace Novaura {
 		std::vector<std::vector<float>> verts;
 
 		std::string::const_iterator c;
+		float startingXpos = 0.0f, endXPos = 0.0f;
+		bool first = false;
+		int count = text.length();
 		for (c = text.begin(); c != text.end(); c++)
 		{
+			
 			Text::Character ch = TextLoader::LoadedCharacters[*c];
 
 			float xpos = x + ch.Bearing.x * scale;
@@ -299,7 +303,16 @@ namespace Novaura {
 			float h = ch.Size.y * scale;
 			// update VBO for each character
 
-			
+			if (!first)
+			{
+				first = true;
+				startingXpos = x + ch.Bearing.x;
+			}
+
+			if (count-- == 0)
+			{
+				endXPos = x + ch.Bearing.x;
+			}
 			
 
 			float vertices[6][4] = {
@@ -326,6 +339,8 @@ namespace Novaura {
 		}
 		glBindVertexArray(0);
 		glBindTexture(GL_TEXTURE_2D, 0);
+
+		spdlog::info("{0}, {1}", startingXpos, endXPos);
 	}
 
 
