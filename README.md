@@ -20,5 +20,5 @@ The core part of the game runs and is playable but there are still more features
 
 The opengl code that I'm writing here is based on code from the learnopengl series and the cherno's opengl series.
 
-https://learnopengl.com/
+https://learnopengl.com/ <br>
 https://www.youtube.com/user/TheChernoProject
