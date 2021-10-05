@@ -3,6 +3,12 @@ Remaking SpaceAdventures in C++ using OpenGL to build a 2d renderer
 
 Link to original game made in Java as part of a group project for school: https://github.com/djperrone/SpaceAdventures
 
+#### New Features:
+- Ship Rotation
+- Target Icon
+- Pause Menu
+- Play Again button
+
 ## Instructions to Play:
 - Clone Repo
 - Run GenerateProjects.batch
