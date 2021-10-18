@@ -6,6 +6,7 @@ Link to original game made in Java as part of a group project for school: https:
 #### New Features:
 - Ship Rotation
 - Target Icon
+- Ammo/Reload system and Rate of Fire
 - Pause Menu
 - Play Again button
 
@@ -13,6 +14,7 @@ Link to original game made in Java as part of a group project for school: https:
 - Clone Repo
 - Run GenerateProjects.batch
 - Open generated Visual Studio Project and hit f5
+- WASD to move, left mouse click to fire ship
 
 #### Currently In Progress:<br>
 The core part of the game runs and is playable but there are still more features I would like to add <br>
