@@ -43,5 +43,9 @@ namespace Novaura {
 
 		static void RenderText(const std::string& text, float x, float y, float scale, glm::vec3 color);
 
+		static void DrawCircle(const Rectangle& rectangle, const glm::vec2& quantity = { 1.0f,1.0f });
+		static void DrawCircle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, const glm::vec2& quantity = { 1.0f,1.0f });
+
+
 	};
 }

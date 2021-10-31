@@ -31,6 +31,7 @@ namespace Novaura {
 
 		std::unique_ptr<Shader> TextureShader;
 		std::unique_ptr<Shader> TextRenderShader;
+		std::unique_ptr<Shader> CircleShader;
 
 		glm::vec4 DefaultRectangleVertices[4];
 		glm::vec2 DefaultTextureCoords[4];
@@ -64,6 +65,7 @@ namespace Novaura {
 		s_RenderData.BatchVertexBuffer->Bind();
 		s_RenderData.TextureShader = std::make_unique<Shader>("Assets/Shaders/BatchTextureShader.glsl");
 		s_RenderData.TextRenderShader = std::make_unique<Shader>("Assets/Shaders/TextRenderShader.glsl");
+		s_RenderData.CircleShader = std::make_unique<Shader>("Assets/Shaders/CircleShader.glsl");
 
 		s_RenderData.BatchVertexArray->AddBuffer(*s_RenderData.BatchVertexBuffer, 0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), 0);
 		s_RenderData.BatchVertexArray->AddBuffer(*s_RenderData.BatchVertexBuffer, 1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), offsetof(VertexData, Color));
@@ -135,12 +137,15 @@ namespace Novaura {
 
 	void BatchRenderer::BeginScene(const Camera& camera)
 	{		
-		s_RenderData.TextRenderShader->Bind();
-		s_RenderData.TextRenderShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
+		//s_RenderData.TextRenderShader->Bind();
+		//s_RenderData.TextRenderShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
+		s_RenderData.CircleShader->Bind();
+
+		s_RenderData.CircleShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
 
 		s_RenderData.TextureShader->Bind();
 
-		s_RenderData.TextureShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());		
+		s_RenderData.TextureShader->SetUniformMat4f("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
 	}
 	void BatchRenderer::EndScene()
 	{		
@@ -435,6 +440,29 @@ namespace Novaura {
 
 		s_RenderData.TextureShader->Bind();
 		//spdlog::info("{0}, {1}", startingXpos, endXPos);
+
+	}
+
+
+	void BatchRenderer::DrawCircle(const Rectangle& rectangle, const glm::vec2& quantity)
+	{
+		DrawCircle(rectangle.GetPosition(), rectangle.GetScale(), rectangle.GetColor(), quantity);
+	}
+
+	// texCoords are used to store the position, quantity stores the scale
+	// for some reason the fragment shader needs to use these values to update the cutoff and distance values
+	void BatchRenderer::DrawCircle(const glm::vec3& position, const glm::vec3& scale, const glm::vec4& color, const glm::vec2& quantity)
+	{
+		s_RenderData.CircleShader->Bind();
+		constexpr float texIndex = 0.0f;
+		glm::vec2 scale1 = scale;
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), scale);
+
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[0], color, glm::vec2(position.x, position.y), glm::vec2(scale1.x, scale1.y), texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[1], color, glm::vec2(position.x, position.y), glm::vec2(scale1.x, scale1.y), texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[2], color, glm::vec2(position.x, position.y), glm::vec2(scale1.x, scale1.y), texIndex);
+		s_RenderData.BatchRectBuffer.emplace_back(transform * s_RenderData.DefaultRectangleVertices[3], color, glm::vec2(position.x, position.y), glm::vec2(scale1.x, scale1.y), texIndex);
+		//s_RenderData.TextureShader->Bind();
 
 	}
 
